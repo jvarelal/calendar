@@ -1,0 +1,28 @@
+.dayGrid thead, .dayGrid th {
+  border: 1px solid #dddddd;
+  text-align: center;
+}
+.dayGrid td {
+  min-height: 50px;
+  border: 1px solid #888888;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dayGrid .selected {
+  background: #6699ff;
+  color: #eeeeee;
+}
+
+
+.dayGrid .today {
+  background: #b4d5ff;
+  color: #222222;
+  cursor: pointer;
+}
+
+.dayGrid .disable {
+  background: #eeeeee;
+  color: #666666;
+  cursor: initial;
+}
