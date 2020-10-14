@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Table } from 'react-bootstrap'
-import { SYSDATE, DAYS_SP } from '../util/constants'
+import { SYSDATE, DAYS_SP } from '../util/utilConts'
+import { evalueTime, getLastDayMonth } from '../util/utilFunc'
 
-const PAST = 'past';
-const PRESENT = 'today';
-const FUTURE = 'future';
-
-const DayGrid = ({ year = SYSDATE.getFullYear(), month = 0, daySelected = 0, update = () => null, }) => {
+const DayGrid = ({ year = SYSDATE.getFullYear(), month = 0, daySelected = 0, update = () => null, tasks = [] }) => {
     const [day, setDay] = useState(daySelected);
-    const days = getDaysInGrid(year, month, day);
+    const days = getDaysInGrid(year, month, day, tasks);
     const updateDay = (newDay) => {
         if (newDay.able) {
-            setDay(newDay.date == day ? null : newDay.date)
+            setDay(newDay.date)
         }
     }
     useEffect(() => update(day));
@@ -28,6 +25,7 @@ const DayGrid = ({ year = SYSDATE.getFullYear(), month = 0, daySelected = 0, upd
             {days.map((row, index) => <tr key={index}>
                 {row.map((d, i) =>
                     <td key={i} className={d.className} onClick={e => updateDay(d)}>
+                        <Arrow tasks={d.tasks}/>
                         {d.date}
                     </td>)}
             </tr>)}
@@ -35,24 +33,25 @@ const DayGrid = ({ year = SYSDATE.getFullYear(), month = 0, daySelected = 0, upd
     </Table>
 }
 
-const getDaysInGrid = (year, month, daySelected) => {
-    const daysPrevMonth = new Date(year, month, 0);
-    const lastDayMonth = getLastDayMonth(year, month);
+const getDaysInGrid = (year, month, daySelected, tasks) => {
+    const daysPrevMonth = getLastDayMonth(year, Number(month) - 1);
+    const lastDayMonth = getLastDayMonth(year, month).getDate();
     let days = [];
-    let daysToComplete = daysPrevMonth.getDate() - daysPrevMonth.getDay()
-    while(daysToComplete <= daysPrevMonth.getDate() && daysPrevMonth.getDay() < 6){
-        days = fillRowGrid(days, { date: daysToComplete++, able: false, className: 'disable' });
+    let day = daysPrevMonth.getDate() - daysPrevMonth.getDay()
+    while (day <= daysPrevMonth.getDate() && daysPrevMonth.getDay() < 6) {
+        days = fillRowGrid(days, { date: day++, able: false, className: 'disable' });
     }
-    for (daysToComplete = 1; daysToComplete <= lastDayMonth; daysToComplete++) {
+    for (day = 1; day <= lastDayMonth; day++) {
         days = fillRowGrid(days, {
-            date: daysToComplete,
+            date: day,
             able: true,
-            className: daysToComplete == daySelected ? 'selected' : evalueTime(year, month, daysToComplete)
+            className: day == daySelected ? 'selected' : evalueTime(year, month, day),
+            tasks: tasks.filter(t => t.day == day)
         });
     }
-    daysToComplete = 1;
+    day = 1;
     while (days[days.length - 1].length % 7 > 0) {
-        days = fillRowGrid(days, { date: daysToComplete++, able: false, className: 'disable' });
+        days = fillRowGrid(days, { date: day++, able: false, className: 'disable' });
     }
     return days;
 }
@@ -66,24 +65,21 @@ const fillRowGrid = (daysRow = [], newDay = {}) => {
     return daysRow
 }
 
-const getLastDayMonth = (year, month) => new Date(year, Number(month) + 1, 0).getDate()
-
-const evalueTime = (year, month, day) => {
-    if (year == SYSDATE.getFullYear() && month == SYSDATE.getMonth() && day == SYSDATE.getDate()) {
-        return PRESENT;
+const Arrow = ({ tasks }) => {
+    if (!tasks || tasks.length === 0) {
+        return null;
     }
-    if (year > SYSDATE.getFullYear()) {
-        return FUTURE;
+    let colorWarning = tasks.find(t => t.priority == 1)
+    let colorDanger = tasks.find(t => t.priority == 2)
+    let styles = {
+        width: '0',
+        height: '0',
+        borderTop: '10px solid transparent',
+        borderBottom: '10px solid transparent',
+        borderLeft: '25px solid ' + (colorDanger ? '#dc3545' : (colorWarning ? '#ffc107' : '#007bff')),
+        float: 'left'
     }
-    if (year == SYSDATE.getFullYear()) {
-        if (month > SYSDATE.getMonth()) {
-            return FUTURE;
-        }
-        if (month == SYSDATE.getMonth() && day > SYSDATE.getDate()) {
-            return FUTURE;
-        }
-    }
-    return PAST;
+    return <div style={styles}> </div>
 }
 
 export default DayGrid

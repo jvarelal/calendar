@@ -10,13 +10,12 @@
 }
 
 .dayGrid .selected {
-  background: #6699ff;
+  background: #77aaff;
   color: #eeeeee;
 }
 
-
 .dayGrid .today {
-  background: #b4d5ff;
+  background: #b4ffa5;
   color: #222222;
   cursor: pointer;
 }

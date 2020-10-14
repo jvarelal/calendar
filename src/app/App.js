@@ -1,20 +1,24 @@
 import React from 'react';
 import '../assets/css/App.css';
 import Agenda from './components/Agenda';
-import { Container, Row, Col } from 'react-bootstrap'
+import { Navbar, Container, Row, Col } from 'react-bootstrap'
 
 function App() {
   return (
-    <Container fluid>
-      <Row>
-        <Col>
-          <h3 align="center" style={{margin: '10px'}}>Agenda</h3>
-        </Col>
-      </Row>
-      <Row>
-        <Col><Agenda /></Col>
-      </Row>
-    </Container>
+    <>
+      <header style={{marginBottom: '25px'}}>
+        <Navbar bg="dark" variant="dark">
+          <Navbar.Brand href="#home">Agenda</Navbar.Brand>
+        </Navbar>
+      </header>
+      <Container fluid>
+        <Row>
+          <Col>
+            <Agenda />
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 
