@@ -2,7 +2,10 @@ const TYPES = {
     CREATE: 'CREATE',
     READ: 'READ',
     UPDATE: 'UPDATE',
-    DELETE: 'DELETE'
+    DELETE: {
+        DATE: 'DELETEBYDATE',
+        ID: 'DELETEBYID'
+    }
 }
 
 export default TYPES;

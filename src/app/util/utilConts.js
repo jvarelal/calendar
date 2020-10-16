@@ -13,6 +13,31 @@ const PAST = 'past';
 const PRESENT = 'today';
 const FUTURE = 'future';
 
-const PRIORITIES = ['Baja','Media', 'Alta'];
+const PRIORITIES = ['Baja', 'Media', 'Alta'];
 
-export { SYSDATE, DAYS_SP, MONTHS_SP, PAST, PRESENT, FUTURE, PRIORITIES }
+const KEYCODES = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    ENTER: 13,
+    SUPR: 46
+}
+
+const TASK_MANAGER = {
+    EDITOR: 1,
+    ERASER: 2
+}
+
+
+export {
+    SYSDATE,
+    DAYS_SP,
+    MONTHS_SP,
+    PAST,
+    PRESENT,
+    FUTURE, 
+    PRIORITIES,
+    KEYCODES,
+    TASK_MANAGER
+}

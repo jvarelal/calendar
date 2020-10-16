@@ -11,14 +11,25 @@ const modifyTasks = (task = {}, cb = () => null, cbError = () => null) => {
     service(request);
 }
 
-const readTasks = (year, month, cb = () => null, cbError = () => null) => {
+const readTasks = (date, cb = () => null, cbError = () => null) => {
     let request = {
         type: TYPES.READ,
-        body: { year: year, month: month },
+        body: date,
         cb: (resp) => cb(resp.data),
         cbError: cbError
     }
     service(request);
 }
 
-export { modifyTasks, readTasks }
+const deleteTasks = (task= {}, date = {}, cb = () => null, cbError = () => null) => {
+    let request = {
+        type: task && task != null ? TYPES.DELETE.ID : TYPES.DELETE.DATE,
+        body: {...date, ...task},
+        cb: (resp) => cb(resp.data),
+        cbError: cbError
+    }
+    console.log(request)
+    service(request);
+}
+
+export { modifyTasks, readTasks, deleteTasks }

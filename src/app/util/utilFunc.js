@@ -1,18 +1,23 @@
 import { SYSDATE, PAST, PRESENT, FUTURE } from './utilConts'
 
-const evalueTime = (year, month, day) => {
-    if (year == SYSDATE.getFullYear() && month == SYSDATE.getMonth() && day == SYSDATE.getDate()) {
-        return PRESENT;
-    }
-    if (year > SYSDATE.getFullYear()) {
-        return FUTURE;
-    }
-    if (year == SYSDATE.getFullYear()) {
-        if (month > SYSDATE.getMonth()) {
+const evalueTime = (date) => {
+    if(date){
+        let year = date.year
+        let month = date.month
+        let day = date.day
+        if (year == SYSDATE.getFullYear() && month == SYSDATE.getMonth() && day == SYSDATE.getDate()) {
+            return PRESENT;
+        }
+        if (year > SYSDATE.getFullYear()) {
             return FUTURE;
         }
-        if (month == SYSDATE.getMonth() && day > SYSDATE.getDate()) {
-            return FUTURE;
+        if (year == SYSDATE.getFullYear()) {
+            if (month > SYSDATE.getMonth()) {
+                return FUTURE;
+            }
+            if (month == SYSDATE.getMonth() && day > SYSDATE.getDate()) {
+                return FUTURE;
+            }
         }
     }
     return PAST;
@@ -30,4 +35,6 @@ const fillNumberList = (begin, end) => {
     return list;
 }
 
-export { evalueTime, getLastDayMonth, fillNumberList }
+const fragmentDate = (date) => ({ year: date.getUTCFullYear(), month: date.getMonth(), day: date.getDate() })
+
+export { evalueTime, getLastDayMonth, fillNumberList, fragmentDate }

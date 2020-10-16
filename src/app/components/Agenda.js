@@ -1,52 +1,70 @@
 import React, { useState, useEffect } from 'react'
 import DayGrid from './DayGrid'
-import ListTask from './ListTask'
-import { Container, Row, Col, Form } from 'react-bootstrap'
-import { SYSDATE, MONTHS_SP } from '../util/utilConts'
-import { fillNumberList } from '../util/utilFunc'
+import TaskList from './TaskList'
+import { Container, Row, Col } from 'react-bootstrap'
+import { SYSDATE, MONTHS_SP, TASK_MANAGER } from '../util/utilConts'
+import { fillNumberList, fragmentDate } from '../util/utilFunc'
 import { readTasks } from '../actions/actions'
+import { SelectForm } from './FormElement'
+import TaskManager from './TaskManager'
 
-const Agenda = ({ minYear = 2010, maxYear = 2040 }) => {
-    const [year, setYear] = useState(SYSDATE.getUTCFullYear());
-    const [month, setMonth] = useState(SYSDATE.getMonth());
-    const [day, setDay] = useState(SYSDATE.getDate());
-    const [tasks, setTasks] = useState();
+const months = MONTHS_SP.map((month, index) => ({ id: index, text: month }))
+
+const Agenda = ({ minYear, maxYear }) => {
+    const [date, setDate] = useState(fragmentDate(SYSDATE));
+    const [showManager, setShowManager] = useState();
+    const [tasksListByMonth, setTasksListByMonth] = useState();
+    const [taskSelected, setTaskSelected] = useState();
+    const onChange = (target) => setDate({ ...date, [target.name]: target.value })
+    const editTask = (t) => {
+        setTaskSelected(t)
+        setShowManager(TASK_MANAGER.EDITOR)
+    }
+    const deleteTask = (t) => {
+        setTaskSelected(t)
+        setShowManager(TASK_MANAGER.ERASER)
+    }
+    const closeManager = () => {
+        setShowManager(null);
+        setTaskSelected(null)
+    }
     const years = fillNumberList(minYear, maxYear);
-    const months = MONTHS_SP.map((m, index) => ({ id: index, text: m }))
-    useEffect(() => readTasks(year, month, setTasks), [year,month])
+    useEffect(() => readTasks(date, setTasksListByMonth), [date.year, date.month])
+    useEffect(() => setTaskSelected(null), [tasksListByMonth])
     return <Container fluid>
         <Row>
-            <Col>
-                <Container fluid>
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group controlId={'month'}>
-                                <Form.Control as="select" value={month} onChange={e => setMonth(e.target.value)}>
-                                    {months.map((option, index) => <option key={index} value={option.id}>{option.text}</option>)}
-                                </Form.Control>
-                            </Form.Group>
-                        </Col>
-                        <Col>
-                            <Form.Group controlId={'year'}>
-                                <Form.Control as="select" value={year} onChange={e => setYear(e.target.value)}>
-                                    {years.map((option, index) => <option key={index} value={option}>{option}</option>)}
-                                </Form.Control>
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-                    <Row>
-                        <Col>
-                            <DayGrid year={year} month={month} update={setDay} daySelected={day} tasks={tasks} />
-                        </Col>
-                    </Row>
-                </Container>
+            <Col xs={8}>
+                <Row>
+                    <Col>
+                        <SelectForm name='month' value={date.month}
+                            options={months} onChange={onChange} />
+                    </Col>
+                    <Col>
+                        <SelectForm name='year' value={date.year}
+                            options={years} onChange={onChange} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <DayGrid update={setDate}
+                            dateSelected={date}
+                            tasks={tasksListByMonth}
+                            newTask={() => setShowManager(TASK_MANAGER.EDITOR)}
+                            deleteTasks={() => setShowManager(TASK_MANAGER.ERASER)} />
+                    </Col>
+                </Row>
             </Col>
-            <Col xs={4}>
-                <Col>
-                    <ListTask year={year} month={month} day={day} tasks={tasks} />
-                </Col>
+            <Col>
+                <TaskList date={date}
+                    tasks={tasksListByMonth}
+                    newTask={() => setShowManager(TASK_MANAGER.EDITOR)}
+                    editTask={editTask}
+                    deleteTask={deleteTask} />
+                <TaskManager date={date}
+                    showManager={showManager}
+                    updateTasks={setTasksListByMonth}
+                    handleClose={closeManager}
+                    taskSelected={taskSelected} />
             </Col>
         </Row>
     </Container>

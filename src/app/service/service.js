@@ -15,8 +15,12 @@ export default function service({ type = '', body = {}, cb = () => null, cbError
             operation: updateTask
         },
         {
-            type: TYPES.DELETE,
-            operation: deleteTask
+            type: TYPES.DELETE.ID,
+            operation: deleteTaskById
+        },
+        {
+            type: TYPES.DELETE.DATE,
+            operation: deleteTaskByDate
         }
     ];
     let search = operations.find(o => o.type === type);
@@ -66,11 +70,21 @@ const updateTask = (body, cb, cbError) => {
     }
 }
 
-const deleteTask = (body, cb, cbError) => {
+const deleteTaskById = (body, cb, cbError) => {
     try {
         let data = _getData().filter(task => task.id != body.id);
         _setData(data);
         cb({ ...response, msg: 'Tarea eliminada' });
+    } catch (e) {
+        cbError({ status: 500, msg: e.message })
+    }
+}
+
+const deleteTaskByDate = (body, cb, cbError) => {
+    try {
+        let data = _getData().filter(task => !(task.year == body.year && task.month == body.month && task.day == body.day));
+        _setData(data);
+        cb({ ...response, msg: 'Tareas eliminadas' });
     } catch (e) {
         cbError({ status: 500, msg: e.message })
     }

@@ -1,23 +1,16 @@
 import React from 'react';
 import '../assets/css/App.css';
 import Agenda from './components/Agenda';
-import { Navbar, Container, Row, Col } from 'react-bootstrap'
+import HeaderApp from './components/HeaderApp'
+import { SYSDATE } from './util/utilConts'
 
 function App() {
+  const minYear = SYSDATE.getFullYear() - 5;
+  const maxYear = SYSDATE.getFullYear() + 10;
   return (
     <>
-      <header style={{marginBottom: '25px'}}>
-        <Navbar bg="dark" variant="dark">
-          <Navbar.Brand href="#home">Agenda</Navbar.Brand>
-        </Navbar>
-      </header>
-      <Container fluid>
-        <Row>
-          <Col>
-            <Agenda />
-          </Col>
-        </Row>
-      </Container>
+      <HeaderApp/>
+      <Agenda minYear={minYear} maxYear={maxYear}/>
     </>
   );
 }
