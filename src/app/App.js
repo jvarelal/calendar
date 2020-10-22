@@ -1,16 +1,30 @@
 import React from 'react';
 import '../assets/css/App.css';
-import Agenda from './components/Agenda';
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import HeaderApp from './components/HeaderApp'
-import { SYSDATE } from './util/utilConts'
+import ModalManager from './components/ModalManager'
+import CalendarTable from './components/CalendarTable'
+import TaskList from './components/TaskList'
+import YearMonthControl from './components/YearMonthControl'
 
 function App() {
-  const minYear = SYSDATE.getFullYear() - 5;
-  const maxYear = SYSDATE.getFullYear() + 10;
   return (
     <>
-      <HeaderApp/>
-      <Agenda minYear={minYear} maxYear={maxYear}/>
+      <HeaderApp />
+      <Container fluid>
+        <Row>
+          <Col xs={8}>
+            <YearMonthControl />
+            <CalendarTable />
+          </Col>
+          <Col>
+            <TaskList/>
+            <ModalManager/>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const SYSDATE = new Date();
 
 const DAYS_SP = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
@@ -24,11 +26,35 @@ const KEYCODES = {
     SUPR: 46
 }
 
-const TASK_MANAGER = {
-    EDITOR: 1,
-    ERASER: 2
+const TASK = {
+    name: '',
+    priority: 0,
+    detail: '',
+    alarm: false,
+    date: {},
+    dismiss: false
 }
 
+const DATE_PROP_SHAPE = PropTypes.shape({
+    day: PropTypes.number.isRequired,
+    month: PropTypes.number.isRequired,
+    year: PropTypes.number.isRequired
+})
+
+const TASK_PROP_SHAPE = PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    priority: PropTypes.number.isRequired,
+    detail: PropTypes.string.isRequired,
+    alarm: PropTypes.bool.isRequired,
+    date: PropTypes.shape({
+        day: PropTypes.number.isRequired,
+        month: PropTypes.number.isRequired,
+        year: PropTypes.number.isRequired,
+        hour: PropTypes.string.isRequired,
+        minute: PropTypes.string.isRequired
+    }).isRequired,
+    dismiss: PropTypes.bool.isRequired
+})
 
 export {
     SYSDATE,
@@ -36,8 +62,10 @@ export {
     MONTHS_SP,
     PAST,
     PRESENT,
-    FUTURE, 
+    FUTURE,
     PRIORITIES,
     KEYCODES,
-    TASK_MANAGER
+    TASK,
+    DATE_PROP_SHAPE,
+    TASK_PROP_SHAPE
 }

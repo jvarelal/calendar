@@ -9,19 +9,48 @@
   cursor: pointer;
 }
 
-.dayGrid .selected {
+.selected {
   background: #77aaff;
   color: #eeeeee;
 }
 
-.dayGrid .today {
+.today {
   background: #b4ffa5;
   color: #222222;
   cursor: pointer;
 }
 
-.dayGrid .disable {
-  background: #eeeeee;
+.disable {
+  background: #dee2e6;
   color: #666666;
   cursor: initial;
+}
+
+.square {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #888;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.flag {
+  width: 0;
+  height: 0;
+  border-top: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid transparent;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.flag-danger {
+  border-left: 1rem solid #dc3545;
+}
+
+.flag-warning {
+  border-left: 1rem solid #ffc107;
+}
+
+.flag-info {
+  border-left: 1rem solid #007bff;
 }

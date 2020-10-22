@@ -1,60 +1,63 @@
-import TYPES from '../actions/types'
+import { CALENDAR_TYPES } from '../actions/types'
 
-export default function service({ type = '', body = {}, cb = () => null, cbError = () => null }) {
+export default function service({ type = '', body = {}, cb = () => null, error = () => null }) {
     const operations = [
         {
-            type: TYPES.CREATE,
-            operation: createTask
+            type: CALENDAR_TYPES.CREATE_TASK,
+            operation: _createTask
         },
         {
-            type: TYPES.READ,
-            operation: readTask
+            type: CALENDAR_TYPES.LIST_TASKS,
+            operation: _readTask
         },
         {
-            type: TYPES.UPDATE,
-            operation: updateTask
+            type: CALENDAR_TYPES.EDIT_TASK,
+            operation: _updateTask
         },
         {
-            type: TYPES.DELETE.ID,
-            operation: deleteTaskById
+            type: CALENDAR_TYPES.DELETE.BY_ID,
+            operation: _deleteTaskById
         },
         {
-            type: TYPES.DELETE.DATE,
-            operation: deleteTaskByDate
+            type: CALENDAR_TYPES.DELETE.BY_DATE,
+            operation: _deleteTaskByDate
         }
     ];
     let search = operations.find(o => o.type === type);
-    search.operation(body, cb, cbError);
+    search.operation(body, cb, error);
 }
 
-const response = { status: 200, msg: '' }
+const response = { status: 200, message: '' }
 
-const createTask = (body, cb, cbError) => {
+const _createTask = (body, cb, cbError) => {
     try {
         let data = _getData()
         data.push({ ...body, id: new Date().getTime() });
         _setData(data);
-        cb({ ...response, msg: 'Tarea agregada' });
+        cb({ ...response, message: 'Tarea agregada' });
     } catch (e) {
-        cbError({ status: 500, msg: e.message })
+        cbError({ status: 500, message: e.message })
     }
 }
 
-const readTask = (body, cb, cbError) => {
+const _readTask = (body, cb, cbError) => {
     try {
-        let monthData = _getData().filter(task => task.year == body.year && task.month == body.month);
-        cb({ ...response, msg: 'Tareas listadas', data: monthData });
+        let monthData = _getData().filter(task => {
+            let date = task.date
+            return date.year === body.year && date.month === body.month
+        });
+        cb({ ...response, message: 'Tareas listadas', data: monthData });
     } catch (e) {
-        cbError({ status: 500, msg: e.message })
+        cbError({ status: 500, message: e.message })
     }
 }
 
-const updateTask = (body, cb, cbError) => {
+const _updateTask = (body, cb, cbError) => {
     try {
         let data = _getData();
         let done = false;
         for (let i = 0; i < data.length; i++) {
-            if (data[i].id == body.id) {
+            if (data[i].id === body.id) {
                 data[i] = { ...body };
                 done = true;
                 break;
@@ -64,29 +67,34 @@ const updateTask = (body, cb, cbError) => {
             throw new Error('Tarea no encontrada');
         }
         _setData(data);
-        cb({ ...response, msg: 'Tarea actualizada' });
+        cb({ ...response, message: 'Tarea actualizada' });
     } catch (e) {
-        cbError({ status: 500, msg: e.message })
+        cbError({ status: 500, message: e.message })
     }
 }
 
-const deleteTaskById = (body, cb, cbError) => {
+const _deleteTaskById = (body, cb, cbError) => {
     try {
-        let data = _getData().filter(task => task.id != body.id);
+        let data = _getData().filter(task => task.id !== body.id);
         _setData(data);
-        cb({ ...response, msg: 'Tarea eliminada' });
+        cb({ ...response, message: 'Tarea eliminada' });
     } catch (e) {
-        cbError({ status: 500, msg: e.message })
+        cbError({ status: 500, message: e.message })
     }
 }
 
-const deleteTaskByDate = (body, cb, cbError) => {
+const _deleteTaskByDate = (body, cb, cbError) => {
     try {
-        let data = _getData().filter(task => !(task.year == body.year && task.month == body.month && task.day == body.day));
+        let data = _getData().filter(task => {
+            let date = task.date;
+            return !(date.year === body.year &&
+                date.month === body.month &&
+                date.day === body.day)
+        });
         _setData(data);
-        cb({ ...response, msg: 'Tareas eliminadas' });
+        cb({ ...response, message: 'Tareas eliminadas' });
     } catch (e) {
-        cbError({ status: 500, msg: e.message })
+        cbError({ status: 500, message: e.message })
     }
 }
 
