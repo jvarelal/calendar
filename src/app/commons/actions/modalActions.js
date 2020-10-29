@@ -1,11 +1,8 @@
-import { MODAL_TYPES } from './types'
+import { MODAL_TYPES } from './modalTypes'
 
-const getModalContent = (title, content) => ({
+const getModalContent = (content) => ({
     type: MODAL_TYPES.SHOW_CONTENT,
-    payload: {
-        title: title,
-        content: content
-    }
+    payload: content
 })
 
 const getModalConfirmation = (title, message, commit) => ({
@@ -25,7 +22,13 @@ const getModalMessage = (title, message) => ({
     }
 })
 
-const getModalLoader = () => ({ type: MODAL_TYPES.SHOW_LOADER })
+const getModalLoader = show => {
+    console.log('getModalLoader:' + show)
+    return ({ 
+        type: MODAL_TYPES.SHOW_LOADER,
+        payload: show
+    })
+}
 
 const handleClose = () => ({ type: MODAL_TYPES.CLOSE })
 

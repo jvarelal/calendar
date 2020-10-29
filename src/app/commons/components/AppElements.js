@@ -7,8 +7,12 @@ import {
     Button,
     Container,
     Row,
-    Col
+    Col,
+    Spinner,
+    Card,
+    Nav
 } from 'react-bootstrap'
+import { Link, useLocation } from 'react-router-dom'
 
 const InputForm = ({ name, type, required, label, value, onChange }) =>
     <Form.Group controlId={name}>
@@ -68,10 +72,11 @@ const FlagPriorityTask = ({ tasks }) => {
     let styles = {
         width: '0',
         height: '0',
-        borderTop: '10px solid transparent',
-        borderBottom: '10px solid transparent',
-        borderLeft: '25px solid ' + (colorDanger ? '#dc3545' : (colorWarning ? '#ffc107' : '#007bff')),
-        float: 'left'
+        borderTop: '1rem solid transparent',
+        borderBottom: '1rem solid transparent',
+        borderLeft: '2rem solid ' + (colorDanger ? '#dc3545' : (colorWarning ? '#ffc107' : '#007bff')),
+        float: 'left',
+        position: 'absolute'
     }
     return <div style={styles}> </div>
 }
@@ -91,10 +96,33 @@ const AlertTableFooter = ({ colSpan, alert, onClose }) => <tfoot>
     </tr>
 </tfoot>
 
+const DropCard = ({ title, variant, children }) => {
+    const [showDetail, setShowDetail] = React.useState(false)
+    return <Card border={variant} className="mb-2" draggable>
+        <Card.Header>
+            <Row>
+                <Col><strong>{title}</strong></Col>
+                <Col className="text-right">
+                    <Button variant={variant} size="sm"
+                        onClick={() => setShowDetail(!showDetail)}>
+                        <i className="material-icons inline-icon">
+                            {showDetail ? 'arrow_drop_up' : 'arrow_drop_down'}
+                        </i>
+                        <i className="material-icons inline-icon">assignment</i>
+                    </Button>
+                </Col>
+            </Row>
+        </Card.Header>
+        {showDetail ? children : null}
+    </Card>
+}
+
+const ModalHeader = ({ title }) => <Modal.Header closeButton>
+    <Modal.Title>{title}</Modal.Title>
+</Modal.Header>
+
 const ModalConfirmation = ({ title, message, handleClose, confirm }) => <>
-    <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-    </Modal.Header>
+    <ModalHeader title={title} />
     <Modal.Body>{message}</Modal.Body>
     <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
@@ -108,6 +136,23 @@ const ModalConfirmation = ({ title, message, handleClose, confirm }) => <>
             </Button>
     </Modal.Footer>
 </>
+
+const ModalMessage = ({ title, message, handleClose }) => <>
+    <ModalHeader title={title} />
+    <Modal.Body>{message}</Modal.Body>
+    <Modal.Footer>
+        <Button variant="primary" onClick={handleClose}>
+            Aceptar
+        </Button>
+    </Modal.Footer>
+</>
+
+const ModalLoader = () => <Modal.Body>
+    <div style={{ textAlign: 'center' }}>
+        <Spinner animation="border" /> <br />
+        Espere un momento...
+    </div>
+</Modal.Body>
 
 const InfoDiv = () => <Container>
     <Row>
@@ -136,6 +181,16 @@ const InfoDiv = () => <Container>
     </Row>
 </Container>;
 
+
+const MenuTabs = ({ navs }) => {
+    let location = useLocation();
+    return <Nav justify fill variant="tabs" className="mb-4">
+        {navs.map((nav, index) => <div key={index} className="nav-item">
+            <Link to={nav.link} className={'nav-link' + (nav.link === location.pathname ? ' active' : '')}>{nav.name}</Link>
+        </div>)}
+    </Nav>
+}
+
 export {
     SelectForm,
     SelectAlone,
@@ -144,5 +199,10 @@ export {
     TableHead,
     FlagPriorityTask,
     AlertTableFooter,
-    ModalConfirmation
+    ModalConfirmation,
+    ModalHeader,
+    ModalMessage,
+    ModalLoader,
+    DropCard,
+    MenuTabs
 }

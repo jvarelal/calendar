@@ -1,4 +1,4 @@
-import { MODAL_TYPES } from '../actions/types'
+import { MODAL_TYPES } from '../actions/modalTypes'
 
 const initialState = {
     showContent: false,
@@ -14,37 +14,36 @@ const initialState = {
 const modal = (state = {...initialState}, action) => {
     switch (action.type) {
         case MODAL_TYPES.SHOW_CONTENT:
-            return {
-                ...state,
+            return { 
+                ...initialState,
                 showContent: true,
-                title: action.payload.title,
-                content: action.payload.content,
+                title: '',
+                content: action.payload,
                 message: ''
             }
         case MODAL_TYPES.SHOW_CONFIRMATION:
-            return {
-                ...state,
+            return { 
+                ...initialState,
                 showConfirmation: true,
                 title: action.payload.title,
                 message: action.payload.message,
-                commit: action.payload.commit
+                commit: action.payload.commit 
             }
         case MODAL_TYPES.SHOW_MESSAGE:
-            return {
-                ...state,
+            return { 
+                ...initialState,
                 showMessage: true,
                 title: action.payload.title,
-                message: action.payload.message
+                message: action.payload.message 
             }
         case MODAL_TYPES.SHOW_LOADER:
-            return {
-                ...state,
-                showLoader: true,
+            return { 
+                ...initialState,
+                showLoader: action.payload,
                 title: '',
                 message: ''
             }
         case MODAL_TYPES.CLOSE:
-            console.log( MODAL_TYPES.CLOSE)
             return { ...initialState }
         default:
             return state;

@@ -3,6 +3,30 @@ import { KEYCODES, DAYS_SP, FUTURE, PAST } from './utilConts'
 
 const getLastDayMonth = (year, month) => new Date(year, Number(month) + 1, 0)
 
+const getDaysInPanel = (date, tasks) => {
+    const finalDayOfWeekPrevMonth = getLastDayMonth(date.year, Number(date.month) - 1).getDay();
+    const lastDayMonth = getLastDayMonth(date.year, date.month);
+    let days = [];
+    let dayOfWeek = finalDayOfWeekPrevMonth + 1
+    for (let day = 1; day <= lastDayMonth.getDate(); day++) {
+        dayOfWeek = dayOfWeek === 7 ? 0 : dayOfWeek;
+        days.push({
+            day: day,
+            dayOfWeek: dayOfWeek,
+            able: evalueDate({ ...date, day: day }) !== PAST,
+            tasks: sortTasksByPriority(tasks.filter(t => t.date.day === day))
+        })
+        dayOfWeek++;
+    }
+    return days;
+}
+
+const sortTasksByPriority = (tasks) => ({
+    danger: tasks.filter(t => t.priority === 2) || [],
+    warning: tasks.filter(t => t.priority === 1) || [],
+    info: tasks.filter(t => t.priority === 0) || [],
+})
+
 const getCalendarTableByMonth = (date, tasks) => {
     const daysPrevMonth = getLastDayMonth(date.year, Number(date.month) - 1);
     const lastDayMonth = getLastDayMonth(date.year, date.month).getDate();
@@ -15,7 +39,7 @@ const getCalendarTableByMonth = (date, tasks) => {
         _fillRowGrid(days, {
             day: day,
             able: true,
-            className: day === date.day ? 'selected' : evalueDate({ ...date, day: day }),
+            className: day === Number(date.day) ? 'selected' : evalueDate({ ...date, day: day }),
             tasks: tasks.filter(t => t.date.day === day)
         });
     }
@@ -52,8 +76,11 @@ const keyBoardMove = (kbOperation) => {
             case KEYCODES.SUPR:
                 if (evalueDate(date) !== FUTURE)
                     throw new Error('* No se pueden eliminar tareas de la fecha actual o anteriores')
-                if (kbOperation.tasks.find(t => t.year === date.year && t.month === date.month && t.day === date.day))
-                    return kbOperation.suprKey();
+                let taskByDate = kbOperation.tasks.filter(t => t.date.year === date.year &&
+                    t.date.month === date.month &&
+                    t.date.day === date.day)
+                if (taskByDate.length > 0)
+                    return kbOperation.suprKey(taskByDate);
                 break;
             default:
                 return null;
@@ -63,4 +90,4 @@ const keyBoardMove = (kbOperation) => {
     }
 }
 
-export { getLastDayMonth, getCalendarTableByMonth, keyBoardMove }
+export { getDaysInPanel, getLastDayMonth, getCalendarTableByMonth, keyBoardMove }

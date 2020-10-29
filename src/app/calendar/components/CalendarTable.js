@@ -3,36 +3,39 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { DATE_PROP_SHAPE, DAYS_SP } from '../util/utilConts'
 import { getCalendarTableByMonth, keyBoardMove } from '../util/utilFuncCalendar'
-import { TableHead, FlagPriorityTask, AlertTableFooter } from './AppElements'
-import { getModalContent, getModalConfirmation } from '../actions/modalActions'
-import { setDate, readTasks, deleteTasksByDate } from '../actions/calendarActions'
+import { setDate, deleteTaskById } from '../actions/calendarActions'
 import TaskForm from './TaskForm'
+import { TableHead, FlagPriorityTask, AlertTableFooter } from '../../commons/components/AppElements'
+import { getModalContent, getModalConfirmation } from '../../commons/actions/modalActions'
 
 const alertBase = { show: false, msg: '' };
 
-const CalendarTable = ({ date, readTasks, tasksByMonth, setDate, getModalContent, getModalConfirmation, deleteTasksByDate }) => {
+const CalendarTable = ({ date, tasksByMonth, setDate, getModalContent, getModalConfirmation, deleteTaskById }) => {
     const tableDays = getCalendarTableByMonth(date, tasksByMonth);
     const [alert, setAlert] = React.useState(alertBase)
     const messageOnDelete = `¿Desea eliminar todas las tareas del ${date.day}/${date.month}/${date.year}?`;
-    const confirmDelete = () => deleteTasksByDate({ ...date, cb: () => readTasks(date) });
     const keyboardOperation = {
         date: date,
         tasks: tasksByMonth,
         arrowsKey: setDate,
-        enterKey: () => getModalContent('+ Nueva Tarea', <TaskForm />),
-        suprKey: () => getModalConfirmation(`Eliminar tareas`, messageOnDelete, confirmDelete),
+        enterKey: () => getModalContent(<TaskForm title="+ Nueva Tarea" />),
+        suprKey: (tasksByDate) => getModalConfirmation(`Eliminar tareas`, messageOnDelete, () => deleteTaskById(tasksByDate)),
         errorBoard: setAlert
     }
     const updateByClick = (newDay) => newDay.able ? setDate({ ...date, day: newDay.day }) : null;
     React.useEffect(() => setAlert(alertBase), [date])
-    React.useEffect(() => readTasks(date), [date.month, date.year]) // eslint-disable-line react-hooks/exhaustive-deps
     return <TableHead className="dayGrid" headers={DAYS_SP}>
         <tbody tabIndex="0"
             className="dayGrid"
             onKeyDown={e => keyBoardMove({ ...keyboardOperation, keyCode: e.keyCode })}>
             {tableDays.map((row, index) => <tr key={index}>
-                {row.map((d, i) => <td key={i} className={d.className} onClick={e => updateByClick(d)}>
-                    <FlagPriorityTask tasks={d.tasks} /> {d.day}
+                {row.map((d, i) => <td key={i}
+                    className={d.className + ' p-0'}
+                    onClick={e => updateByClick(d)}>
+                    <div style={{ marginBottom: '0.8rem', marginTop: '0.8rem' }}>
+                        <FlagPriorityTask tasks={d.tasks} />
+                        <h6 style={{ display: 'inline-block' }}>{d.day}</h6>
+                    </div>
                 </td>)}
             </tr>)}
         </tbody>
@@ -46,8 +49,7 @@ CalendarTable.propTypes = {
     setDate: PropTypes.func.isRequired,
     getModalContent: PropTypes.func.isRequired,
     getModalConfirmation: PropTypes.func.isRequired,
-    deleteTasksByDate: PropTypes.func.isRequired,
-    readTasks: PropTypes.func.isRequired
+    deleteTaskById: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -57,5 +59,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { readTasks, setDate, getModalContent, getModalConfirmation, deleteTasksByDate }
+    { setDate, getModalContent, getModalConfirmation, deleteTaskById }
 )(CalendarTable)

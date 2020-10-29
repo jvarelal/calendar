@@ -1,30 +1,24 @@
 import React from 'react';
 import '../assets/css/App.css';
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import HeaderApp from './components/HeaderApp'
-import ModalManager from './components/ModalManager'
-import CalendarTable from './components/CalendarTable'
-import TaskList from './components/TaskList'
-import YearMonthControl from './components/YearMonthControl'
+import { Container, Row, Col } from 'react-bootstrap'
+import HeaderApp from './commons/components/HeaderApp'
+import ModalManager from './commons/components/ModalManager'
+import Calendar from './calendar/components/Calendar'
+import GeneralInfo from './commons/components/GeneralInfo'
 
 function App() {
   return (
     <>
       <HeaderApp />
-      <Container fluid>
+      <Container>
         <Row>
-          <Col xs={8}>
-            <YearMonthControl />
-            <CalendarTable />
-          </Col>
           <Col>
-            <TaskList/>
-            <ModalManager/>
+            <GeneralInfo />
           </Col>
         </Row>
       </Container>
+      <Calendar />
+      <ModalManager />
     </>
   );
 }

@@ -54,3 +54,34 @@
 .flag-info {
   border-left: 1rem solid #007bff;
 }
+
+.inline-icon {
+  vertical-align: bottom;
+}
+
+.panel-cell {
+  border: 1px solid #aaaaaa;
+  text-align: center;
+}
+
+.panel-active{
+  cursor: 'pointer';
+}
+.panel-active:hover{
+  background: #77aaff;
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+
+.panel-danger {
+  background:  #f7d8da;
+}
+
+.panel-warning {
+  background:  #fff0c8;
+}
+
+.panel-info {
+  background:  #d9e6f5;
+}

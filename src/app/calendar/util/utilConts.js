@@ -35,6 +35,10 @@ const TASK = {
     dismiss: false
 }
 
+const TASK_CONFIG = {
+    EDIT_PAST: false
+}
+
 const DATE_PROP_SHAPE = PropTypes.shape({
     day: PropTypes.number.isRequired,
     month: PropTypes.number.isRequired,
@@ -67,5 +71,6 @@ export {
     KEYCODES,
     TASK,
     DATE_PROP_SHAPE,
-    TASK_PROP_SHAPE
+    TASK_PROP_SHAPE,
+    TASK_CONFIG
 }

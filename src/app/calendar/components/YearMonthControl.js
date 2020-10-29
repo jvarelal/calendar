@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import {Row , Col} from 'react-bootstrap'
 import { setYearMonth } from '../actions/calendarActions'
 import { MONTHS_SP } from '../util/utilConts'
-import { SelectForm } from './AppElements'
+import { SelectForm } from '../../commons/components/AppElements'
 
 const months = MONTHS_SP.map((month, index) => ({ id: index, text: month }))
 
