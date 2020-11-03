@@ -11,11 +11,18 @@ const setDate = date => ({
     payload: date
 })
 
-const createTask = task => calendarClient(CALENDAR_TYPES.CREATE_TASK, task)
+const createTask = task => calendarClient(CALENDAR_TYPES.CREATE_TASK, {
+    ...task,
+    creation: new Date().toLocaleDateString(),
+    lastEdition: new Date().toLocaleDateString()
+})
 
-const readTasks = date => calendarClient(CALENDAR_TYPES.LIST_TASKS, date)
+const readTasks = user => calendarClient(CALENDAR_TYPES.LIST_TASKS, user)
 
-const updateTask = task => calendarClient(CALENDAR_TYPES.EDIT_TASK, task)
+const updateTask = task => calendarClient(CALENDAR_TYPES.EDIT_TASK, {
+    ...task,
+    lastEdition: new Date().toLocaleDateString()
+})
 
 const deleteTasksByDate = (date, tasksByMonth) => {
     let taskByDay = tasksByMonth.filter(task => task.date.day === date.day)

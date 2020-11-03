@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Modal, Form, Container, Row, Col, Button } from 'react-bootstrap'
-import { fillNumberList, fragmentDate } from '../util/utilFunc'
-import { SYSDATE, DATE_PROP_SHAPE, TASK_PROP_SHAPE, PRIORITIES, TASK } from '../util/utilConts'
+import { fillNumberList, fragmentDate } from '../../commons/util/func'
+import { SYSDATE, DATE_PROP_SHAPE, TASK_PROP_SHAPE, PRIORITIES, TASK } from '../../commons/util/const'
 import { createTask, updateTask } from '../actions/calendarActions'
-import { SelectForm, SelectAlone, InputForm, TextAreaForm, ModalHeader } from '../../commons/components/AppElements'
+import { SelectFormH, SelectForm, InputForm, TextAreaForm, DateSelect } from '../../commons/components/FormElements'
+import { ModalHeader } from '../../commons/components/ModalElements'
 import { handleClose } from '../../commons/actions/modalActions'
-import DateSelect from './DateSelect'
 
-const TaskForm = ({ title, date, taskSelected, handleClose, createTask, updateTask }) => {
+const TaskForm = ({ title, userId, date, taskSelected, handleClose, createTask, updateTask }) => {
     const initialTask = taskSelected || { ...TASK, date: { ...date, hour: '00', minute: '00' } }
     const maxDate = { year: SYSDATE.getFullYear() + 4, month: 11, day: 31 }
     const [task, setTask] = React.useState(initialTask);
@@ -21,7 +21,11 @@ const TaskForm = ({ title, date, taskSelected, handleClose, createTask, updateTa
     }
     const onSubmit = (event) => {
         event.preventDefault();
-        let nTask = { ...task, priority: Number(task.priority), dismiss: false }
+        let nTask = { 
+            ...task, 
+            userId: userId,
+            priority: Number(task.priority), 
+            dismiss: false }
         console.log(nTask)
         task.id ? updateTask(nTask) : createTask(nTask);
     }
@@ -29,18 +33,18 @@ const TaskForm = ({ title, date, taskSelected, handleClose, createTask, updateTa
     return <Form onSubmit={onSubmit}>
         <ModalHeader title={title} />
         <Modal.Body>
-            <DateSelect label="Fecha: "
+            <InputForm name="name" required={true} label="Titulo:"
+                value={task.name} onChange={onChange} />
+            <SelectFormH name="priority" value={task.priority} label="Prioridad:"
+                options={PRIORITIES} onChange={onChange} />
+            <TextAreaForm name="detail" value={task.detail} label="Descripción:"
+                rows="3" onChange={onChange} />
+            <DateSelect label="Fecha estimada de termino: "
                 controlId="date"
                 startDate={task.date}
                 minDate={fragmentDate(SYSDATE)}
                 maxDate={maxDate}
                 handleChange={onChangeTime} />
-            <InputForm name="name" required={true} label="Nombre de la tarea:"
-                value={task.name} onChange={onChange} />
-            <SelectForm name="priority" value={task.priority} label="Prioridad:"
-                options={PRIORITIES} onChange={onChange} />
-            <TextAreaForm name="detail" value={task.detail} label="Descripción:"
-                rows="3" onChange={onChange} />
             <Form.Group controlId="alarm">
                 <Form.Check type="checkbox" label="Crear recordatorio" name="alarm"
                     checked={task.alarm} onChange={onCheck} />
@@ -50,11 +54,11 @@ const TaskForm = ({ title, date, taskSelected, handleClose, createTask, updateTa
                     <Container>
                         <Row>
                             <Col>
-                                <SelectAlone name="hour" value={task.date.hour}
+                                <SelectForm name="hour" value={task.date.hour}
                                     options={fillNumberList(0, 23)} onChange={onChangeTime} />
                             </Col>
                             <Col>
-                                <SelectAlone name="minute" value={task.date.minute}
+                                <SelectForm name="minute" value={task.date.minute}
                                     options={fillNumberList(0, 59)} onChange={onChangeTime} />
                             </Col>
                         </Row>
@@ -75,6 +79,7 @@ const TaskForm = ({ title, date, taskSelected, handleClose, createTask, updateTa
 
 TaskForm.propTypes = {
     title: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
     date: DATE_PROP_SHAPE.isRequired,
     task: TASK_PROP_SHAPE,
     createTask: PropTypes.func.isRequired,
@@ -82,7 +87,8 @@ TaskForm.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    date: state.calendar.date
+    date: state.calendar.date,
+    userId: state.user.id
 })
 
 export default connect(

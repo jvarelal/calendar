@@ -1,7 +1,33 @@
-import { fragmentDate, evalueDate } from './utilFunc'
-import { KEYCODES, DAYS_SP, FUTURE, PAST } from './utilConts'
+import { fragmentDate, evalueDate, getLastDayMonth } from '../../commons/util/func'
+import { KEYCODES, SYSDATE, DAYS_SP, FUTURE, PAST } from '../../commons/util/const'
 
-const getLastDayMonth = (year, month) => new Date(year, Number(month) + 1, 0)
+const addNewYearToList = (date = {}, yearslist = []) => {
+    if (date.year < yearslist[0]) {
+        yearslist = [date.year, ...yearslist]
+    }
+    if (date.year > yearslist[yearslist.length - 1]) {
+        yearslist = [...yearslist, date.year]
+    }
+    return yearslist;
+}
+
+const getTaskByMonth = (tasks = [], date = {}) => {
+    return tasks.filter(task => {
+        let d = task.date
+        return d.year === date.year && d.month === date.month
+    });
+}
+
+const getTdByMonth = (prevTasks = [], date = {}, tasksByMonth = []) => {
+    if (Number(date.year) === SYSDATE.getFullYear()
+        && Number(date.month) === SYSDATE.getMonth()) {
+        prevTasks = tasksByMonth.filter(task => Number(task.date.day) === SYSDATE.getDate())
+    }
+    return prevTasks;
+}
+
+const isDifferentYYMM = (date, newDate) => Number(newDate.year) !== Number(date.year) ||
+    Number(newDate.month) !== Number(date.month)
 
 const getDaysInPanel = (date, tasks) => {
     const finalDayOfWeekPrevMonth = getLastDayMonth(date.year, Number(date.month) - 1).getDay();
@@ -71,11 +97,11 @@ const keyBoardMove = (kbOperation) => {
                 return kbOperation.arrowsKey(fragmentDate(new Date(date.year, date.month, Number(date.day) + 7)))
             case KEYCODES.ENTER:
                 if (evalueDate(date) === PAST)
-                    throw new Error('* Solo se pueden asignar tareas a fechas posteriores a la actual')
+                    throw new Error('* Solo se pueden asignar notas a fechas posteriores a la actual')
                 return kbOperation.enterKey();
             case KEYCODES.SUPR:
                 if (evalueDate(date) !== FUTURE)
-                    throw new Error('* No se pueden eliminar tareas de la fecha actual o anteriores')
+                    throw new Error('* No se pueden eliminar notas de la fecha actual o anteriores')
                 let taskByDate = kbOperation.tasks.filter(t => t.date.year === date.year &&
                     t.date.month === date.month &&
                     t.date.day === date.day)
@@ -90,4 +116,40 @@ const keyBoardMove = (kbOperation) => {
     }
 }
 
-export { getDaysInPanel, getLastDayMonth, getCalendarTableByMonth, keyBoardMove }
+const handleDrop = (e, newDate, task, getModalMessage, updateTask) => {
+    let className = e.target.className
+    let newPriority;
+    switch (true) {
+        case className.indexOf('danger') >= 0:
+            newPriority = 2;
+            break;
+        case className.indexOf('warning') >= 0:
+            newPriority = 1;
+            break;
+        case className.indexOf('info') >= 0:
+            newPriority = 0;
+            break;
+        default:
+            newPriority = task.priority;
+            break;
+    }
+    if (evalueDate(newDate) === PAST || evalueDate(task.date) === PAST) {
+        return getModalMessage('Editar nota', 'No se pueden asignar o afectar notas de fechas anteriores')
+    }
+    if (task.priority !== newPriority || task.date.day !== newDate.day) {
+        let nTask = { ...task, priority: newPriority, dismiss: false, date: newDate }
+        return updateTask(nTask);
+    }
+}
+
+export {
+    addNewYearToList,
+    getTaskByMonth,
+    getTdByMonth,
+    sortTasksByPriority,
+    isDifferentYYMM,
+    getDaysInPanel,
+    getCalendarTableByMonth,
+    keyBoardMove,
+    handleDrop
+}

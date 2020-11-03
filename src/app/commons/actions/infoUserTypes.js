@@ -1,6 +1,0 @@
-const INFO_USER_TYPES = {
-    GET_LOCATION: 'GET_LOCATION',
-    GET_WEATHER: 'GET_WEATHER'
-}
-
-export { INFO_USER_TYPES };

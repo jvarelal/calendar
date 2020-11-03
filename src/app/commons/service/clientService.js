@@ -25,7 +25,7 @@ const client = (nameService, tipoRequest, body) => dispatch => {
             }
         },
         error: err => {
-            let msj = typeof err == 'string' ? err : 'Fallo en la operación'
+            let msj = typeof err == 'string' ? err : err.message || 'Fallo en la operación'
             const errores = { message: msj, status: 500, title: tipoRequest }
             dispatch({ type: MODAL_TYPES.SHOW_MESSAGE, payload: errores })
         }
@@ -36,9 +36,9 @@ const client = (nameService, tipoRequest, body) => dispatch => {
 
 const calendarClient = (tipoRequest, body) => client('calendar', tipoRequest, body)
 
-const infoUserClient = (tipoRequest, body) => client('infoUser', tipoRequest, body)
+const userClient = (tipoRequest, body) => client('user', tipoRequest, body)
 
 export {
     calendarClient,
-    infoUserClient
+    userClient
 }

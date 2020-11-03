@@ -1,7 +1,7 @@
 import { CALENDAR_TYPES } from '../../calendar/actions/calendarTypes'
-import { INFO_USER_TYPES } from '../actions/infoUserTypes'
+import { USER_TYPES } from '../../user/actions/userTypes'
 import './firebase'
-import { db } from './firebase'
+import { db, auth } from './firebase'
 import axios from 'axios'
 
 export default function service({ nameService = '', type = '', body = {}, cb = () => null, error = () => null }) {
@@ -24,14 +24,22 @@ export default function service({ nameService = '', type = '', body = {}, cb = (
                 execute: calendarService.deleteTaskByIdFb
             }
         ],
-        infoUser: [
+        user: [
             {
-                type: INFO_USER_TYPES.GET_LOCATION,
+                type: USER_TYPES.GET_REGISTER,
+                execute: userService.register
+            },
+            {
+                type: USER_TYPES.GET_LOGIN,
+                execute: userService.login
+            },
+            {
+                type: USER_TYPES.GET_LOCATION,
                 url: 'http://api.ipstack.com/check?access_key=aa8dbbb07ed7fe7245663642cf668b9b',
                 method: 'GET'
             },
             {
-                type: INFO_USER_TYPES.GET_WEATHER,
+                type: USER_TYPES.GET_WEATHER,
                 url: `https://api.climacell.co/v3/weather/realtime?lat=${body.latitude}&lon=${body.longitude}&unit_system=si&fields=precipitation,wind_gust,humidity,wind_speed,temp`,
                 method: 'GET',
                 config: {
@@ -73,43 +81,61 @@ const httpClient = (operation, body, cb, error) => {
 
 const response = { status: 200, message: '' }
 
-const calendarService = {
-    createTaskFb: async (body, cb, cbError) => {
+const userService = {
+    register: (body, cb, cbError) => {
         try {
-            await db.collection('tasks').doc().set(body)
-            cb({ ...response, message: 'Tarea agregada' });
+            auth.createUserWithEmailAndPassword(body.email, body.password)
+                .then(userCredential => cb({ ...response, data: userCredential }))
+                .catch(cbError)
         } catch (e) {
             console.log(e)
             cbError({ status: 500, message: e.message })
         }
     },
+    login: (body, cb, cbError) => {
+        try {
+            auth.signInWithEmailAndPassword(body.email, body.password)
+                .then(userCredential => cb({ ...response, data: userCredential }));
+        } catch (e) {
+            cbError({ status: 500, message: e.message })
+        }
+    }
+}
+
+const calendarService = {
+    createTaskFb: async (body, cb, cbError) => {
+        try {
+            await db.collection('tasks').doc().set(body)
+            cb({ ...response, message: 'Nota agregada' });
+        } catch (e) {
+            cbError({ status: 500, message: e.message })
+        }
+    },
     readTaskFb: (body, cb, cbError) => {
         try {
-            db.collection('tasks').onSnapshot(querySnap => {
+            console.log(body)
+            db.collection('tasks').where("userId", "==", body).onSnapshot(querySnap => {
                 let data = [];
                 querySnap.forEach(doc => data.push({ ...doc.data(), id: doc.id }))
-                cb({ ...response, message: 'Tareas listadas', data: data });
+                cb({ ...response, message: 'Notas listadas', data: data });
             })
         } catch (e) {
-            console.log(e)
             cbError({ status: 500, message: e.message })
         }
     },
     updateTaskFb: async (body, cb, cbError) => {
         try {
             await db.collection('tasks').doc(body.id).update(body)
-            cb({ ...response, message: 'Tarea actualizada' });
+            cb({ ...response, message: 'Nota actualizada' });
         } catch (e) {
-            console.log(e)
             cbError({ status: 500, message: e.message })
         }
     },
     deleteTaskByIdFb: (body, cb, cbError) => {
         try {
             body.forEach(async task => await db.collection('tasks').doc(task.id).delete());
-            cb({ ...response, message: 'Tarea eliminada' });
+            cb({ ...response, message: 'Nota eliminada' });
         } catch (e) {
-            console.log(e)
             cbError({ status: 500, message: e.message })
         }
     }

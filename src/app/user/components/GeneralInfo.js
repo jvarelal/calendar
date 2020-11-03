@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, Container, Row, Col } from 'react-bootstrap'
-import { DropCard } from './AppElements'
-import { getLocation, getWeather } from '../actions/infoUserActions'
-import { SYSDATE } from '../../calendar/util/utilConts'
+import { DropCard } from '../../commons/components/FormElements'
+import { getLocation, getWeather } from '../actions/userActions'
+import { SYSDATE } from '../../commons/util/const'
 
 const GeneralInfo = ({ location = {}, getLocation, getWeather }) => {
     const getWeatherByLocation = (userlocation = {}) => {
@@ -56,7 +56,7 @@ GeneralInfo.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    location: state.infoUser.location
+    location: state.user.location
 })
 
 export default connect(mapStateToProps, { getLocation, getWeather })(GeneralInfo);

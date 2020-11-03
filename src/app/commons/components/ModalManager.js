@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
-import { ModalConfirmation, ModalMessage, ModalLoader } from './AppElements'
+import { ModalConfirmation, ModalMessage, ModalLoader } from './ModalElements'
 import { handleClose } from '../actions/modalActions'
 
 const ModalManager = ({ modal, handleClose }) => {

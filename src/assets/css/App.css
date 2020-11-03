@@ -1,7 +1,247 @@
+#root{
+  height: 100%;
+}
+
+.nav-item button{
+  background: transparent;
+  width: 100%;
+}
+
+.Wood{
+  background-image: url("../img/white-wood.jpg");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Wood .calendarDiv{
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+  }
+  .Wood button.remark{
+    background: rgba(249, 187, 40, 0.8);
+    color: black;
+  }
+
+.Illusionist{
+  background-image: url("../img/the-illusionist.png");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Illusionist .calendarDiv{
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+  }
+  .Illusionist button.remark{
+    background: rgba(249, 187, 40, 0.8);
+    color: black;
+  }
+
+.Mosaic{
+  background-image: url("../img/zz.jpg");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Mosaic .calendarDiv{
+    background-image: url("../img/wood1.jpg");
+    background-repeat: repeat;
+  }
+    .Mosaic .calendarDiv table{
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .Mosaic .taskPanel{
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .Mosaic button.remark{
+      background:#049999;
+      color: white;
+    }
+  
+.Alchemy{
+  background-image: url("../img/alchemy.gif");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Alchemy .calendarDiv{
+    background: rgba(255, 255, 255, 0.8);
+  }
+  .Alchemy button.remark{
+    background:#a759af;
+    color: white;
+  }
+
+.Ahoy{
+  background-image: url("../img/ahoy.jpg");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Ahoy .calendarDiv{
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .Ahoy button.remark{
+    background: #f9bb28;
+    color: white;
+  }
+
+.Asteroids{
+  background-image: url("../img/asteroids.jpg");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Asteroids .calendarDiv{
+    background: rgba(255, 255, 255, 0.95);
+    color: black;
+  }
+  .Asteroids button.remark{
+    background: #f9bb28;
+    color: black;
+  }
+
+.Brijan{
+  background-image: url("../img/brijan.gif");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Brijan .calendarDiv{
+    background-image: url("../img/wood3.jpg");
+    background-repeat: repeat;
+    color: white;
+  }
+    .Brijan .calendarDiv table{
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .Brijan .taskPanel{
+      background: rgba(0, 0, 0, 0.4);
+    }
+    .Brijan button.remark{
+      background: #f9bb28;
+      color: white;
+    }
+
+.Kitty{
+  background-image: url("../img/kitty.png");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Kitty .calendarDiv{
+    background: rgba(255, 255, 255, 0.85);
+    color: black;
+  }
+  .Kitty button.remark{
+    background: #f9bb28;
+    color: white;
+  }
+
+.Cuadros{
+  background-image: url("../img/cuadros.png");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Cuadros .calendarDiv{
+    background: rgba(255, 255, 255, 0.85);
+    color: black;
+  }
+  .Cuadros button.remark{
+    background: white;
+    color: black;
+  }
+
+.Glitch{
+  background-image: url("../img/glitch.png");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Glitch .calendarDiv{
+    background: rgba(255, 255, 255, 0.85);
+    color: black;
+  }
+  .Glitch button.remark{
+    background: #f9bb28;
+    color: black;
+  }
+
+.Autumn{
+  background-image: url("../img/autum.gif");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Autumn .calendarDiv{
+    background-image: url("../img/wood4.jpg");
+    background-repeat: repeat;
+    color: white;
+  }
+    .Autumn .calendarDiv table{
+      color: white;
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .Autumn .taskPanel{
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .Autumn button.remark{
+      background: #a4a4a4;
+      color: white;
+      width: 100%;
+    }
+
+.Bicycles{
+  background-image: url("../img/bicycles.png");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Bicycles .calendarDiv{
+    background-image: url("../img/wood6.jpg");
+    background-repeat: repeat;
+    color: white;
+  }
+    .Bicycles .calendarDiv table{
+      color: white;
+    }
+    .Bicycles button.remark{
+      background: #f9bb28;
+      color: black;
+      width: 100%;
+    }
+
+.Celebration{
+  background-image: url("../img/celebration.png");
+  background-repeat: repeat;
+  height: 100%;
+  overflow: auto;
+}
+  .Celebration .calendarDiv{
+    background-image: url("../img/wood5.jpg");
+    background-repeat: repeat;
+    color: white;
+  }
+    .Celebration .calendarDiv table{
+      color: white;
+    }
+    .Celebration button.remark{
+      background: #f9bb28;
+      color: black;
+      width: 100%;
+    }
+
+.dayGrid:focus{
+  box-shadow: 0px 15px 10px #888;
+}
+
 .dayGrid thead, .dayGrid th {
   border: 1px solid #dddddd;
   text-align: center;
 }
+
 .dayGrid td {
   min-height: 50px;
   border: 1px solid #888888;
@@ -10,8 +250,7 @@
 }
 
 .selected {
-  background: #77aaff;
-  color: #eeeeee;
+  background: #b0cbf7;
 }
 
 .today {
@@ -21,8 +260,7 @@
 }
 
 .disable {
-  background: #dee2e6;
-  color: #666666;
+  color: #888888;
   cursor: initial;
 }
 
@@ -75,13 +313,13 @@
 
 
 .panel-danger {
-  background:  #f7d8da;
+  background: rgba(247, 216, 218, 0.8);
 }
 
 .panel-warning {
-  background:  #fff0c8;
+  background:  rgba(255, 240, 200, 0.8);
 }
 
 .panel-info {
-  background:  #d9e6f5;
+  background:  rgba(217, 230, 245, 0.8);
 }

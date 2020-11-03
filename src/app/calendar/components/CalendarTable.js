@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { DATE_PROP_SHAPE, DAYS_SP } from '../util/utilConts'
-import { getCalendarTableByMonth, keyBoardMove } from '../util/utilFuncCalendar'
+import { DATE_PROP_SHAPE, DAYS_SP } from '../../commons/util/const'
+import { stringJsonDate } from '../../commons/util/func'
+import { getCalendarTableByMonth, keyBoardMove } from '../util/funcCalendar'
 import { setDate, deleteTaskById } from '../actions/calendarActions'
 import TaskForm from './TaskForm'
-import { TableHead, FlagPriorityTask, AlertTableFooter } from '../../commons/components/AppElements'
+import { TableHead, FlagPriorityTask, AlertTableFooter } from './AppElements'
 import { getModalContent, getModalConfirmation } from '../../commons/actions/modalActions'
 
 const alertBase = { show: false, msg: '' };
@@ -13,13 +14,13 @@ const alertBase = { show: false, msg: '' };
 const CalendarTable = ({ date, tasksByMonth, setDate, getModalContent, getModalConfirmation, deleteTaskById }) => {
     const tableDays = getCalendarTableByMonth(date, tasksByMonth);
     const [alert, setAlert] = React.useState(alertBase)
-    const messageOnDelete = `¿Desea eliminar todas las tareas del ${date.day}/${date.month}/${date.year}?`;
+    const messageOnDelete = `¿Desea eliminar todas las notas del ${stringJsonDate(date)}?`;
     const keyboardOperation = {
         date: date,
         tasks: tasksByMonth,
         arrowsKey: setDate,
-        enterKey: () => getModalContent(<TaskForm title="+ Nueva Tarea" />),
-        suprKey: (tasksByDate) => getModalConfirmation(`Eliminar tareas`, messageOnDelete, () => deleteTaskById(tasksByDate)),
+        enterKey: () => getModalContent(<TaskForm title="+ Nueva Nota" />),
+        suprKey: (tasksByDate) => getModalConfirmation(`Eliminar notas`, messageOnDelete, () => deleteTaskById(tasksByDate)),
         errorBoard: setAlert
     }
     const updateByClick = (newDay) => newDay.able ? setDate({ ...date, day: newDay.day }) : null;

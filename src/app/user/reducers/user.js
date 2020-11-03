@@ -1,6 +1,9 @@
-import { INFO_USER_TYPES } from '../actions/infoUserTypes'
+import { USER_TYPES } from '../actions/userTypes'
 
 const initialState = {
+    id: '',
+    name: '',
+    email: '',
     location: {
         ip: '',
         ipType: '',
@@ -18,14 +21,21 @@ const initialState = {
     }
 }
 
-const infoUser = (state = { ...initialState }, action) => {
+const user = (state = { ...initialState }, action) => {
     switch (action.type) {
-        case INFO_USER_TYPES.GET_LOCATION:
+        case USER_TYPES.GET_REGISTER:
+        case USER_TYPES.GET_LOGIN:
+            return {
+                ...state,
+                id: action.payload.user.uid,
+                email: action.payload.user.email
+            }
+        case USER_TYPES.GET_LOCATION:
             return {
                 ...state,
                 location: { ...action.payload }
             }
-        case INFO_USER_TYPES.GET_WEATHER:
+        case USER_TYPES.GET_WEATHER:
             return {
                 ...state,
                 location: { ...state.location, weather: action.payload }
@@ -36,4 +46,4 @@ const infoUser = (state = { ...initialState }, action) => {
 }
 
 
-export default infoUser
+export default user
