@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/3ae38b6676.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="wrapper Celebration">
+        <header class="navbar flex-center">
+            <a href="#" class="nav-logo">
+                <i class="fas fa-sticky-note"></i>
+                <i>POSTICK</i>
+            </a>
+            <nav>
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Calendario</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-clipboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-columns"></i>
+                            <span>Date panel</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <div class="nav-link user-menu">
+                            <i class="fas fa-clock icon"></i>
+                            <div class="card">
+                                PRUEBA
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link user-menu">
+                            <img src="https://lh3.googleusercontent.com/-5H8pJJxeNVA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnj-ybD3tt9hx-rIYiMVftTkOVWbQ/photo.jpg?sz=46"
+                                alt="" class="profile">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <div>JOSÉ ABRAHAM VARELA LEÓN</div>
+                                    <div class="text-sm text-gray m-1">ljvarela93@gmail.com</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="fm-group">
+                                        <select id="background" name="background" class="fm-input">
+                                            <option>Azul</option>
+                                            <option>Roko</option>
+                                            <option>Cafe</option>
+                                        </select>
+                                        <label for="background" class="fm-label active">Fondo</label>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-columns"></i>
+                                        <span>Cerrar sesión</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="row h50 flex-center">
+            <div class="col text-center">
+                <div class="login">
+                    <div>
+                        <ul class="navbar-list">
+                            <li class="w50">
+                                <span class="p-5" style="display: block;">Login</span>
+                            </li>
+                            <li class="w50">
+                                <button class="btn-inactive btn w100">
+                                    Registro
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="plr-9">
+                        <div class="fm-group">
+                            <input id="name" name="name" type="text" class="fm-input" />
+                            <label for="name" class="fm-label">Nombre</label>
+                        </div>
+                        <div class="fm-group">
+                            <input id="password" name="password" type="text" class="fm-input" />
+                            <label for="password" class="fm-label">Detalle</label>
+                        </div>
+                    </div>
+                    <div class="card-footer ptb-7">
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-primary w100">Prueba</button>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary w100">Prueba</button>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary w100">Prueba</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let inputs = document.querySelectorAll('.fm-group input')
+    inputs.forEach(input => input.addEventListener('focus', e => {
+        target = e.target
+        label = target.parentNode.lastElementChild
+        console.log(label)
+        label.className = label.className + ' active'
+    }))
+</script>
+
+</html>

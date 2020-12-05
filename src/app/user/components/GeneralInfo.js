@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Card, Container, Row, Col } from 'react-bootstrap'
-import { DropCard } from '../../commons/components/FormElements'
+import { DropCard } from '../../task/components/TaskElements'
 import { getLocation, getWeather } from '../actions/userActions'
 import { SYSDATE } from '../../commons/util/const'
 
@@ -14,38 +13,35 @@ const GeneralInfo = ({ location = {}, getLocation, getWeather }) => {
     React.useEffect(() => getLocation(getWeatherByLocation), [getLocation])
     const weather = location.weather || { temp: {} }
     return <DropCard title="Bienvenido" variant="light">
-        <Card.Body className="pb-0">
-            <Row>
-                <Col>
-                    <Container>
-                        <p>
-                            <i className="material-icons inline-icon mr-1">place</i> 
-                            {location.country_name}, {location.city}
-                        </p>
-                        <p>
-                            <i className="material-icons inline-icon mr-1">public</i> 
-                            latitud: {location.latitude}, longitud: {location.longitude}
-                        </p>
-                        <p>
-                            <i className="material-icons inline-icon mr-1">flag</i> 
-                            {location.ip} ({location.type})
-                        </p>
-                    </Container>
-                </Col>
-                <Col>
+        <div>
+            <div className="row">
+                <div className="col">
                     <p>
-                        <i className="material-icons inline-icon mr-1">today</i> 
+                        <i className="material-icons inline-icon mr-1">place</i>
+                        {location.country_name}, {location.city}
+                    </p>
+                    <p>
+                        <i className="material-icons inline-icon mr-1">public</i>
+                            latitud: {location.latitude}, longitud: {location.longitude}
+                    </p>
+                    <p>
+                        <i className="material-icons inline-icon mr-1">flag</i>
+                        {location.ip} ({location.type})
+                    </p>
+                </div>
+                <div className="col">
+                    <p>
+                        <i className="material-icons inline-icon mr-1">today</i>
                         {SYSDATE.getDate()}/{SYSDATE.getMonth() + 1}/{SYSDATE.getFullYear()}
                     </p>
                     <p>
-                        <i className="material-icons inline-icon mr-1">wb_sunny</i> 
+                        <i className="material-icons inline-icon mr-1">wb_sunny</i>
                         {weather.temp.value}
                     </p>
 
-                </Col>
-            </Row>
-        </Card.Body>
-        <Card.Footer></Card.Footer>
+                </div>
+            </div>
+        </div>
     </DropCard>
 }
 

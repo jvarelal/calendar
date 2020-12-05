@@ -1,38 +1,39 @@
-import React from 'react';
-import '../assets/css/App.css';
+import React from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import HeaderApp from './commons/components/HeaderApp'
 import ModalManager from './commons/components/ModalManager'
-import TaskDashBoard from './calendar/components/TaskDashBoard'
-import Calendar from './calendar/components/Calendar'
-import TaskDatePanel from './calendar/components/TaskDatePanel'
+import DashBoard from './task/components/dashboard/DashBoard'
+import Calendar from './task/components/calendar/Calendar'
+import TaskDatePanel from './task/components/calendar/TaskDatePanel'
 import Login from './user/components/Login'
 import PrivateRoute from './user/components/PrivateRoute'
-import { THEMES } from './commons/util/const'
-import { getRandomNumber } from './commons/util/func'
+import LoadUser from './user/components/LoadUser'
+import Home from './commons/components/Home';
 
 function App() {
-  const theme = THEMES[getRandomNumber(0, THEMES.length -1)]
-  let navs = [
-    { link: '/', type: 'brand', name: 'Notas', icon: 'book', component: TaskDashBoard, private: true },
-    { link: '/dashboard', type: 'tab', name: 'Pendientes', component: TaskDashBoard, private: true },
-    { link: '/calendar', type: 'tab', name: 'Calendario', component: Calendar },
-    { link: '/list', type: 'tab', name: 'Listado por fecha', component: TaskDatePanel, private: true },
-    { link: '/login', component: Login }
-  ]
+  let navs = {
+    brand: { link: '/', name: 'Postick', icon: 'fas fa-sticky-note', component: DashBoard },
+    tabs: [
+      { link: '/dashboard', icon: 'fas fa-clipboard', name: 'Pendientes', component: DashBoard, private: true },
+      { link: '/calendar', icon: 'fas fa-calendar-alt', name: 'Calendario', component: Calendar },
+      { link: '/list', icon: 'fas fa-columns', name: 'Listado por fecha', component: TaskDatePanel, private: true },
+      { link: '/login', icon: 'fas fa-user', component: Login },
+      { link: '/', icon: 'fas fa-home', component: Home }
+    ]
+  }
   return (
-    <div className={theme.NAME}>
+    <LoadUser>
       <HashRouter>
-        <HeaderApp style={theme.NAV} navs={navs} />
+        <HeaderApp navs={navs} />
         <Switch>
-          {navs.map((nav, index) => nav.private ?
+          {navs.tabs.map((nav, index) => nav.private ?
             <PrivateRoute key={index} exact path={nav.link} component={nav.component} /> :
             <Route key={index} exact path={nav.link} component={nav.component} />)}
         </Switch>
         <ModalManager />
       </HashRouter>
-    </div>
+    </LoadUser>
   );
 }
 
-export default App;
+export default App

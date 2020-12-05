@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        .background-col {
+            flex-basis: 50%;
+            background-image: url("img/Layout.png");
+            background-size: 90vh;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-right: 1px solid #999999;
+            position: relative;
+            height: 100vh;
+        }
+
+        .background-col2 {
+            flex-basis: 50%;
+            background-image: url("img/Calendar3.png");
+            background-size: 90vh;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-right: 1px solid #999999;
+            position: relative;
+            height: 100vh;
+        }
+
+        .text-col {
+            flex-basis: 50%;
+            background-color: #fff;
+            background-image: linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
+                linear-gradient(#eee .1em, transparent .1em);
+            background-size: 100% 1.2em;
+            border-right: 1px solid #999999;
+            position: relative;
+            height: 100vh;
+            display: flex;
+        }
+
+        .info-start {
+            width: 50%;
+            margin: auto;
+            font-size: 1.25rem;
+            text-align: justify;
+        }
+
+        .toast {
+            padding: .5rem;
+            border-top: 1px solid #bbbbbb;
+        }
+
+        .toast-header {
+            padding-bottom: .25rem;
+            margin-bottom: .25rem;
+        }
+        
+        .toast-body {
+            font-size: 0.8rem;
+            padding: 0.25rem 0;
+            color: #444444;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div class="wrapper Cuadros">
+            <header class="navbar flex-center">
+                <div class="nav-logo" style="cursor: pointer;"><i class="fas fa-sticky-note"
+                        aria-hidden="true"></i>&nbsp;<i>Postick</i></div>
+                <nav>
+                    <ul class="navbar-list">
+                        <li class="nav-item"><a class="nav-link" href="#/dashboard"> <i class="fas fa-clipboard"
+                                    aria-hidden="true"></i>&nbsp;<span>Pendientes</span> </a></li>
+                        <li class="nav-item"><a class="nav-link" href="#/calendar"> <i class="fas fa-calendar-alt"
+                                    aria-hidden="true"></i>&nbsp;<span>Calendario</span> </a></li>
+                        <li class="nav-item"><a class="nav-link" href="#/list"> <i class="fas fa-columns"
+                                    aria-hidden="true"></i>&nbsp;<span>Listado por fecha</span> </a></li>
+                    </ul>
+                </nav>
+                <nav>
+                    <ul class="navbar-list">
+
+                        <nav>
+                            <ul class="navbar-list">
+                                <li class="nav-item">
+                                    <div class="nav-link user-menu"><span>
+                                            test
+                                        </span>
+                                        <div class="card">
+                                            <div class="toast">
+                                                <div class="toast-header flex-center">
+                                                    <div>{title}</div>
+                                                    <span class="btn btn-sm" style="border: none">
+                                                        X
+                                                    </span>
+                                                </div>
+                                                <div class="toast-body">
+                                                    NOTA DE PRUEBA
+                                                </div>
+                                            </div>
+
+                                            <div class="toast">
+                                                <div class="toast-header">
+                                                    <div class="flex-center">
+                                                        <div>{title}</div>
+                                                        <span class="btn btn-sm" style="border: none">
+                                                            X
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="toast-body">
+                                                    NOTA DE PRUEBA
+                                                </div>
+                                            </div>
+
+                                            <div class="toast">
+                                                <div class="toast-header">
+                                                    <div class="flex-center">
+                                                        <div>EMERGENTE</div>
+                                                        <span class="btn btn-sm" style="border: none">
+                                                            X
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="toast-body">
+                                                    NOTA DE PRUEBAujhiu
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="nav-link user-menu"><span><i class="fas fa-clock icon"
+                                                aria-hidden="true"></i></span>
+                                        <div class="card">
+                                            <div class="card-header text-center">
+                                                <div>Sin recordatorios</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                        <li class="nav-item">
+                            <div class="nav-link user-menu"><span><i class="fas fa-clock icon"
+                                        aria-hidden="true"></i></span>
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        <div>Sin recordatorios</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nav-link user-menu"><span><img
+                                        src="https://lh3.googleusercontent.com/a-/AOh14GjrFQzIdJUci1F-Q6lXTEKuXR38h_eEZ4R6Gg45=s96-c"
+                                        alt="profile" class="profile"></span>
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        <div>Jose Varela León</div>
+                                        <div class="text-sm text-gray m-1">ljvarela93@gmail.com</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="fm-group "><select size="3" id="theme" name="theme"
+                                                class="fm-input">
+                                                <option value="0">White</option>
+                                                <option value="1">Wood</option>
+                                                <option value="2">Illusionist</option>
+                                                <option value="3">Alchemy</option>
+                                                <option value="4">Ahoy</option>
+                                                <option value="5">Asteroids</option>
+                                                <option value="6">Brijan</option>
+                                                <option value="7">Kitty</option>
+                                                <option value="8">Glitch</option>
+                                                <option value="9">Cuadros</option>
+                                                <option value="10">Celebration</option>
+                                            </select><label for="theme" class="fm-label active">Fondos</label></div>
+                                        <div class="fm-group "><select id="backgroundCards" name="backgroundCards"
+                                                class="fm-input">
+                                                <option value="0">Solo borde</option>
+                                                <option value="1">Fondo</option>
+                                            </select><label for="backgroundCards" class="fm-label active">Color de
+                                                notas</label></div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="nav-link" style="cursor: pointer;"><i class="fas fa-columns"
+                                                aria-hidden="true"></i> <span>Cerrar sesión</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="flex-center">
+                <div class="background-col">
+                </div>
+                <div class="text-col">
+                    <div class="info-start">
+
+                        <h3 class="text-center">Enlista tus pendientes</h3>
+                        <p>
+                            Escribe notas para cada actividad que necesites. Estas se presentaran
+                            en los tableros que generes y los subgrupos que tu definas para su
+                            clasificación.
+                        </p>
+                        <a href="#" class="btn btn-primary w100">Comenzar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-center">
+                <div class="text-col">
+                    <div class="info-start">
+                        <div class="row">
+                            <div class="col">
+                                <h3 class="text-center">Agenda tus actividades</h3>
+                                <p>
+                                    Remarca fechas en el calendario para con diversas notas
+                                    y genera un recordatorio a la hora que necesites
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="background-col2"></div>
+            </div>
+            <div class="modal "></div>
+        </div>
+    </div>
+</body>
+
+</html>

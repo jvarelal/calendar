@@ -1,30 +1,40 @@
 import React from 'react';
-import { Nav, Navbar } from 'react-bootstrap'
-import { Link, useLocation } from 'react-router-dom'
-import TaskReminder from '../../calendar/components/TaskReminder'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import TaskReminder from '../../task/components/TaskReminder'
+import NavSetting from '../../user/components/NavSetting'
+import Header from './styled/Header'
 
-const HeaderApp = ({ style = {}, navs = [] }) => {
-    const brand = navs.filter(nav => nav.type === 'brand')
-    const tabs = navs.filter(nav => nav.type === 'tab')
-    const location = useLocation();
-    return <header>
-        <Navbar style={style.CSS} variant={style.VARIANT}>
-            {brand.map((b, index) => <Link key={index} to={b.link} className="navbar-brand">
-                <i className="material-icons inline-icon">{b.icon}</i> {b.name}
-            </Link>)}
-            <Nav className="mr-auto">
-                {tabs.map((t, index) => <Link key={index}
-                    to={t.link}
-                    className={'nav-link' + (t.link === location.pathname ? ' active' : '')}>
-                    {t.name}
-                </Link>)}
-            </Nav>
-            <Nav className="ml-auto">
-                <TaskReminder />
-                <Nav.Link href="#home">Sign In</Nav.Link>
-            </Nav>
-        </Navbar>
-    </header>
+const HeaderApp = ({ navs = {}, user }) => {
+    const tabs = navs.tabs.filter(t => t.name)
+    return <Header>
+        <Header.NavLogo>
+            <Header.NavLink href={navs.brand.link}>
+                <i className={navs.brand.icon} /> <i>{navs.brand.name}</i>
+            </Header.NavLink>
+        </Header.NavLogo>
+        <Header.Nav>
+            {tabs.map((t, index) => <Header.NavLink key={index} href={t.link}>
+                <i className={t.icon} /> <span>{t.name}</span>
+            </Header.NavLink>)}
+        </Header.Nav>
+        <Header.Nav>
+            {user.id ? <TaskReminder /> : null}
+            {user.id ? <NavSetting /> :
+                <Header.NavLink href='/login'>
+                    <i className="fas fa-user" /> <span>Iniciar sesión</span>
+                </Header.NavLink>}
+        </Header.Nav>
+    </Header>
 }
 
-export default HeaderApp;
+HeaderApp.propTypes = {
+    user: PropTypes.object.isRequired,
+    navs: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps, null)(HeaderApp);

@@ -2,108 +2,48 @@ import PropTypes from 'prop-types'
 
 const THEMES = [
     {
+        NAME: 'White',
+        CREATOR: ''
+    },
+    {
         NAME: 'Wood',
-        CREATOR: 'https://cargocollective.com/whydontwetry',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: 'black' }
-        }
+        CREATOR: 'https://cargocollective.com/whydontwetry'
     },
     {
         NAME: 'Illusionist',
-        CREATOR: 'http://julien-bailly.com/',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: '#4d4d95' }
-        }
-    },
-    {
-        NAME: 'Mosaic',
-        CREATOR: 'http://julien-bailly.com/',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: 'black' }
-        }
+        CREATOR: 'http://julien-bailly.com/'
     },
     {
         NAME: 'Alchemy',
-        CREATOR: 'http://repponen.com/',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: 'orange' }
-        }
+        CREATOR: 'http://repponen.com/'
     },
     {
         NAME: 'Ahoy',
-        CREATOR: 'https://www.behance.net/lorena-g',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: '#f4a8b5' }
-        }
+        CREATOR: 'https://www.behance.net/lorena-g'
     },
     {
         NAME: 'Asteroids',
-        CREATOR: 'https://noumevon.com/',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: 'darkblue' }
-        }
+        CREATOR: 'https://noumevon.com/'
     },
     {
         NAME: 'Brijan',
-        CREATOR: 'https://twitter.com/brijanp',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: '#229722' }
-        }
-    },
-    {
-        NAME: 'Bicycles',
-        CREATOR: 'http://shaunfox.com/',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: 'rgb(91, 90, 90)' }
-        }
-    },
-    {
-        NAME: 'Autumn',
-        CREATOR: 'https://daileycrafton.com/',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: '#ae443c' }
-        }
+        CREATOR: 'https://twitter.com/brijanp'
     },
     {
         NAME: 'Kitty',
-        CREATOR: 'http://thepatternlibrary.com/#kitty',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: '#f4a8b5' }
-        }
+        CREATOR: 'http://thepatternlibrary.com/#kitty'
     },
     {
         NAME: 'Glitch',
-        CREATOR: 'https://twitter.com/destroywerk',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: 'rgb(101, 176, 127)' }
-        }
+        CREATOR: 'https://twitter.com/destroywerk'
     },
     {
         NAME: 'Cuadros',
-        CREATOR: 'https://twitter.com/nataliadfrutos',
-        NAV: {
-            VARIANT: 'light',
-            CSS: { background: 'rgba(255,255,255,0.8)' }
-        }
+        CREATOR: 'https://twitter.com/nataliadfrutos'
     },
     {
         NAME: 'Celebration',
-        CREATOR: 'https://twitter.com/prabhuk1986',
-        NAV: {
-            VARIANT: 'dark',
-            CSS: { background: '#2d2d4f' }
-        }
+        CREATOR: 'https://twitter.com/prabhuk1986'
     }
 ]
 
@@ -122,13 +62,16 @@ const PAST = 'past';
 const PRESENT = 'today';
 const FUTURE = 'future';
 
-const PRIORITIES = ['Baja', 'Media', 'Alta'];
-const VARIANTS = ['danger', 'warning', 'info']
+const COLORS = [
+    { id: 'white', text: 'Blanco Translucido' },
+    { id: 'blue', text: 'Azul' },
+    { id: 'yellow', text: 'Amarillo' },
+    { id: 'pink', text: 'Rosa' },
+    { id: 'green', text: 'Verde' },
+    { id: 'orange', text: 'Naranja' },
+    { id: 'purple', text: 'Morado' }
+];
 
-const ACCESS = {
-    REGISTER: 1,
-    LOGIN: 2
-}
 
 const KEYCODES = {
     LEFT: 37,
@@ -141,14 +84,43 @@ const KEYCODES = {
 
 const TASK = {
     name: '',
-    priority: 0,
+    color: COLORS[0].id,
     detail: '',
     alarm: false,
-    date: {},
+    date: { hour: '00', minute: '00' },
     dismiss: false,
     done: false,
     creation: '',
-    lastEdition: ''
+    editions: []
+}
+
+const GROUP_DASHBOARD = {
+    id: 0,
+    name: '',
+    tasks: [],
+    creation: '',
+    editions: []
+}
+
+const DASHBOARD = {
+    name: '',
+    detail: '',
+    groups: [],
+    orderGroup: [],
+    creation: '',
+    editions: []
+}
+
+const TEMPLATES = {
+    DASHBOARD: {
+        BASE: {
+            ...DASHBOARD,
+            name: 'PENDIENTES',
+            detail: 'Mis pendientes',
+            groups: [{ ...GROUP_DASHBOARD, name: 'MI LISTA', id: 1 }],
+            orderGroup: [1]
+        }
+    }
 }
 
 const DATE_PROP_SHAPE = PropTypes.shape({
@@ -157,9 +129,24 @@ const DATE_PROP_SHAPE = PropTypes.shape({
     year: PropTypes.number.isRequired
 })
 
+const GROUP_PROP_SHAPE = PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    tasks: PropTypes.array.isRequired,
+    creation: PropTypes.string.isRequired,
+    editions: PropTypes.array.isRequired,
+})
+
+const DASHBOARD_PROP_SHAPE = PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    detail: PropTypes.string.isRequired,
+    groups: PropTypes.arrayOf(GROUP_PROP_SHAPE).isRequired,
+    creation: PropTypes.string.isRequired,
+    editions: PropTypes.array.isRequired
+})
+
 const TASK_PROP_SHAPE = PropTypes.shape({
     name: PropTypes.string.isRequired,
-    priority: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
     detail: PropTypes.string.isRequired,
     alarm: PropTypes.bool.isRequired,
     date: PropTypes.shape({
@@ -171,9 +158,21 @@ const TASK_PROP_SHAPE = PropTypes.shape({
     }).isRequired,
     dismiss: PropTypes.bool.isRequired,
     creation: PropTypes.string.isRequired,
-    lastEdition: PropTypes.string.isRequired,
-    done: PropTypes.bool.isRequired
+    editions: PropTypes.array.isRequired,
+    done: PropTypes.bool.isRequired,
+    dashboard: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        idGroup: PropTypes.number.isRequired
+    }).isRequired
 })
+
+const RGX = {
+    ALL: /./,
+    LETTERS: /^([a-zA-Z- ]*)$/,
+    ALPHANUMERICAL1: /^([a-zA-Z0-9- ]*)$/,
+    EMAIL: /^([a-zA-Z0-9-_.@ ]*)$/,
+    NUMBERS: /^([0-9-]*)$/
+}
 
 export {
     THEMES,
@@ -183,11 +182,14 @@ export {
     PAST,
     PRESENT,
     FUTURE,
-    PRIORITIES,
+    COLORS,
     KEYCODES,
     TASK,
-    ACCESS,
+    TEMPLATES,
+    GROUP_DASHBOARD,
+    DASHBOARD,
+    DASHBOARD_PROP_SHAPE,
     DATE_PROP_SHAPE,
     TASK_PROP_SHAPE,
-    VARIANTS
+    RGX
 }

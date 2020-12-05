@@ -1,0 +1,663 @@
+html
+    @extend %BaseCalibri
+    font-weight: 300
+    height: 100%
+    --borderGray: rgba(200, 200, 200, 0.75)
+
+body
+    margin: 0
+    height: 100%
+    padding: 0
+
+*
+    box-sizing: border-box
+
+header, footer
+    padding: 0 1rem
+    position: absolute
+    width: 100%
+    z-index: 10
+
+footer
+    bottom: 0
+
+button, li, a, input, select, textarea, label, input[type="submit"]
+    @extend %BasePT
+    text-decoration: none
+
+#root
+    height: 100%
+
+::-webkit-scrollbar
+    width: 6px
+
+::-webkit-scrollbar-track
+    background: rgba(0, 0, 0, 0.25)
+
+::-webkit-scrollbar-thumb
+    background: rgba(50,50,200, 0.25)
+
+::-webkit-scrollbar-thumb:hover
+    background: rgba(50,50,200, 0.5)
+
+a
+    color: inherit
+
+.wrapper
+    margin-right: auto
+    margin-left: auto
+    min-height: 100%
+    min-width: 100%
+    position: absolute
+
+.wrapper::after
+    content: ''
+    display: block
+    height: 3rem
+
+.modal
+    background: rgba(70, 70, 70, 0.6)
+    position: absolute
+    width: 100%
+    height: 100%
+    overflow: auto
+    top: 0
+    left: 0
+    color: black
+    display: flex
+    opacity: 0
+    z-index: -1
+    transition: all 0.1s linear 0.1s
+    .modal-content
+        margin: auto
+        background: white
+        min-width: 30rem
+        width: 25%
+        padding: 1rem
+        transition: all 0.3s linear 0.2s
+        opacity: 0
+        transform: translateY(-150%)
+    .modal-content.active
+        opacity: 1
+        transform: translateY(0%)
+    .modal-lg
+        min-width: 45rem
+        width: 40%
+
+.modal.active
+    opacity: 1
+    z-index: 20
+
+.loading
+    +Loading(rgba(100, 100, 100, 0.5))
+
+@keyframes spin
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+
+.container
+    padding: 4rem .5rem
+    width: 100%
+    height: 100%
+    overflow: auto
+
+.row
+    display: flex
+    flex-wrap: wrap
+    margin-left: 1.5rem
+    margin-right: 1.5rem
+
+.col
+    flex-basis: 0
+    flex-grow: 1
+    position: relative
+    padding-left: 1rem
+    padding-right: 1rem
+
+.col2
+    max-width: 50%
+
+.col4
+    max-width: 25%
+
+.col3
+    max-width: 33%
+
+.badge
+    border-radius: .4rem
+    background: $RedColor
+    color: white
+    font-size: 0.75rem
+    float: right
+    padding: 0.3rem
+    position: absolute
+    bottom: 0
+
+.fm-group
+    position: relative
+    margin: 1.9rem 0rem
+    width: 100%
+    min-width: 10rem
+    .fm-input
+        border-radius: .1rem
+        border: 1px solid #d1d1d1
+        padding: .5rem
+        font-size: .9rem
+        width: 100%
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out
+        outline: 0
+        &:focus
+            box-shadow: 0 1px 0 0 #011636
+    .fm-input.wrong
+        border: 1px solid $RedColor
+    .fm-input.disabled
+        border: none
+        border-bottom: 1px solid #666666
+        background: rgba(255, 255, 255, 0)
+        color: inherit
+        -webkit-appearance: none
+        -moz-appearance: none
+        &::-ms-expand
+            display: none
+    .fm-label
+        padding: .5rem
+        color: #999999
+        font-size: .9rem
+        cursor: text
+        transition: .25s ease-out
+        position: absolute
+        top: 0
+        left: 0
+    .fm-label.active
+        @extend %ElementCyan
+        font-size: .8rem
+        transform: translateY(-70%)
+        padding: .1rem .5rem
+        border-top-left-radius: .25rem
+    .fm-error
+        color: $RedColor
+        padding-top: 0.25rem
+    .set-right
+        position: absolute
+        right: 0
+        border-radius: 0px
+
+.overlabel
+    float: left
+    margin-bottom: 1.25rem
+    border-bottom: 1px solid #999999
+    color: #999999
+
+.fm-group.inline
+    min-width: auto
+    margin: 0.25rem
+
+.text-alert
+    @extend %GroupNote
+    text-align: center
+    background: rgba(255,0,0, 0.2)
+    color: $RedColor
+.text-muted
+    @extend %GroupNote
+    color: #999999
+.btn
+    padding: .5rem 1.5rem
+    font-size: .9rem
+    border: 1px solid #999999
+    cursor: pointer
+    background: transparent
+    transition: all 0.2s ease 0s
+    border-radius: .3rem
+.btn-inactive
+    background-color: rgba(100, 100, 100, 0.2)
+    color: #aaaaaa
+
+.btn-red
+    background: $RedColor
+    color: white
+
+.btn-blue
+    background: #007bff
+    color: white
+
+.btn-gray
+    background: #888888
+    color: #eeeeee
+
+.btn-sm
+    border: 1px solid #aaaaaa
+    cursor: pointer
+    background: transparent
+    transition: all 0.2s ease 0s
+    text-align: center
+    padding: .25rem
+    min-width: 2rem
+    &:hover
+        font-size: 1.05rem
+
+.card
+    padding: 1rem
+    border: 1px solid #ccc
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15)
+
+.card-header
+    font-family: "Monserrat", sans-serif
+    font-weight: bolder
+    font-size: 1.2rem
+    border-bottom: 1px solid var(--borderGray)
+    padding-bottom: 1rem
+
+.card-footer
+    border-top: 1px solid var(--borderGray)
+    text-align: center
+    padding-top: 1rem
+
+.card-note
+    margin: 0.75rem auto
+    max-width: 20rem
+    min-width: 17rem
+
+.notification
+    padding: .5rem
+    border-top: 1px solid #bbbbbb
+    .notification-header
+        padding-bottom: .25rem
+        margin-bottom: .25rem
+    .notification-body
+        font-size: 0.8rem
+        padding: 0.25rem 0
+        color: #444444
+
+p
+    margin-bottom: 1rem
+
+.flex-center
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.navbar
+    height: 3rem
+
+.navbar-footer
+    background: rgba(50, 50, 50, 0.9)
+    height: 3rem
+    color: #aaaaaa
+
+.navbar-list
+    list-style: none
+    margin: 0
+    padding: 0
+    display: flex
+
+.nav-item
+    height: 100%
+
+.nav-logo
+    display: inline-block
+    padding: 0 2rem
+
+.nav-link
+    display: inline-block
+    padding: 0 2rem
+    transition: all 0.3s ease 0s
+    &:hover
+        font-size: 1.1rem
+
+.icon
+    font-size: 2rem
+
+.profile
+    height: 2rem
+    border-radius: 50%
+
+.user-menu
+    position: relative
+    > div
+        position: absolute
+        z-index: 2
+        background: rgba(255, 255, 255, 0.9)
+        width: 20rem
+        right: 0
+        color: black
+        opacity: 0
+        visibility: hidden
+        transition: top 0.3s
+    &:hover
+        .card
+            opacity: 1
+            visibility: visible
+
+.text-sm
+    font-size: 0.75rem
+
+.text-center
+    text-align: center
+
+.text-right
+    text-align: right
+
+.text-gray
+    color: #aaaaaa
+
+.m-1
+    margin: .1rem
+.m-5
+    margin: .5rem
+.m-8
+    margin: .8rem
+.p-2
+    padding: .2rem
+
+.p-5
+    padding: .5rem
+
+.ptb-7
+    padding-top: .7rem
+    padding-bottom: .7rem
+
+.plr-7
+    padding-left: .7rem
+    padding-right: .7rem
+
+.plr-9
+    padding-left: .9rem
+    padding-right: .9rem
+
+.ptb-9
+    padding-top: .9rem
+    padding-bottom: .9rem
+
+.w100
+    width: 100%
+
+.w50
+    width: 50%
+
+.h75
+    height: 75%
+
+.h50
+    height: 50%
+
+.login
+    width: 40%
+    min-width: 20rem
+    margin: 20vh auto
+    border: 1px solid #ccc
+    border-radius: 0.3rem
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15)
+    font-size: 16px
+    .navbar-list
+        width: 100%
+        button
+            border: none
+            &:hover
+                @extend %ElementWhite
+                font-size: 1.05rem
+.white
+    background: rgba(255,255,255, 0.75)
+    color: black
+
+.orange
+    background: #f89e2a
+    color: white
+
+.yellow
+    background: #ffef26CC
+    color: #444444
+
+.blue
+    background: #7ca6f7CC
+    color: white
+
+.pink
+    background: #ff31bfCC
+    color: white
+
+.green
+    background: #71db3fCC
+    color: #222222
+
+.purple
+    background: #c258ddCC
+    color: #eee
+
+.orange button,
+.blue button,
+.pink button,
+.purple button
+    color: white
+
+.yellow button,
+.green button
+    color: black
+
+.orange button:hover,
+.yellow button:hover,
+.blue button:hover,
+.pink button:hover,
+.green button:hover,
+.purple button:hover
+    background: white
+    color: black
+
+.tbl
+    border-collapse: collapse
+    width: 100%
+    margin-bottom: 2rem
+    th
+        border: 1px solid var(--borderGray)
+        padding: 1rem
+        .normal-th
+            display: block
+        .sm-th
+            display: none
+    td
+        border: 1px solid var(--borderGray)
+        font-size: 1.2rem
+        .space
+            cursor: pointer
+            padding: .75rem
+.flag
+    width: 0
+    height: 0
+    border-top: 1.4rem solid transparent
+    border-bottom: 1.4rem solid transparent
+    border-left: 1.25rem solid rgba(255, 200, 10, 0.75)
+    float: left
+    position: absolute
+
+.select-div option
+    display: none
+
+.select-list
+    position: absolute
+    width: 100%
+    border: 1px solid #222222
+    z-index: 10
+    background: white
+
+.select-option
+    padding: .5rem
+    cursor: pointer
+
+.select-option:hover
+    background-color: rgba(100, 120, 255, 0.75)
+    color: white
+
+.mini-square
+    +square(1rem, #eeeeee)
+
+.square
+    +square(5rem, #333333)
+
+.bl-gray
+    border-left: 1px solid var(--borderGray)
+
+.br-gray
+    border-right: 1px solid var(--borderGray)
+
+.card-group
+    flex-basis: 0
+    flex-grow: 1
+    position: relative
+    padding: 0 .25rem
+    border: 1px solid var(--borderGray)
+
+.card-group-header
+    font-family: "Monserrat", sans-serif
+    font-weight: bold
+    border-bottom: 1px solid var(--borderGray)
+    padding: .75rem
+    display: flex
+    background: rgba(255,255,255,0.25)
+
+.card-group-body
+    display: flex
+    flex-wrap: wrap
+
+.btn-group
+    display: inline-flex
+    justify-content: center
+
+.disable, .past
+    color: #888888
+
+.selected
+    background: rgba(100, 100, 250, 0.75)
+    color: white
+
+.today
+    background: rgba(100, 200,100, 0.5)
+
+.ml-auto
+    margin-left: auto
+
+.mr-auto
+    margin-right: auto
+
+.m-auto
+    margin: auto
+
+.White
+    +NormalTheme("", 'white', 'cyan', 'orange', 'white', "../img/squares.png")
+
+.Wood
+    +NormalTheme("../img/white-wood.jpg", 'black', 'yellow', 'orange', 'white', "../img/wood2.png")
+
+.Alchemy
+    +NormalTheme("../img/alchemy.gif", 'orange', 'cyan', 'purple', 'cyan', "../img/chemical.png")
+
+.Ahoy
+    +NormalTheme("../img/ahoy.jpg", 'pink', 'orange', 'purple', 'cyan', "../img/boat.png")
+
+.Kitty
+    +NormalTheme("../img/kitty.png", 'pink', 'cyan', 'orange', 'cyan', "../img/cat.png")
+
+.Cuadros
+    +NormalTheme("../img/cuadros.png", 'white', 'cyan', 'cyan', 'orange', "../img/squares.png")
+
+.Glitch
+    +NormalTheme("../img/glitch.png", 'cyan', 'yellow', 'cyan', 'orange',"../img/glitch1.png")
+
+.Brijan
+    +NormalTheme("../img/brijan.gif", 'green', 'cyan', 'orange', 'cyan',"../img/triangle1.svg")
+
+.Illusionist
+    +BlackTheme("../img/the-illusionist.png", 'black', 'yellow', 'orange', 'white', "../img/ilusionist1.png")
+
+.Asteroids
+    +BlackTheme("../img/asteroids.jpg", 'black', 'cyan', 'orange', 'orange', "../img/space.png")
+
+.Celebration
+    +BlackTheme("../img/celebration.png", 'black', 'orange', 'cyan', 'black', "../img/celebration1.png")
+
+.start-text
+    @extend %Start
+    background-color: rgba(255,255,255,0.75)
+    display: flex
+    z-index: 5
+.start-info
+    width: 50%
+    margin: auto
+    font-size: 1.2rem
+    text-align: justify
+    color: black
+
+@media screen and (max-width:1000px)
+    header
+        padding: 0 .25rem
+    .navbar
+        height: 2.5rem
+
+    .nav-logo
+        width: 100%
+
+    .nav-link
+        padding: 0 .75rem
+
+    .nav-link span
+        display: none
+
+    .nav-link i
+        font-size: 1.5rem
+
+    .nav-link .profile
+        height: 1.5rem
+
+    .row
+        display: flex
+        flex-wrap: wrap
+        margin-left: .5rem
+        margin-right: .5rem
+
+    .col
+        flex-basis: 0
+        flex-grow: 1
+        position: relative
+        padding: 0 .25rem
+
+    .col4
+        max-width: 100%
+
+    .col3
+        max-width: 100%
+
+    .col2
+        max-width: 100%
+
+    .fm-group
+        margin: 1rem 0
+
+    .tbl
+        th
+            .normal-th
+                display: none
+            .sm-th
+                display: block
+        td
+            font-size: 1.5rem
+            color: #666
+            .space
+                padding: .25rem
+
+    .flag
+        width: 0
+        height: 0
+        border-top: .8rem solid transparent
+        border-bottom: .8rem solid transparent
+        border-left: .5rem solid rgba(255, 220, 50, 0.8)
+        float: left
+        position: absolute
+
+    .modal-lg
+        min-width: 25rem
+
+    .card-note
+        min-width: 12rem
+
+    .start-info
+        font-size: 1rem

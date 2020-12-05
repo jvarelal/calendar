@@ -22,13 +22,10 @@ const getModalMessage = (title, message) => ({
     }
 })
 
-const getModalLoader = show => {
-    console.log('getModalLoader:' + show)
-    return ({ 
-        type: MODAL_TYPES.SHOW_LOADER,
-        payload: show
-    })
-}
+const getModalLoader = show => ({
+    type: MODAL_TYPES.SHOW_LOADER,
+    payload: show
+})
 
 const handleClose = () => ({ type: MODAL_TYPES.CLOSE })
 

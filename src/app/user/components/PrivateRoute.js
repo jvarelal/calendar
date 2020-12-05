@@ -9,7 +9,6 @@ const PrivateRoute = ({ component: Component, user, ...rest }) => (
             if (user.id)
                 return <Component {...props}/>
             else{
-                console.log('No se encontro user')
                 return <Redirect to="/login" />
             }
         }}

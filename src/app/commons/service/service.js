@@ -1,7 +1,6 @@
-import { CALENDAR_TYPES } from '../../calendar/actions/calendarTypes'
+import { CALENDAR_TYPES, DASHBOARD_TYPES } from '../../task/actions/taskTypes'
 import { USER_TYPES } from '../../user/actions/userTypes'
-import './firebase'
-import { db, auth } from './firebase'
+import { provider, db, auth } from './firebase'
 import axios from 'axios'
 
 export default function service({ nameService = '', type = '', body = {}, cb = () => null, error = () => null }) {
@@ -9,19 +8,33 @@ export default function service({ nameService = '', type = '', body = {}, cb = (
         calendar: [
             {
                 type: CALENDAR_TYPES.CREATE_TASK,
-                execute: calendarService.createTaskFb
+                execute: calendarService.createTask
             },
             {
                 type: CALENDAR_TYPES.LIST_TASKS,
-                execute: calendarService.readTaskFb
+                execute: calendarService.readTask
             },
             {
                 type: CALENDAR_TYPES.EDIT_TASK,
-                execute: calendarService.updateTaskFb
+                execute: calendarService.updateTask
             },
             {
                 type: CALENDAR_TYPES.DELETE.BY_ID,
-                execute: calendarService.deleteTaskByIdFb
+                execute: calendarService.deleteTaskById
+            }
+        ],
+        dashboard: [
+            {
+                type: DASHBOARD_TYPES.CREATE_DASHBOARD,
+                execute: dashboardService.createDashboard
+            },
+            {
+                type: DASHBOARD_TYPES.LIST_DASHBOARDS,
+                execute: dashboardService.readDashboards
+            },
+            {
+                type: DASHBOARD_TYPES.EDIT_DASHBOARD,
+                execute: dashboardService.updateDashboards
             }
         ],
         user: [
@@ -30,8 +43,24 @@ export default function service({ nameService = '', type = '', body = {}, cb = (
                 execute: userService.register
             },
             {
-                type: USER_TYPES.GET_LOGIN,
+                type: USER_TYPES.GET_LOGIN.BY_EMAIL,
                 execute: userService.login
+            },
+            {
+                type: USER_TYPES.GET_LOGIN.BY_GOOGLE,
+                execute: userService.googleAuth
+            },
+            {
+                type: USER_TYPES.GET_LOGIN.BY_FACEBOOK,
+                execute: userService.facebookAuth
+            },
+            {
+                type: USER_TYPES.GET_LOGOUT,
+                execute: userService.logout
+            },
+            {
+                type: USER_TYPES.CHECK_SESSION,
+                execute: userService.checkSession
             },
             {
                 type: USER_TYPES.GET_LOCATION,
@@ -85,8 +114,12 @@ const userService = {
     register: (body, cb, cbError) => {
         try {
             auth.createUserWithEmailAndPassword(body.email, body.password)
-                .then(userCredential => cb({ ...response, data: userCredential }))
-                .catch(cbError)
+                .then(credentials => {
+                    if (credentials) {
+                        credentials.updateProfile({ displayName: body.name })
+                            .then(s => cb({ ...response, data: credentials }))
+                    }
+                }).catch(cbError)
         } catch (e) {
             console.log(e)
             cbError({ status: 500, message: e.message })
@@ -95,7 +128,79 @@ const userService = {
     login: (body, cb, cbError) => {
         try {
             auth.signInWithEmailAndPassword(body.email, body.password)
-                .then(userCredential => cb({ ...response, data: userCredential }));
+                .then(credentials => cb({ ...response, data: credentials })).catch(cbError);
+        } catch (e) {
+            cbError({ status: 500, message: e.message })
+        }
+    },
+    logout: (body, cb, cbError) => {
+        try {
+            auth.signOut().then(() => cb({ ...response })).catch(cbError);
+        } catch (e) {
+            cbError({ status: 500, message: e.message })
+        }
+    },
+    googleAuth: (body, cb, cbError) => {
+        try {
+            const googleProvider = new provider.GoogleAuthProvider();
+            auth.signInWithPopup(googleProvider)
+                .then(credentials => {
+                    cb({ ...response, data: credentials })
+                }).catch(cbError);
+        } catch (e) {
+            console.log(e)
+            cbError({ status: 500, message: e.message })
+        }
+    },
+    facebookAuth: (body, cb, cbError) => {
+        try {
+            const facebookProvider = new provider.FacebookAuthProvider();
+            auth.signInWithPopup(facebookProvider)
+                .then(credentials => {
+                    cb({ ...response, data: credentials })
+                }).catch(cbError);
+        } catch (e) {
+            console.log(e)
+            cbError({ status: 500, message: e.message })
+        }
+    },
+    checkSession: (body, cb, cbError) => {
+        try {
+            auth.onAuthStateChanged(user => {
+                user ? cb({ ...response, data: { user: user } }) : cb({ status: 400, ignore: true })
+            })
+        } catch (e) {
+            cbError({ status: 500, message: e.message })
+        }
+    }
+}
+
+const dashboardService = {
+    createDashboard: async (body, cb, cbError) => {
+        console.log('entro createDashboard')
+        try {
+            await db.collection('dashboards').add({ ...body, cb: null })
+                .then(refDoc => cb({ ...response, message: 'Tablero creado', data: refDoc }))
+        } catch (e) {
+            console.log(e)
+            cbError({ status: 500, message: e.message })
+        }
+    },
+    readDashboards: (body, cb, cbError) => {
+        try {
+            db.collection('dashboards').where("userId", "==", body.id).onSnapshot(querySnap => {
+                let data = [];
+                querySnap.forEach(doc => data.push({ ...doc.data(), id: doc.id }))
+                cb({ ...response, message: 'Tableros listados', data: data });
+            })
+        } catch (e) {
+            cbError({ status: 500, message: e.message })
+        }
+    },
+    updateDashboards: async (body, cb, cbError) => {
+        try {
+            await db.collection('dashboards').doc(body.id).update(body)
+            cb({ ...response, message: 'Dashboard actualizado' });
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
@@ -103,17 +208,19 @@ const userService = {
 }
 
 const calendarService = {
-    createTaskFb: async (body, cb, cbError) => {
+    createTask: async (body, cb, cbError) => {
         try {
-            await db.collection('tasks').doc().set(body)
-            cb({ ...response, message: 'Nota agregada' });
+            await db.collection('tasks').add({ ...body, cb: null })
+                .then(refDoc => {
+                    console.log(refDoc)
+                    cb({ ...response, message: 'Tablero creado', data: refDoc })
+                })
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
     },
-    readTaskFb: (body, cb, cbError) => {
+    readTask: (body, cb, cbError) => {
         try {
-            console.log(body)
             db.collection('tasks').where("userId", "==", body).onSnapshot(querySnap => {
                 let data = [];
                 querySnap.forEach(doc => data.push({ ...doc.data(), id: doc.id }))
@@ -123,15 +230,15 @@ const calendarService = {
             cbError({ status: 500, message: e.message })
         }
     },
-    updateTaskFb: async (body, cb, cbError) => {
+    updateTask: async (body, cb, cbError) => {
         try {
-            await db.collection('tasks').doc(body.id).update(body)
-            cb({ ...response, message: 'Nota actualizada' });
+            await db.collection('tasks').doc(body.id).update({ ...body, cb: null })
+                .then(refDoc => cb({ ...response, message: 'Nota actualizada', data: refDoc }))
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
     },
-    deleteTaskByIdFb: (body, cb, cbError) => {
+    deleteTaskById: (body, cb, cbError) => {
         try {
             body.forEach(async task => await db.collection('tasks').doc(task.id).delete());
             cb({ ...response, message: 'Nota eliminada' });

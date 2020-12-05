@@ -1,0 +1,237 @@
+$RedColor: #dc3545
+
+%BasePT
+    font-family: "PT Sans", sans-serif
+    font-size: 15px
+
+%BaseCalibri
+    font-family: Calibri, sans-serif
+    font-family: 16px
+
+%ElementWhite
+    background: white
+    color: black
+
+%ElementWhiteH
+    @extend %ElementWhite
+    &:hover
+        @extend %ElementBlack
+
+%ElementBlack
+    background: black
+    color: white
+
+%ElementBlackH
+    @extend %ElementBlack
+    &:hover
+        @extend %ElementWhite
+
+%ElementOrange
+    background: orange
+    color: white
+
+%ElementOrangeH
+    @extend %ElementOrange
+    &:hover
+        background: #ff8822
+        color: white
+
+%ElementCyan
+    background: #049999
+    color: white
+
+%ElementCyanH
+    @extend %ElementCyan
+    &:hover
+        background: #049090
+        color: white
+
+%ElementPurple
+    background: #a359a4
+    color: white
+
+%ElementPurpleH
+    @extend %ElementPurple
+    &:hover
+        background: #97599f
+        color: white
+%ElementGreen
+    background: #229722
+    color: white
+
+%ElementGreenH
+    @extend %ElementGreen
+    &:hover
+        background: #209020
+        color: white
+
+%ElementYellow
+    background: rgb(249, 187, 40)
+    color: white
+
+%ElementRed
+    background: $RedColor
+    color: white
+
+%ElementPink
+    background: #ee8294
+    color: white
+
+%GroupNote
+    font-size: .9rem
+    margin: .3rem 0
+    padding: .5rem
+
+%Start
+    flex-basis: 50%
+    height: 100vh
+
+=square($size, $colorBorder)
+    width: $size
+    height: $size
+    margin: 0 .25rem
+    border: 1px solid $colorBorder
+
+=Loading($color)
+    border: 6px solid #f0f0f0
+    border-top: 6px solid $color
+    border-radius: 50%
+    width: 50px
+    height: 50px
+    animation: spin 2s linear infinite
+    margin: auto
+
+=BackgroundStart($img)
+    @extend %Start
+    background-position: center
+    background-image: url($img)
+    background-size: contain
+    background-repeat: no-repeat
+    position: absolute
+    width: 50%
+
+=BackgroundTheme($url, $color, $header, $label, $button, $cardButton, $imgVoid, $imgStart)
+    @if $url != ""
+        background-image: url($url)
+        background-repeat: repeat
+        color: $color
+    header
+        @if $header == "black"
+            @extend %ElementBlack
+        @else if $header == "pink"
+            @extend %ElementPink
+        @else if $header == "green"
+            @extend %ElementGreen
+        @else if $header == "orange"
+            @extend %ElementOrange
+        @else if $header == "cyan"
+            @extend %ElementCyan
+        @else
+            @extend %ElementWhite
+    .empty-img
+        background-repeat: no-repeat
+        background-image: url($imgVoid)
+        background-size: 10rem 10rem
+        margin: 2rem auto
+        opacity: 0.75
+        height: 10rem
+        width: 10rem
+    .fm-group
+        label.active
+            @if $label == "black"
+                @extend %ElementBlack
+                border: 1px solid #dddddd
+            @else if $label == "pink"
+                @extend %ElementPink
+            @else if $label == "green"
+                @extend %ElementGreen
+            @else if $label == "orange"
+                @extend %ElementOrange
+            @else if $label == "cyan"
+                @extend %ElementCyan
+            @else if $label == "purple"
+                @extend %ElementPurple
+            @else if $label == "yellow"
+                @extend %ElementYellow
+            @else
+                @extend %ElementWhite
+                border: 1px solid #444444
+    .btn-primary
+        @if $button == "black"
+            @extend %ElementBlackH
+        @else if $button == "green"
+            @extend %ElementGreenH
+        @else if $button == "orange"
+            @extend %ElementOrangeH
+        @else if $button == "cyan"
+            @extend %ElementCyanH
+        @else if $button == "purple"
+            @extend %ElementPurpleH
+        @else
+            @extend %ElementWhiteH
+    .loading
+        @if $label == "black"
+            +Loading(rgba(255, 136, 34, 0.5))
+        @else if $label == "green"
+            +Loading(rgba(0, 255, 0, 0.5))
+        @else if $label == "orange"
+            +Loading(rgba(255, 136, 34, 0.5))
+        @else if $label == "cyan"
+            +Loading(rgba(4, 153, 153, 0.5))
+        @else if $label == "purple"
+            +Loading(rgba(151, 89, 159, 0.5))
+        @else
+            +Loading(rgba(100, 100, 100, 0.5))
+    .card-group-header
+        .btn-sm
+            @if $cardButton == "black"
+                @extend %ElementBlackH
+            @else if $cardButton == "green"
+                @extend %ElementGreenH
+            @else if $cardButton == "orange"
+                @extend %ElementOrangeH
+            @else if $cardButton == "cyan"
+                @extend %ElementCyanH
+            @else if $cardButton == "purple"
+                @extend %ElementPurpleH
+            @else
+                @extend %ElementWhiteH
+
+=ScaleWhite($scale)
+    background: rgba(255, 255, 255, $scale)
+
+=ScaleBlack($scale)
+    background: rgba(0, 0, 0, $scale)
+
+=NormalTheme($url, $header, $label, $button, $cardButton, $imgVoid)
+    +BackgroundTheme($url, black, $header, $label, $button, $cardButton, $imgVoid, 'white')
+    .container
+        +ScaleWhite(0.5)
+    .login, .tbl
+        +ScaleWhite(0.75)
+        color: #444444
+    .start-img-l
+        +BackgroundStart("../img/Layout.png")
+    .start-img-r
+        +BackgroundStart("../img/Calendar3.png")
+    .tbl
+        tbody
+            &:focus
+                box-shadow: 0 6px 5px rgba(0, 0, 0, 0.75)
+
+=BlackTheme($url, $header, $label, $button, $cardButton, $imgVoid)
+    +BackgroundTheme($url, white, $header, $label, $button, $cardButton, $imgVoid, 'black')
+    .container
+        +ScaleBlack(0.5)
+        color: white
+    .login, .tbl
+        +ScaleBlack(0.7)
+        color: #eeeeee
+    .start-img-l
+        +BackgroundStart("../img/Layout.png")
+    .start-img-r
+        +BackgroundStart("../img/Calendar3ia.png")
+    .tbl
+        tbody
+            &:focus
+                box-shadow: 0 6px 5px rgba(255, 255, 255, 0.75)

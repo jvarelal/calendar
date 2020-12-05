@@ -1,4 +1,4 @@
-import { SYSDATE, FUTURE, PRESENT, PAST } from './const'
+import { SYSDATE, FUTURE, PRESENT, PAST, THEMES } from './const'
 
 const goToTheTop = () => {
     document.body.scrollTop = 0; // For Safari
@@ -75,8 +75,6 @@ const notificationsBySecond = (setNotifications, tasks, setTime) => {
     }
 }
 
-const colorPriority = (priority) => priority === 2 ? 'danger' : (priority === 1 ? 'warning' : 'info')
-
 const stringJsonDate = (date) => {
     let day = completeZero(date.day);
     let month = completeZero(Number(date.month) + 1);
@@ -102,15 +100,125 @@ const getMaxDay = (maxDate, startDate) => {
     return maxDay;
 }
 
-function getRandomNumber(min, max) {
+const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function validateEmail(email) {
-    var re = /\S+@\S+\.\S+/;
-    return re.test(email);
+const insertArrayWithId = (array = [], element = {}) => {
+    if (array.length === 0) {
+        return [{ ...element, id: 1 }]
+    }
+    let ids = array.map(o => Number(o.id));
+    let nextId = Math.max(...ids) + 1;
+    return [...array, { ...element, id: nextId }]
 }
 
+const sortByList = (array = [], list = []) => {
+    let newArray = []
+    list.forEach(id => {
+        let element = array.find(e => e.id === id)
+        if (element) newArray.push(element)
+    })
+    let remainArray = array.filter(e => !list.includes(e.id))
+    return [...remainArray, ...newArray];
+}
+
+const lpadArray = (array, number) => {
+    const module = array.length % number
+    if (module === 0)
+        return array
+    return [...new Array(number - module), ...array]
+}
+
+const rpadArray = (array, number) => {
+    const module = array.length % number
+    if (module === 0)
+        return array
+    return [...array, ...new Array(number - module)]
+}
+
+const moveInArray = (array, indexTarget, newIndex) => {
+    let nArray = [...array]
+    nArray.splice(newIndex, 0, nArray.splice(indexTarget, 1)[0]);
+    return nArray;
+}
+
+const onDragOver = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+}
+
+const validateEmail = (email) => {
+    let validation = {error: !/\S+@\S+\.\S+/.test(email)}
+    if(validation.error) validation.msg = 'Email invalido'
+    return validation;
+}
+
+
+const updateTasksInGroup = (dashboard, task, newOrderId, updateDashboard) => {
+    for (let i = 0; i < dashboard.groups.length; i++) {
+        let group = dashboard.groups[i]
+        if (group.id === task.dashboard.idGroup) {
+            let cleanTasks = group.tasks.filter(idTask => idTask !== task.id)
+            cleanTasks.splice(newOrderId, 0, task.id);
+            group.tasks = cleanTasks
+        }
+    }
+    console.log(dashboard)
+    updateDashboard(dashboard)
+}
+
+const getTheme = () => {
+    let user = getUserLocalData()
+    return THEMES[user.theme]
+}
+
+const setPrefence = preference => {
+    let user = getUserLocalData()
+    setUserLocalData({ ...user, ...preference })
+}
+
+const getUserLocalData = () => {
+    let local = localStorage.notas;
+    return local ? JSON.parse(local) : {
+        theme: getRandomNumber(0, THEMES.length - 1),
+        backgroundCards: false
+    }
+}
+
+const setUserLocalData = (data) => {
+    localStorage.notas = JSON.stringify({
+        theme: data.theme || getRandomNumber(0, THEMES.length - 1),
+        backgroundCards: data.backgroundCards || false
+    })
+}
+
+const onTextChange = (e, rg, setValue, upperCase) => {
+    let input = e.target;
+    let value = input.value && upperCase ? input.value.toUpperCase() : input.value
+    if (!value || (rg.test(input.value)
+        && (input.value.length <= input.maxLength))) {
+        return setValue(value ? value : '')
+    }
+}
+
+/*
+const onAlphaChange = evento => {
+    let input = evento.target;
+    let rg = /^([a-zA-Z0-9-@. ]*)$/
+    if (rg.test(input.value)
+        && (this.state[input.name].length < input.maxLength || input.value.length <= input.maxLength))
+        return this.setState({ [input.name]: input.value ? input.value.toUpperCase() : '' })
+}
+
+const onNumberChange = evento => {
+    let input = evento.target;
+    let rg = /^([0-9-]*)$/
+    if (rg.test(input.value)
+        && (this.state[input.name].length < input.maxLength || input.value.length <= input.maxLength))
+        return this.setState({ [input.name]: input.value ? input.value.toUpperCase() : '' })
+}
+*/
 export {
     goToTheTop,
     completeZero,
@@ -119,11 +227,22 @@ export {
     evalueDate,
     getNotifications,
     notificationsBySecond,
-    colorPriority,
     stringJsonDate,
     getLastDayMonth,
     getMinDay,
     getMaxDay,
     getRandomNumber,
-    validateEmail
+    updateTasksInGroup,
+    lpadArray,
+    rpadArray,
+    sortByList,
+    onDragOver,
+    moveInArray,
+    validateEmail,
+    insertArrayWithId,
+    getTheme,
+    getUserLocalData,
+    setUserLocalData,
+    setPrefence,
+    onTextChange
 }

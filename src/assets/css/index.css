@@ -1,15 +1,1313 @@
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans&family=Montserrat&display=swap");
+button, li, a, input, select, textarea, label, input[type=submit] {
+  font-family: "PT Sans", sans-serif;
+  font-size: 15px;
+}
+
 html {
+  font-family: Calibri, sans-serif;
+  font-family: 16px;
+}
+
+.Cuadros header, .login .navbar-list button:hover, .Celebration .card-group-header .btn-sm:hover, .Illusionist .card-group-header .btn-sm, .Wood .card-group-header .btn-sm {
+  background: white;
+  color: black;
+}
+
+.Celebration header, .Asteroids header, .Illusionist header, .Wood header, .Celebration .card-group-header .btn-sm, .Illusionist .card-group-header .btn-sm:hover, .Wood .card-group-header .btn-sm:hover {
+  background: black;
+  color: white;
+}
+
+.Celebration .fm-group label.active, .Ahoy .fm-group label.active, .Alchemy header, .Asteroids .card-group-header .btn-sm, .Asteroids .btn-primary, .Illusionist .btn-primary, .Brijan .btn-primary, .Glitch .card-group-header .btn-sm, .Cuadros .card-group-header .btn-sm, .Kitty .btn-primary, .Wood .btn-primary {
+  background: orange;
+  color: white;
+}
+
+.Asteroids .card-group-header .btn-sm:hover, .Asteroids .btn-primary:hover, .Illusionist .btn-primary:hover, .Brijan .btn-primary:hover, .Glitch .card-group-header .btn-sm:hover, .Cuadros .card-group-header .btn-sm:hover, .Kitty .btn-primary:hover, .Wood .btn-primary:hover {
+  background: #ff8822;
+  color: white;
+}
+
+.Asteroids .fm-group label.active, .Brijan .fm-group label.active, .Glitch header, .Cuadros .fm-group label.active, .Kitty .fm-group label.active, .Alchemy .fm-group label.active, .fm-group .fm-label.active, .Celebration .btn-primary, .Brijan .card-group-header .btn-sm, .Glitch .btn-primary, .Cuadros .btn-primary, .Kitty .card-group-header .btn-sm, .Ahoy .card-group-header .btn-sm, .Alchemy .card-group-header .btn-sm {
+  background: #049999;
+  color: white;
+}
+
+.Celebration .btn-primary:hover, .Brijan .card-group-header .btn-sm:hover, .Glitch .btn-primary:hover, .Cuadros .btn-primary:hover, .Kitty .card-group-header .btn-sm:hover, .Ahoy .card-group-header .btn-sm:hover, .Alchemy .card-group-header .btn-sm:hover {
+  background: #049090;
+  color: white;
+}
+
+.Ahoy .btn-primary, .Alchemy .btn-primary {
+  background: #a359a4;
+  color: white;
+}
+
+.Ahoy .btn-primary:hover, .Alchemy .btn-primary:hover {
+  background: #97599f;
+  color: white;
+}
+
+.Brijan header {
+  background: #229722;
+  color: white;
+}
+
+.Illusionist .fm-group label.active, .Glitch .fm-group label.active, .Wood .fm-group label.active {
+  background: #f9bb28;
+  color: white;
+}
+
+.Kitty header, .Ahoy header {
+  background: #ee8294;
+  color: white;
+}
+
+.text-muted, .text-alert {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  padding: 0.5rem;
+}
+
+.start-text, .Celebration .start-img-r, .Celebration .start-img-l, .Asteroids .start-img-r, .Asteroids .start-img-l, .Illusionist .start-img-r, .Illusionist .start-img-l, .Brijan .start-img-r, .Brijan .start-img-l, .Glitch .start-img-r, .Glitch .start-img-l, .Cuadros .start-img-r, .Cuadros .start-img-l, .Kitty .start-img-r, .Kitty .start-img-l, .Ahoy .start-img-r, .Ahoy .start-img-l, .Alchemy .start-img-r, .Alchemy .start-img-l, .Wood .start-img-r, .Wood .start-img-l {
+  flex-basis: 50%;
+  height: 100vh;
+}
+
+html {
+  font-weight: 300;
   height: 100%;
+  --borderGray: rgba(200, 200, 200, 0.75);
 }
 
 body {
   margin: 0;
   height: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
 }
+
+header, footer {
+  padding: 0 1rem;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+footer {
+  bottom: 0;
+}
+
+button, li, a, input, select, textarea, label, input[type=submit] {
+  text-decoration: none;
+}
+
+#root {
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(50, 50, 200, 0.25);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(50, 50, 200, 0.5);
+}
+
+a {
+  color: inherit;
+}
+
+.wrapper {
+  margin-right: auto;
+  margin-left: auto;
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+}
+
+.wrapper::after {
+  content: "";
+  display: block;
+  height: 2rem;
+}
+
+.modal {
+  background: rgba(70, 70, 70, 0.6);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  top: 0;
+  left: 0;
+  color: black;
+  display: flex;
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.2s linear 0.2s;
+}
+.modal .modal-content {
+  margin: auto;
+  background: white;
+  min-width: 30rem;
+  width: 25%;
+  padding: 1rem;
+  transition: all 0.4s linear 0.3s;
+  opacity: 0;
+  transform: translateY(-150%);
+}
+.modal .modal-content.active {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.modal .modal-lg {
+  min-width: 45rem;
+  width: 40%;
+}
+
+.modal.active {
+  opacity: 1;
+  z-index: 20;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.container {
+  padding: 4rem 0.5rem;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  position: relative;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.col2 {
+  max-width: 50%;
+}
+
+.col4 {
+  max-width: 25%;
+}
+
+.col3 {
+  max-width: 33%;
+}
+
+.fm-group {
+  position: relative;
+  margin: 1.9rem 0rem;
+  width: 100%;
+  min-width: 10rem;
+}
+.fm-group .fm-input {
+  border-radius: 0.1rem;
+  border: 1px solid #d1d1d1;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  outline: 0;
+}
+.fm-group .fm-input:focus {
+  box-shadow: 0 1px 0 0 #011636;
+}
+.fm-group .fm-input.wrong {
+  border: 1px solid #dc3545;
+}
+.fm-group .fm-input.disabled {
+  border: none;
+  border-bottom: 1px solid #666666;
+  background: rgba(255, 255, 255, 0);
+  color: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.fm-group .fm-input.disabled::-ms-expand {
+  display: none;
+}
+.fm-group .fm-label {
+  padding: 0.5rem;
+  color: #999999;
+  font-size: 0.9rem;
+  cursor: text;
+  transition: 0.25s ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.fm-group .fm-label.active {
+  font-size: 0.8rem;
+  transform: translateY(-70%);
+  padding: 0.1rem 0.5rem;
+  border-top-left-radius: 0.25rem;
+}
+.fm-group .fm-error {
+  color: #dc3545;
+  padding-top: 0.25rem;
+}
+.fm-group .set-right {
+  position: absolute;
+  right: 0;
+  border-radius: 0px;
+}
+
+.overlabel {
+  float: left;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #999999;
+  color: #999999;
+}
+
+.fm-group.inline {
+  min-width: auto;
+  margin: 0.25rem;
+}
+
+.text-alert {
+  text-align: center;
+  background: rgba(255, 0, 0, 0.2);
+  color: #dc3545;
+}
+
+.text-muted {
+  color: #999999;
+}
+
+.btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #999999;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s ease 0s;
+  border-radius: 0.3rem;
+}
+
+.btn-inactive {
+  background-color: rgba(100, 100, 100, 0.2);
+  color: #aaaaaa;
+}
+
+.btn-red {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-blue {
+  background: #007bff;
+  color: white;
+}
+
+.btn-gray {
+  background: #888888;
+  color: #eeeeee;
+}
+
+.btn-sm {
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s ease 0s;
+  text-align: center;
+  padding: 0.25rem;
+  min-width: 2rem;
+}
+.btn-sm:hover {
+  font-size: 1.05rem;
+}
+
+.card {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  font-family: "Monserrat", sans-serif;
+  font-weight: bolder;
+  font-size: 1.2rem;
+  border-bottom: 1px solid var(--borderGray);
+  padding-bottom: 1rem;
+}
+
+.card-footer {
+  border-top: 1px solid var(--borderGray);
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.card-note {
+  margin: 0.75rem auto;
+  max-width: 20rem;
+  min-width: 17rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar {
+  border-bottom: 1px solid #eeeeee;
+  height: 3rem;
+}
+
+.navbar-footer {
+  background: rgba(50, 50, 50, 0.9);
+  border-top: 1px solid #888888;
+  height: 2rem;
+}
+
+.navbar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.nav-item {
+  height: 100%;
+}
+
+.nav-logo {
+  display: inline-block;
+  padding: 0 2rem;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 0 2rem;
+  transition: all 0.3s ease 0s;
+}
+.nav-link:hover {
+  font-size: 1.1rem;
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.profile {
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.user-menu {
+  position: relative;
+}
+.user-menu > div {
+  position: absolute;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  width: 20rem;
+  right: 0;
+  color: black;
+  opacity: 0;
+  visibility: hidden;
+  transition: top 0.3s;
+}
+.user-menu:hover .card {
+  opacity: 1;
+  visibility: visible;
+}
+
+.text-sm {
+  font-size: 0.75rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-gray {
+  color: #aaaaaa;
+}
+
+.m-1 {
+  margin: 0.1rem;
+}
+
+.m-5 {
+  margin: 0.5rem;
+}
+
+.m-8 {
+  margin: 0.8rem;
+}
+
+.p-2 {
+  padding: 0.2rem;
+}
+
+.p-5 {
+  padding: 0.5rem;
+}
+
+.ptb-7 {
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+
+.plr-7 {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+}
+
+.plr-9 {
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
+}
+
+.ptb-9 {
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.h75 {
+  height: 75%;
+}
+
+.h50 {
+  height: 50%;
+}
+
+.login {
+  width: 40%;
+  min-width: 20rem;
+  margin: 20vh auto;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+}
+.login .navbar-list {
+  width: 100%;
+}
+.login .navbar-list button {
+  border: none;
+}
+.login .navbar-list button:hover {
+  font-size: 1.05rem;
+}
+
+.white {
+  background: rgba(255, 255, 255, 0.75);
+  color: black;
+}
+
+.orange {
+  background: #f89e2a;
+  color: white;
+}
+
+.yellow {
+  background: #ffef26CC;
+  color: #444444;
+}
+
+.blue {
+  background: #7ca6f7CC;
+  color: white;
+}
+
+.pink {
+  background: #ff31bfCC;
+  color: white;
+}
+
+.green {
+  background: #71db3fCC;
+  color: #222222;
+}
+
+.purple {
+  background: #c258ddCC;
+  color: #eee;
+}
+
+.orange button,
+.blue button,
+.pink button,
+.purple button {
+  color: white;
+}
+
+.yellow button,
+.green button {
+  color: black;
+}
+
+.orange button:hover,
+.yellow button:hover,
+.blue button:hover,
+.pink button:hover,
+.green button:hover,
+.purple button:hover {
+  background: white;
+  color: black;
+}
+
+.tbl {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.tbl th {
+  border: 1px solid var(--borderGray);
+  padding: 1rem;
+}
+.tbl th .normal-th {
+  display: block;
+}
+.tbl th .sm-th {
+  display: none;
+}
+.tbl td {
+  border: 1px solid var(--borderGray);
+  font-size: 1.2rem;
+}
+.tbl td .space {
+  cursor: pointer;
+  padding: 0.75rem;
+}
+
+.flag {
+  width: 0;
+  height: 0;
+  border-top: 1.4rem solid transparent;
+  border-bottom: 1.4rem solid transparent;
+  border-left: 1.25rem solid rgba(255, 200, 10, 0.75);
+  float: left;
+  position: absolute;
+}
+
+.select-div option {
+  display: none;
+}
+
+.select-list {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #222222;
+  z-index: 10;
+  background: white;
+}
+
+.select-option {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.select-option:hover {
+  background-color: rgba(100, 120, 255, 0.75);
+  color: white;
+}
+
+.mini-square {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.25rem;
+  border: 1px solid #eeeeee;
+}
+
+.square {
+  width: 5rem;
+  height: 5rem;
+  margin: 0 0.25rem;
+  border: 1px solid #333333;
+}
+
+.bl-gray {
+  border-left: 1px solid var(--borderGray);
+}
+
+.br-gray {
+  border-right: 1px solid var(--borderGray);
+}
+
+.card-group {
+  flex-basis: 0;
+  flex-grow: 1;
+  position: relative;
+  padding: 0 0.25rem;
+  border: 1px solid var(--borderGray);
+}
+
+.card-group-header {
+  font-family: "Monserrat", sans-serif;
+  font-weight: bold;
+  border-bottom: 1px solid var(--borderGray);
+  padding: 0.75rem;
+  display: flex;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.card-group-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.btn-group {
+  display: inline-flex;
+  justify-content: center;
+}
+
+.disable, .past {
+  color: #888888;
+}
+
+.selected {
+  background: rgba(100, 100, 250, 0.75);
+  color: white;
+}
+
+.today {
+  background: rgba(100, 200, 100, 0.5);
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.Wood {
+  background-image: url("../img/white-wood.jpg");
+  background-repeat: repeat;
+  color: black;
+}
+.Wood .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/wood2.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Wood .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(100, 100, 100, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Wood .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Wood .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3ia.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Wood .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Wood .login, .Wood .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Alchemy {
+  background-image: url("../img/alchemy.gif");
+  background-repeat: repeat;
+  color: black;
+}
+.Alchemy .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/chemical.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Alchemy .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(4, 153, 153, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Alchemy .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Alchemy .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Alchemy .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Alchemy .login, .Alchemy .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Ahoy {
+  background-image: url("../img/ahoy.jpg");
+  background-repeat: repeat;
+  color: black;
+}
+.Ahoy .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/boat.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Ahoy .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(255, 136, 34, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Ahoy .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Ahoy .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Ahoy .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Ahoy .login, .Ahoy .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Kitty {
+  background-image: url("../img/kitty.png");
+  background-repeat: repeat;
+  color: black;
+}
+.Kitty .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/cat.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Kitty .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(4, 153, 153, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Kitty .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Kitty .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Kitty .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Kitty .login, .Kitty .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Cuadros {
+  background-image: url("../img/cuadros.png");
+  background-repeat: repeat;
+  color: black;
+}
+.Cuadros .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/squares.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Cuadros .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(4, 153, 153, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Cuadros .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Cuadros .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Cuadros .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Cuadros .login, .Cuadros .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Glitch {
+  background-image: url("../img/glitch.png");
+  background-repeat: repeat;
+  color: black;
+}
+.Glitch .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/glitch1.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Glitch .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(100, 100, 100, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Glitch .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Glitch .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Glitch .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Glitch .login, .Glitch .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Brijan {
+  background-image: url("../img/brijan.gif");
+  background-repeat: repeat;
+  color: black;
+}
+.Brijan .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/triangle1.svg");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Brijan .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(4, 153, 153, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Brijan .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Brijan .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Brijan .container {
+  background: rgba(255, 255, 255, 0.5);
+}
+.Brijan .login, .Brijan .tbl {
+  background: rgba(255, 255, 255, 0.75);
+  color: #444444;
+}
+
+.Illusionist {
+  background-image: url("../img/the-illusionist.png");
+  background-repeat: repeat;
+  color: white;
+}
+.Illusionist .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/ilusionist1.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Illusionist .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(100, 100, 100, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Illusionist .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Illusionist .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3ia.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Illusionist .container {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+.Illusionist .login, .Illusionist .tbl {
+  background: rgba(0, 0, 0, 0.7);
+  color: #eeeeee;
+}
+
+.Asteroids {
+  background-image: url("../img/asteroids.jpg");
+  background-repeat: repeat;
+  color: white;
+}
+.Asteroids .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/space.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Asteroids .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(4, 153, 153, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Asteroids .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Asteroids .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3ia.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Asteroids .container {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+.Asteroids .login, .Asteroids .tbl {
+  background: rgba(0, 0, 0, 0.7);
+  color: #eeeeee;
+}
+
+.Celebration {
+  background-image: url("../img/celebration.png");
+  background-repeat: repeat;
+  color: white;
+}
+.Celebration .empty-img {
+  background-repeat: no-repeat;
+  background-image: url("../img/celebration1.png");
+  background-size: 10rem 10rem;
+  margin: 2rem auto;
+  opacity: 0.75;
+  height: 10rem;
+  width: 10rem;
+}
+.Celebration .loading {
+  border: 6px solid #f0f0f0;
+  border-top: 6px solid rgba(255, 136, 34, 0.5);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+.Celebration .start-img-l {
+  background-position: center;
+  background-image: url("../img/Layout.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Celebration .start-img-r {
+  background-position: center;
+  background-image: url("../img/Calendar3ia.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 50%;
+}
+.Celebration .container {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+.Celebration .login, .Celebration .tbl {
+  background: rgba(0, 0, 0, 0.7);
+  color: #eeeeee;
+}
+
+.start-text {
+  background-color: white;
+  background-image: linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px), linear-gradient(#eeeeee 0.1em, transparent 0.1em);
+  background-size: 100% 1.2em;
+  display: flex;
+  z-index: 5;
+}
+
+.start-info {
+  width: 50%;
+  margin: auto;
+  font-size: 1.2rem;
+  text-align: justify;
+  color: black;
+}
+
+@media screen and (max-width: 1000px) {
+  header {
+    padding: 0 0.25rem;
+  }
+
+  .navbar {
+    height: 2.5rem;
+  }
+
+  .nav-logo {
+    width: 100%;
+  }
+
+  .nav-link {
+    padding: 0 0.75rem;
+  }
+
+  .nav-link span {
+    display: none;
+  }
+
+  .nav-link i {
+    font-size: 1.5rem;
+  }
+
+  .nav-link .profile {
+    height: 1.5rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .col {
+    flex-basis: 0;
+    flex-grow: 1;
+    position: relative;
+    padding: 0 0.25rem;
+  }
+
+  .col4 {
+    max-width: 100%;
+  }
+
+  .col3 {
+    max-width: 100%;
+  }
+
+  .col2 {
+    max-width: 100%;
+  }
+
+  .fm-group {
+    margin: 1rem 0;
+  }
+
+  .tbl th .normal-th {
+    display: none;
+  }
+  .tbl th .sm-th {
+    display: block;
+  }
+  .tbl td {
+    font-size: 1.5rem;
+    color: #666;
+  }
+  .tbl td .space {
+    padding: 0.25rem;
+  }
+
+  .flag {
+    width: 0;
+    height: 0;
+    border-top: 0.8rem solid transparent;
+    border-bottom: 0.8rem solid transparent;
+    border-left: 0.5rem solid rgba(255, 220, 50, 0.8);
+    float: left;
+    position: absolute;
+  }
+
+  .modal-lg {
+    min-width: 25rem;
+  }
+
+  .card-note {
+    min-width: 12rem;
+  }
+
+  .start-info {
+    font-size: 1rem;
+  }
+}
+
+/*# sourceMappingURL=index.css.map */

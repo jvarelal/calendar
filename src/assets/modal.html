@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/3ae38b6676.js" crossorigin="anonymous"></script>
+    <style>
+        .select-list{
+            position: absolute;
+            width: 100%;
+            border: 1px solid #222222;
+            z-index: 10;
+            background: white;
+        }
+        .select-option{
+            padding: .5rem;
+        }
+        .select-option:hover{
+            background-color: rgba(100, 120, 255, 0.75);
+            color: white;
+        }
+        .mini-square{
+            width: 1rem;
+            height: 1rem;
+            margin-right: .25rem;
+            border: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper Cuadros">
+        <header class="navbar flex-center">
+            <a href="#" class="nav-logo">
+                <i class="fas fa-sticky-note"></i>
+                <i>POSTICK</i>
+            </a>
+            <nav>
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Calendario</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-clipboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-columns"></i>
+                            <span>Date panel</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <div class="nav-link user-menu">
+                            <i class="fas fa-clock icon"></i>
+                            <div class="card">
+                                PRUEBA
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link user-menu">
+                            <img src="https://lh3.googleusercontent.com/-5H8pJJxeNVA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnj-ybD3tt9hx-rIYiMVftTkOVWbQ/photo.jpg?sz=46"
+                                alt="" class="profile">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <div>JOSÉ ABRAHAM VARELA LEÓN</div>
+                                    <div class="text-sm text-gray m-1">ljvarela93@gmail.com</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="fm-group">
+                                        <select id="background" name="background" class="fm-input">
+                                            <option>Azul</option>
+                                            <option>Roko</option>
+                                            <option>Cafe</option>
+                                        </select>
+                                        <label for="background" class="fm-label active">Fondo</label>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-columns"></i>
+                                        <span>Cerrar sesión</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="container">
+
+            <div class="row">
+                <div class="col">
+                    <div class="fm-group">
+                        <select id="color" name="color" class="fm-input">
+                            <option>Azul</option>
+                            <option>Roko</option>
+                            <option>Cafe</option>
+                        </select>
+                        <label for="color" class="fm-label active">Color</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="fm-group">
+                        <button class="btn btn-primary w100">
+                            + Nuevo Tablero
+                        </button>
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <div class="fm-group">
+                        <button class="btn btn-primary w100">
+                            + Nuevo Grupo
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card-group">
+                    <div class="card-group-header">
+                        HISTORIES
+                    </div>
+                    <div class="card-group-body">
+                        <div class="card card-note yellow">
+                            <div class="card-header">
+                                NOTAS
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Nueva nota de prueba para test de letra y cuadrar tipografia
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn-sm">
+                                            <i class="fas fa-thumbtack"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-note purple">
+                            <div class="card-header">
+                                NOTAS
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Nueva nota de prueba para test de letra y cuadrar tipografia
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn">Prueba</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card-group-header">
+                        COMPLETE
+                    </div>
+                    <div class="card-group-body">
+                        <div class="card card-note blue">
+                            <div class="card-header">
+                                NOTAS
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Nueva nota de prueba para test de letra y cuadrar tipografia
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn">Prueba</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card-group-header">
+                        COMPLETE
+                    </div>
+                    <div class="card-group-body">
+                        <div class="card card-note blue">
+                            <div class="card-header">
+                                NOTAS
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Nueva nota de prueba para test de letra y cuadrar tipografia
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn">Prueba</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card-group-header">
+                        COMPLETE
+                    </div>
+                    <div class="card-group-body">
+                        <div class="card card-note blue">
+                            <div class="card-header">
+                                NOTAS
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Nueva nota de prueba para test de letra y cuadrar tipografia
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn">Prueba</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card-group-header">
+                        COMPLETE
+                    </div>
+                    <div class="card-group-body">
+                        <div class="card card-note blue">
+                            <div class="card-header">
+                                NOTAS
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Nueva nota de prueba para test de letra y cuadrar tipografia
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn">Prueba</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal active">
+            <div class="modal-content modal-lg">
+                <div class="card-header">
+                    <div class="flex-center">
+                        <div>+ Nueva tarea</div><span class="btn btn-sm" style="border: medium none;">X</span>
+                    </div>
+                </div>
+                <form>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="fm-group "><select id="id" name="id" class="fm-input">
+                                        <option value="6arqV3hNAD7AXNzurS1N">PENDIENTES</option>
+                                    </select><label for="id" class="fm-label active">Tablero</label></div>
+                                <div class="fm-group "><select id="idGroup" name="idGroup" class="fm-input">
+                                        <option value="1">MI LISTA</option>
+                                    </select><label for="idGroup" class="fm-label active">Grupo</label></div>
+                                <div class="fm-group ">
+                                    <select id="id" name="id" class="fm-input" value="Azul"></select>
+                                    <label for="id" class="fm-label active">Color</label>
+                                    <div class="select-list">
+                                        <div class="select-option flex-center">
+                                            <div class="mini-square pink"></div>
+                                            <div class="mr-auto">Rosa</div>
+                                        </div>
+                                        <div class="select-option flex-center">
+                                            <div class="mini-square blue"></div>
+                                            <div class="mr-auto">Azul</div>
+                                        </div>
+                                        <div class="select-option flex-center">
+                                            <div class="mini-square orange"></div>
+                                            <div class="mr-auto">Naranja</div>
+                                        </div>
+                                        <div class="select-option flex-center">
+                                            <div class="mini-square green"></div>
+                                            <div class="mr-auto">Verde</div>
+                                        </div>
+                                        <div class="select-option flex-center">
+                                            <div class="mini-square yellow"></div>
+                                            <div class="mr-auto">Amarillo</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="fm-group "><input id="name" name="name" type="text" maxlength="100"
+                                        minlength="0" class="fm-input" required="" value=""><label for="name"
+                                        class="fm-label">Titulo</label></div>
+                                <div class="fm-group "><textarea id="detail" name="detail" maxlength="100" minlength="0"
+                                        rows="3" class="fm-input"></textarea><label for="detail"
+                                        class="fm-label">Descripción</label></div>
+                                <div class="fm-group"><span class="overlabel">Fecha a marcar en calendario:</span>
+                                    <div class="fm-group flex-center">
+                                        <div class="fm-group inline"><select id="year" name="year" class="fm-input">
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                            </select><label for="year" class="fm-label active">Año</label></div>
+                                        <div class="fm-group inline"><select id="month" name="month" class="fm-input">
+                                                <option value="10">Noviembre</option>
+                                                <option value="11">Diciembre</option>
+                                            </select><label for="month" class="fm-label active">Mes</label></div>
+                                        <div class="fm-group inline"><select id="day" name="day" class="fm-input">
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                            </select><label for="day" class="fm-label active">Día</label></div>
+                                    </div>
+                                </div>
+                                <div class="fm-group flex-center"><input type="checkbox" name="alarm" id="alarm"><label
+                                        for="alarm" class="mr-auto">Crear recordatorio</label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row card-footer">
+                        <div class="col"><input class="btn btn-primary" type="submit" value="Guardar"></div>
+                        <div class="col"><button class="btn btn-gray">Cancelar</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let inputs = document.querySelectorAll('.fm-group input')
+    inputs.forEach(input => input.addEventListener('focus', e => {
+        target = e.target
+        label = target.parentNode.lastElementChild
+        console.log(label)
+        label.className = label.className + ' active'
+    }))
+</script>
+
+</html>

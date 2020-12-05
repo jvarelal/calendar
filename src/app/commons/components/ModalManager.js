@@ -1,37 +1,33 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Modal from 'react-bootstrap/Modal'
-import { ModalConfirmation, ModalMessage, ModalLoader } from './ModalElements'
+import Modal from './styled/Modal'
 import { handleClose } from '../actions/modalActions'
 
 const ModalManager = ({ modal, handleClose }) => {
-    let modalContent = () => {
+    const modalContent = () => {
         switch (true) {
             case modal.showConfirmation:
-                return <ModalConfirmation title={modal.title}
+                return <Modal.Confirmation title={modal.title}
                     message={modal.message}
                     handleClose={handleClose}
                     confirm={modal.commit} />
             case modal.showContent:
-                return <>
-                    {modal.content}
-                </>
+                return modal.content
             case modal.showMessage:
-                return <ModalMessage title={modal.title}
+                return <Modal.Message title={modal.title}
                     message={modal.message}
                     handleClose={handleClose} />
             case modal.showLoader:
-                return <ModalLoader />
+                return <Modal.Loader />
             default:
                 return null;
         }
     }
-    return <Modal show={modal.showContent ||
-        modal.showConfirmation ||
-        modal.showMessage ||
-        modal.showLoader}
+    const show = modal.showContent || modal.showConfirmation ||
+        modal.showMessage || modal.showLoader
+    return <Modal show={show}
         onHide={handleClose}>
-        {modalContent()}
+        {show ? modalContent() : ''}
     </Modal>
 }
 
