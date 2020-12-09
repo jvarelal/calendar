@@ -5,24 +5,6 @@ import axios from 'axios'
 
 export default function service({ nameService = '', type = '', body = {}, cb = () => null, error = () => null }) {
     const operations = {
-        calendar: [
-            {
-                type: CALENDAR_TYPES.CREATE_TASK,
-                execute: calendarService.createTask
-            },
-            {
-                type: CALENDAR_TYPES.LIST_TASKS,
-                execute: calendarService.readTask
-            },
-            {
-                type: CALENDAR_TYPES.EDIT_TASK,
-                execute: calendarService.updateTask
-            },
-            {
-                type: CALENDAR_TYPES.DELETE.BY_ID,
-                execute: calendarService.deleteTaskById
-            }
-        ],
         dashboard: [
             {
                 type: DASHBOARD_TYPES.CREATE_DASHBOARD,
@@ -35,6 +17,10 @@ export default function service({ nameService = '', type = '', body = {}, cb = (
             {
                 type: DASHBOARD_TYPES.EDIT_DASHBOARD,
                 execute: dashboardService.updateDashboards
+            },
+            {
+                type: DASHBOARD_TYPES.EDIT_GROUP,
+                execute: dashboardService.updateGroup
             }
         ],
         user: [
@@ -166,9 +152,7 @@ const userService = {
     },
     checkSession: (body, cb, cbError) => {
         try {
-            auth.onAuthStateChanged(user => {
-                user ? cb({ ...response, data: { user: user } }) : cb({ status: 400, ignore: true })
-            })
+            auth.onAuthStateChanged(user => cb({ ...response, data: { user: user || {} } }))
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
@@ -177,7 +161,6 @@ const userService = {
 
 const dashboardService = {
     createDashboard: async (body, cb, cbError) => {
-        console.log('entro createDashboard')
         try {
             await db.collection('dashboards').add({ ...body, cb: null })
                 .then(refDoc => cb({ ...response, message: 'Tablero creado', data: refDoc }))
@@ -204,44 +187,11 @@ const dashboardService = {
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
-    }
-}
-
-const calendarService = {
-    createTask: async (body, cb, cbError) => {
-        try {
-            await db.collection('tasks').add({ ...body, cb: null })
-                .then(refDoc => {
-                    console.log(refDoc)
-                    cb({ ...response, message: 'Tablero creado', data: refDoc })
-                })
-        } catch (e) {
-            cbError({ status: 500, message: e.message })
-        }
     },
-    readTask: (body, cb, cbError) => {
+    updateGroup: async (body, cb, cbError) => {
         try {
-            db.collection('tasks').where("userId", "==", body).onSnapshot(querySnap => {
-                let data = [];
-                querySnap.forEach(doc => data.push({ ...doc.data(), id: doc.id }))
-                cb({ ...response, message: 'Notas listadas', data: data });
-            })
-        } catch (e) {
-            cbError({ status: 500, message: e.message })
-        }
-    },
-    updateTask: async (body, cb, cbError) => {
-        try {
-            await db.collection('tasks').doc(body.id).update({ ...body, cb: null })
-                .then(refDoc => cb({ ...response, message: 'Nota actualizada', data: refDoc }))
-        } catch (e) {
-            cbError({ status: 500, message: e.message })
-        }
-    },
-    deleteTaskById: (body, cb, cbError) => {
-        try {
-            body.forEach(async task => await db.collection('tasks').doc(task.id).delete());
-            cb({ ...response, message: 'Nota eliminada' });
+            db.collection('dashboards').doc(body.id).update({ groups: body.groups })
+            cb({ ...response, message: 'Dashboard actualizado' });
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }

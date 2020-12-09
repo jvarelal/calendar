@@ -7,16 +7,19 @@ import { DATE_PROP_SHAPE, PAST } from '../../../commons/util/const'
 import TaskCard from '../TaskCard'
 import { getModalContent } from '../../../commons/actions/modalActions'
 import TaskForm from '../TaskForm'
+import SAINTS from '../../util/saints'
 
 const TaskList = ({ date, tasksByMonth, getModalContent }) => {
     const taskByDate = tasksByMonth.filter(task => task.date.day === date.day);
     const formTitle = '+ Nueva Nota';
     const thereAreTasks = taskByDate.length > 0
     const newTask = () => getModalContent(<TaskForm />)
+    const holiday = SAINTS[date.month].DAYS[date.day - 1].holiday || { title: '' }
     return <div>
         <div className="flex-center">
             <div className="col text-center">
-                <h3> <i className="fas fa-calendar" /> {stringJsonDate(date)} </h3>
+                <h3><i className="fas fa-calendar" /> {stringJsonDate(date)} </h3>
+                <h3>{holiday.title}</h3>
             </div>
             {evalueDate(date) !== PAST && thereAreTasks ?
                 <ButtonNewTask title={formTitle} onClick={newTask} /> :

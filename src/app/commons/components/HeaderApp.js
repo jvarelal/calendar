@@ -10,12 +10,12 @@ const HeaderApp = ({ navs = {}, user }) => {
     return <Header>
         <Header.NavLogo>
             <Header.NavLink href={navs.brand.link}>
-                <i className={navs.brand.icon} /> <i>{navs.brand.name}</i>
+                <i className={navs.brand.icon} /> <span><i>{navs.brand.name}</i></span>
             </Header.NavLink>
         </Header.NavLogo>
         <Header.Nav>
             {tabs.map((t, index) => <Header.NavLink key={index} href={t.link}>
-                <i className={t.icon} /> <span>{t.name}</span>
+                <i className={t.icon + ' icon'} /> <span>{t.name}</span>
             </Header.NavLink>)}
         </Header.Nav>
         <Header.Nav>

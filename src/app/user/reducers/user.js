@@ -52,6 +52,7 @@ const user = (state = { ...initialState }, action) => {
                 location: { ...state.location, weather: action.payload }
             }
         case USER_TYPES.SET_PREFERENCE:
+            console.log(action.payload)
             return {
                 ...state,
                 preferences: { ...state.preferences, ...action.payload }

@@ -27,12 +27,12 @@ const FmGroup = ({ name, label, active = false, alert, textMuted, children, inli
     {textMuted ? <div className="text-muted">{textMuted}</div> : null}
 </div>
 
-const Input = ({ name, label, type = 'text', maxLength = 100, minLength = 0, upperCase, rgx = RGX.ALL, validateValue, value, onChange, required, inline }) => {
+const Input = ({ name, label, type = 'text', maxLength = 100, minLength = 0, upperCase, rgx = RGX.ALL, validateValue, value, onChange, required, inline, focus }) => {
     const [field, setField] = React.useState({ ..._innerField, name: name, value: value })
     const setValue = newValue => setField({ ...field, value: newValue })
     const validateWholeField = () => {
         let updateField = { ...field, focus: false }
-        if (required && (!field.value || !field.value.trim())) {
+        if (required && (field.value === '' || field.value.trim() === '')) {
             return setField({ ...updateField, alert: 'El campo es requerido' })
         }
         if (field.value.length < Number(minLength)) {
@@ -44,7 +44,11 @@ const Input = ({ name, label, type = 'text', maxLength = 100, minLength = 0, upp
         }
         return onChange(field)
     }
-    React.useEffect(() => setField({ ...field, value: value }), [value])
+    const inputRef = React.useRef(null)
+    React.useEffect(() => setField({ ...field, value: value }), [value])  // eslint-disable-line react-hooks/exhaustive-deps
+    React.useEffect(() => {
+        if (focus) inputRef.current.focus()
+    }, [focus])
     return <FmGroup name={name} label={label} active={field.focus || field.value} alert={field.alert} inline={inline}>
         <input id={name}
             name={name}
@@ -56,7 +60,8 @@ const Input = ({ name, label, type = 'text', maxLength = 100, minLength = 0, upp
             onChange={e => onTextChange(e, rgx, setValue, upperCase)}
             onFocus={e => setField({ ...field, focus: true, touched: true, alert: '' })}
             onBlur={validateWholeField}
-            required={required} />
+            required={required}
+            ref={inputRef} />
     </FmGroup>
 }
 
@@ -65,7 +70,7 @@ const TextArea = ({ name, label, rows = 1, value, maxLength = 100, minLength = 0
     const setValue = newValue => setField({ ...field, value: newValue })
     const validateWholeField = () => {
         let updateField = { ...field, focus: false }
-        if (!field.value || !field.value.trim()) {
+        if (field.value === '' || field.value.trim() === '') {
             if (required) {
                 return setField({ ...updateField, alert: 'El campo es requerido' })
             }
@@ -80,7 +85,7 @@ const TextArea = ({ name, label, rows = 1, value, maxLength = 100, minLength = 0
         }
         return onChange(field)
     }
-    React.useEffect(() => setField({ ...field, value: value }), [value])
+    React.useEffect(() => setField({ ...field, value: value }), [value]) // eslint-disable-line react-hooks/exhaustive-deps
     return <FmGroup name={name} label={label} active={field.focus || field.value} alert={field.alert}>
         <textarea id={name}
             name={name}
@@ -114,7 +119,7 @@ const Select = ({ name, label, value, options, onChange, required, number, valid
         setField({ ...field, value: e.target.value })
         if (flash) onChange({ ...field, value: number ? Number(e.target.value) : e.target.value })
     }
-    React.useEffect(() => setField({ ...field, value: value }), [value])
+    React.useEffect(() => setField({ ...field, value: value }), [value]) // eslint-disable-line react-hooks/exhaustive-deps
     return <FmGroup name={name} label={label} active={true} alert={field.alert} inline={inline}>
         <select id={name}
             name={name}
@@ -201,7 +206,8 @@ const DateSelect = ({ label, startDate, minDate, maxDate, handleChange }) => {
     </MultiGroup>
 }
 
-const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCase, rgx = RGX.ALL, validateValue, value, onChange, required, onButtonClick }) => {
+const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCase, rgx = RGX.ALL,
+    validateValue, value, onChange, required, textButton, onButtonClick }) => {
     return <MultiGroup>
         <Input name={name} label={label}
             type={type} maxLength={maxLength}
@@ -210,12 +216,14 @@ const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCa
             value={value} required={required}
             onChange={onChange} inline />
         <span className="btn btn-primary set-right" onClick={e => onButtonClick()}>
-            <i className="fas fa-plus" />
+            {textButton}
         </span>
     </MultiGroup>
 }
 
+
 Form.Group = Group
+Form.FmGroup = FmGroup
 Form.Input = Input
 Form.Select = Select
 Form.TextArea = TextArea

@@ -8,6 +8,8 @@ import { createDashboard, updateDashboard, setIdxDashboard } from '../../actions
 import { DASHBOARD, DASHBOARD_PROP_SHAPE, GROUP_DASHBOARD } from '../../../commons/util/const'
 import { insertArrayWithId } from '../../../commons/util/func'
 
+const DISTRIBUTION = [{ id: 0, text: 'Automática' }, { id: 1, text: 'Vertical' }]
+
 const DashBoardForm = ({ title, userId, dashboardSelected, dashboards, handleClose, createDashboard, updateDashboard, setIdxDashboard }) => {
     const [dashboard, setDashBoard] = React.useState(dashboardSelected || { ...DASHBOARD })
     const [group, setGroup] = React.useState('')
@@ -29,35 +31,42 @@ const DashBoardForm = ({ title, userId, dashboardSelected, dashboards, handleClo
     }
     const onSubmit = (e) => {
         e.preventDefault();
+        if (dashboard.id) {
+            return updateDashboard(dashboard)
+        }
         let nDashboard = { ...dashboard, userId: userId, orderGroup: dashboard.groups.map(g => g.id) }
         if (nDashboard.groups.length > 0) {
-            return nDashboard.id ? updateDashboard(nDashboard) :
-                createDashboard({ ...nDashboard, cb: () => setIdxDashboard(dashboards.length) });
+            return createDashboard({ ...nDashboard, cb: () => setIdxDashboard(dashboards.length) });
         }
         return setAlert('Agregue al menos un grupo al nuevo tablero')
     }
-    return <Modal.DropContent title={title} handleClose={handleClose} >
+    return <Modal.DropContent title={title} handleClose={handleClose} left>
         <Form onSubmit={onSubmit} error={alert}>
             <Modal.Body>
                 <Form.Input name="name" required={true} label="Nombre"
-                    value={dashboard.name} onChange={onChange} upperCase />
+                    value={dashboard.name} onChange={onChange} upperCase focus />
                 <Form.TextArea name="detail" value={dashboard.detail} label="Descripción"
                     rows="2" onChange={onChange} />
-                <Form.InputButton name="group" label="Nuevo Grupo"
-                    value={group} onChange={target => setGroup(target.value)}
-                    onButtonClick={addGroup} upperCase />
-                <div style={{ border: '1px solid #ccc' }}>
-                    {dashboard.groups.length > 0 ?
-                        dashboard.groups.map((group, index) => <div className="flex-center" key={index}
-                            style={{ borderBottom: '1px solid #aaa' }}>
-                            <div className="col ptb-7">{group.name}</div>
-                            <div className="col col4 text-right">
-                                <span className="btn btn-sm p-2" onClick={() => deleteGroup(index)}>
-                                    <i className="fas fa-trash-alt" />
-                                </span>
-                            </div>
-                        </div>) : <h4 className="text-center text-muted m-8">Sin grupos agregados</h4>}
-                </div>
+                {!dashboard.id ? <>
+                    <Form.InputButton name="group" label="Nuevo Grupo"
+                        value={group} onChange={target => setGroup(target.value)}
+                        textButton={<i className="fas fa-plus" />}
+                        onButtonClick={addGroup} upperCase />
+                    <div style={{ border: '1px solid #ccc' }}>
+                        {dashboard.groups.length > 0 ?
+                            dashboard.groups.map((group, index) => <div className="flex-center" key={index}
+                                style={{ borderBottom: '1px solid #aaa' }}>
+                                <div className="col ptb-7">{group.name}</div>
+                                <div className="col col4 text-right">
+                                    <span className="btn btn-sm p-2" onClick={() => deleteGroup(index)}>
+                                        <i className="fas fa-trash-alt" />
+                                    </span>
+                                </div>
+                            </div>) : <h4 className="text-center text-muted m-8">Sin grupos agregados</h4>}
+                    </div>
+                </> : null}
+                <Form.Select name="vertical" value={dashboard.vertical} label="Distribución"
+                    options={DISTRIBUTION} onChange={onChange} number />
             </Modal.Body>
             <Modal.FormFooter handleClose={handleClose} />
         </Form>

@@ -2,7 +2,7 @@ import { MODAL_TYPES } from '../actions/modalTypes'
 import service from './service'
 import { getModalLoader } from '../actions/modalActions'
 
-const client = (nameService, tipoRequest, body = {}) => dispatch => {
+const client = (nameService, tipoRequest, body = {}, loader = true) => dispatch => {
     let serviceRequest = {
         nameService: nameService,
         type: tipoRequest,
@@ -34,18 +34,17 @@ const client = (nameService, tipoRequest, body = {}) => dispatch => {
             dispatch({ type: MODAL_TYPES.SHOW_MESSAGE, payload: errores })
         }
     };
-    dispatch(getModalLoader(true))
+    if(loader){
+        dispatch(getModalLoader(true))
+    }
     service(serviceRequest);
 }
 
-const calendarClient = (tipoRequest, body) => client('calendar', tipoRequest, body)
-
-const userClient = (tipoRequest, body) => client('user', tipoRequest, body)
+const userClient = (tipoRequest, body, loader) => client('user', tipoRequest, body, loader)
 
 const dashboardClient = (tipoRequest, body) => client('dashboard', tipoRequest, body)
 
 export {
-    calendarClient,
     userClient,
     dashboardClient
 }

@@ -16,15 +16,13 @@ const checkSession = body => userClient(USER_TYPES.CHECK_SESSION, body);
 
 const getLocation = cb => {
     let body = { cb: cb }
-    return userClient(USER_TYPES.GET_LOCATION, body)
+    return userClient(USER_TYPES.GET_LOCATION, body, false)
 }
 
-const getWeather = location => userClient(USER_TYPES.GET_WEATHER, location);
+const getWeather = location => userClient(USER_TYPES.GET_WEATHER, location, false);
 
 const setUserPreference = preference => {
-    console.log(preference)
     let data = {[preference.name]: preference.value}
-    console.log(data)
     setPrefence(data)
     return {
         type: USER_TYPES.SET_PREFERENCE,

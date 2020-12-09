@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Header from '../../commons/components/styled/Header'
 import { notificationsBySecond, getNotifications } from '../../commons/util/func'
-import { updateTask } from '../actions/taskActions'
+import { processTask } from '../actions/taskActions'
 import Notification from '../../commons/components/styled/Notification'
 
-const TaskReminder = ({ todayTasks, updateTask }) => {
+const TaskReminder = ({ todayTasks, dashboards, processTask }) => {
     const [time, setTime] = React.useState(new Date().toLocaleTimeString());
     const [notifications, setNotifications] = React.useState([]);
-    const dismissNotification = (task) => updateTask({ ...task, dismiss: true })
+    const dismissNotification = (task) => processTask(dashboards, task, true)
     const title = <>
-        <i className="fas fa-clock icon" />
+        <i className="fas fa-clock icon-g" />
         {notifications.length > 0 ? <span className="badge"> {notifications.length}</span> : null}
     </>
     document.title = (notifications.length === 0 ? '' : '(' + notifications.length + ') ') + 'Agenda'
@@ -39,7 +39,8 @@ TaskReminder.propTypes = {
 }
 
 const mapStateToProps = state => ({
+    dashboards: state.task.dashboards,
     todayTasks: state.task.todayTasks
 })
 
-export default connect(mapStateToProps, { updateTask, getNotifications })(TaskReminder);
+export default connect(mapStateToProps, { processTask, getNotifications })(TaskReminder);

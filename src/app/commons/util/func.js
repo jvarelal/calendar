@@ -100,6 +100,21 @@ const getMaxDay = (maxDate, startDate) => {
     return maxDay;
 }
 
+const jsonToDate = (jsonDate) => new Date(jsonDate.year, jsonDate.month, jsonDate.day)
+
+const getWeek = (jsonDate) => {
+    let dt = jsonToDate(jsonDate);
+    var tdt = new Date(dt.valueOf());
+    var dayn = (dt.getDay() + 6) % 7;
+    tdt.setDate(tdt.getDate() - dayn + 3);
+    var firstThursday = tdt.valueOf();
+    tdt.setMonth(0, 1);
+    if (tdt.getDay() !== 4) {
+        tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
+    }
+    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+}
+
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -111,6 +126,16 @@ const insertArrayWithId = (array = [], element = {}) => {
     let ids = array.map(o => Number(o.id));
     let nextId = Math.max(...ids) + 1;
     return [...array, { ...element, id: nextId }]
+}
+
+const replaceById = (array = [], element = {}) => {
+    let nArray = [...array]
+    for (let i = 0; i < nArray.length; i++) {
+        if (nArray[i].id === element.id) {
+            nArray[i] = element
+        }
+    }
+    return nArray;
 }
 
 const sortByList = (array = [], list = []) => {
@@ -149,8 +174,8 @@ const onDragOver = (event) => {
 }
 
 const validateEmail = (email) => {
-    let validation = {error: !/\S+@\S+\.\S+/.test(email)}
-    if(validation.error) validation.msg = 'Email invalido'
+    let validation = { error: !/\S+@\S+\.\S+/.test(email) }
+    if (validation.error) validation.msg = 'Email invalido'
     return validation;
 }
 
@@ -164,7 +189,6 @@ const updateTasksInGroup = (dashboard, task, newOrderId, updateDashboard) => {
             group.tasks = cleanTasks
         }
     }
-    console.log(dashboard)
     updateDashboard(dashboard)
 }
 
@@ -188,7 +212,7 @@ const getUserLocalData = () => {
 
 const setUserLocalData = (data) => {
     localStorage.notas = JSON.stringify({
-        theme: data.theme || getRandomNumber(0, THEMES.length - 1),
+        theme: data.theme !== undefined && data.theme !== null ? data.theme : getRandomNumber(0, THEMES.length - 1),
         backgroundCards: data.backgroundCards || false
     })
 }
@@ -196,8 +220,8 @@ const setUserLocalData = (data) => {
 const onTextChange = (e, rg, setValue, upperCase) => {
     let input = e.target;
     let value = input.value && upperCase ? input.value.toUpperCase() : input.value
-    if (!value || (rg.test(input.value)
-        && (input.value.length <= input.maxLength))) {
+    if ((!value || (rg.test(input.value)
+        && (input.value.length <= input.maxLength))) && input.value.trim() !== '') {
         return setValue(value ? value : '')
     }
 }
@@ -231,6 +255,8 @@ export {
     getLastDayMonth,
     getMinDay,
     getMaxDay,
+    jsonToDate,
+    getWeek,
     getRandomNumber,
     updateTasksInGroup,
     lpadArray,
@@ -240,6 +266,7 @@ export {
     moveInArray,
     validateEmail,
     insertArrayWithId,
+    replaceById,
     getTheme,
     getUserLocalData,
     setUserLocalData,

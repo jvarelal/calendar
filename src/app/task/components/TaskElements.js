@@ -64,7 +64,7 @@ const ButtonNewTask = ({ onClick }) => <div className="col">
 
 const DropCard = ({ title, variant, onDragStart, onDrop, children, expanded = false }) => {
     const [showDetail, setShowDetail] = React.useState(expanded)
-    return <div className={'card card-note ' + (variant ? variant : '')}
+    return <div className={'card card-note ' + variant}
         draggable={onDragStart ? true : false}
         onDragStart={onDragStart}
         onDrop={onDrop}>
@@ -81,6 +81,8 @@ const DropCard = ({ title, variant, onDragStart, onDrop, children, expanded = fa
         {showDetail ? children : null}
     </div>
 }
+
+
 
 export {
     TableWithHeader,

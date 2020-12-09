@@ -1,5 +1,6 @@
 import { CALENDAR_TYPES, DASHBOARD_TYPES } from './taskTypes'
-import { calendarClient, dashboardClient } from '../../commons/service/clientService'
+import { dashboardClient } from '../../commons/service/clientService'
+import { insertArrayWithId, replaceById } from '../../commons/util/func'
 
 const setYearMonth = target => ({
     type: CALENDAR_TYPES.SET_YEAR_MONTH,
@@ -11,25 +12,63 @@ const setDate = date => ({
     payload: date
 })
 
-const createTask = task => calendarClient(CALENDAR_TYPES.CREATE_TASK, {
-    ...task,
-    creation: new Date().toLocaleDateString(),
-    editions: [new Date().toLocaleDateString()]
-})
-
-const readTasks = user => calendarClient(CALENDAR_TYPES.LIST_TASKS, user)
-
-const updateTask = task => {
-    task.editions.push(new Date().toLocaleDateString())
-    return calendarClient(CALENDAR_TYPES.EDIT_TASK, task)
+const processTask = (dashboards, task, dismiss) => {
+    const dashboard = dashboards.find(d => d.id === task.dashboard.id)
+    const idGroup = task.dashboard.idGroup
+    for (let i = 0; i < dashboard.groups.length; i++) {
+        if (dashboard.groups[i].id === idGroup) {
+            task.dismiss = dismiss ? true : false
+            delete task.dashboard
+            if (!task.id) {
+                task.creation = new Date().toLocaleDateString()
+                task.edition = [new Date().toLocaleDateString()]
+                dashboard.groups[i].tasks = insertArrayWithId(dashboard.groups[i].tasks, task)
+            } else {
+                task.editions.push(new Date().toLocaleDateString())
+                dashboard.groups[i].tasks = replaceById(dashboard.groups[i].tasks, task)
+            }
+            break;
+        }
+    }
+    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
 }
 
-const deleteTasksByDate = (date, tasksByMonth) => {
-    let taskByDay = tasksByMonth.filter(task => task.date.day === date.day)
-    return calendarClient(CALENDAR_TYPES.DELETE.BY_DATE, taskByDay)
+const deleteTask = (dashboards, task) => {
+    const dashboard = dashboards.find(d => d.id === task.dashboard.id)
+    const idGroup = task.dashboard.idGroup
+    for (let i = 0; i < dashboard.groups.length; i++) {
+        if (dashboard.groups[i].id === idGroup) {
+            dashboard.groups[i].tasks = dashboard.groups[i].tasks.filter(t => t.id !== task.id)
+            break;
+        }
+    }
+    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
 }
 
-const deleteTaskById = task => calendarClient(CALENDAR_TYPES.DELETE.BY_ID, task)
+const deleteGroup = (dashboard, group) => {
+    dashboard.groups = dashboard.groups.filter(g => g.id !== group.id)
+    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
+}
+
+const processGroup = (dashboard) => dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
+
+const updateTaskPosition = (dashboard, newIdGroup, idxTask, task) => {
+    console.log(dashboard)
+    console.log(newIdGroup)
+    console.log(idxTask)
+    console.log(task)
+    const idGroup = task.dashboard.idGroup
+    for (let i = 0; i < dashboard.groups.length; i++) {
+        if (dashboard.groups[i].id === idGroup) {
+            dashboard.groups[i].tasks = dashboard.groups[i].tasks.filter(t => t.id !== task.id)
+        }
+        if (dashboard.groups[i].id === newIdGroup) {
+            dashboard.groups[i].tasks.splice(idxTask, 0, task);
+        }
+    }
+    console.log(dashboard)
+    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
+}
 
 const createDashboard = dashboard => dashboardClient(DASHBOARD_TYPES.CREATE_DASHBOARD, {
     ...dashboard,
@@ -53,9 +92,9 @@ export { createDashboard, readDashboards, updateDashboard, deleteDashboard, setI
 export {
     setDate,
     setYearMonth,
-    createTask,
-    readTasks,
-    updateTask,
-    deleteTasksByDate,
-    deleteTaskById
+    deleteTask,
+    processTask,
+    deleteGroup,
+    processGroup,
+    updateTaskPosition
 }

@@ -25,8 +25,7 @@ const ModalManager = ({ modal, handleClose }) => {
     }
     const show = modal.showContent || modal.showConfirmation ||
         modal.showMessage || modal.showLoader
-    return <Modal show={show}
-        onHide={handleClose}>
+    return <Modal show={show} onHide={handleClose}>
         {show ? modalContent() : ''}
     </Modal>
 }

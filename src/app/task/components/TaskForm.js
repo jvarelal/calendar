@@ -3,56 +3,47 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Modal from '../../commons/components/styled/Modal'
 import Form from '../../commons/components/styled/Form'
-import { useHistory } from 'react-router-dom'
-import { fillNumberList, fragmentDate, evalueDate } from '../../commons/util/func'
-import { SYSDATE, DATE_PROP_SHAPE, TASK_PROP_SHAPE, COLORS, TASK, PAST } from '../../commons/util/const'
-import { createTask, updateTask } from '../actions/taskActions'
-import { updateDashboard } from '../actions/taskActions'
+import { fillNumberList, evalueDate, fragmentDate } from '../../commons/util/func'
+import { SYSDATE, MAXDATE, DATE_PROP_SHAPE, TASK_PROP_SHAPE, COLORS, TASK, PAST } from '../../commons/util/const'
+import { processTask } from '../actions/taskActions'
 import { DivColorOption } from './TaskElements'
 import { handleClose } from '../../commons/actions/modalActions'
 
-const maxDate = { year: SYSDATE.getFullYear() + 4, month: 11, day: 31 }
 
-const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGroup, handleClose, createTask, updateTask, updateDashboard }) => {
+const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGroup, handleClose, processTask }) => {
     const initialTask = taskSelected || {
         ...TASK,
         date: { ...date, hour: '00', minute: '00' },
-        dashboard: dashboards.length > 0 ? {
-            id: dashboards[idxDashboard].id,
-            idGroup: idGroup || dashboards[idxDashboard].groups[0].id
-        } : {}
+        dashboard: { id: (dashboards[idxDashboard] || {}).id, idGroup: idGroup || 0 }
     }
     const [task, setTask] = React.useState(initialTask);
-    const currentDashboard = dashboards.find(d => d.id === task.dashboard.id)
-    const history = useHistory();
-    const onChange = (target) => setTask({ ...task, [target.name]: target.value })
-    const onChangeDb = target => setTask({ ...task, dashboard: { ...task.dashboard, [target.name]: target.value } })
+    const onChange = target => setTask({ ...task, [target.name]: target.value })
     const onCheck = event => setTask({ ...task, [event.target.name]: !task[event.target.name] })
-    const minDate = fragmentDate(SYSDATE)
+    const onChangeDashboard = target => setTask({ ...task, dashboard: { ...task.dashboard, [target.name]: [target.value] } })
     const onChangeTime = target => {
         let newDate = { ...task.date, [target.name]: target.value }
-        setTask({ ...task, date: evalueDate(newDate) !== PAST ? newDate : minDate })
+        setTask({ ...task, date: evalueDate(newDate) !== PAST ? newDate : fragmentDate(SYSDATE) })
     }
     const onSubmit = (event) => {
         event.preventDefault();
-        task.id ? updateTask({ ...task, dismiss: false }) : createTask({ ...task, userId: userId })
-    }
-    const login = () => {
-        history.push('/login');
-        handleClose()
+        processTask(dashboards, task)
     }
     React.useEffect(() => setTask(initialTask), [taskSelected]) // eslint-disable-line react-hooks/exhaustive-deps
-    return <Modal.DropContent title={task.id ? 'Editar tarea' : '+ Nueva tarea'} handleClose={handleClose} lg>
+    return <Modal.DropContent lg={userId} left={userId}
+        title={task.id ? 'Editar tarea' : '+ Nueva tarea'}
+        handleClose={handleClose} >
         {userId ? <Form onSubmit={onSubmit}>
             <Modal.Body>
-                <div className="flex-center">
+                <div className="row">
                     <div className="col col3">
                         <Form.Select name="id" value={task.dashboard.id} label="Tablero"
                             options={dashboards.map((d, i) => ({ id: d.id, text: d.name }))}
-                            onChange={onChangeDb} disabled={idGroup || task.id} />
+                            onChange={onChangeDashboard}
+                            disabled={idGroup || task.id} />
                         <Form.Select name="idGroup" value={task.dashboard.idGroup} label="Grupo"
-                            options={currentDashboard.groups.map(g => ({ id: g.id, text: g.name }))}
-                            onChange={onChangeDb} number disabled={idGroup || task.id} />
+                            options={dashboards.find(d => d.id === task.dashboard.id).groups.map(g => ({ id: g.id, text: g.name }))}
+                            onChange={onChangeDashboard}
+                            number disabled={idGroup || task.id} />
                         <Form.SelectDiv name="color" value={task.color} label="Color"
                             options={COLORS}>
                             {COLORS.map((color, index) => <DivColorOption
@@ -65,14 +56,14 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
                     </div>
                     <div className="col bl-gray">
                         <Form.Input name="name" required={true} label="Titulo"
-                            value={task.name} onChange={onChange} upperCase />
+                            value={task.name} onChange={onChange} upperCase focus />
                         <Form.TextArea name="detail" value={task.detail} label="Descripción"
                             rows="3" onChange={onChange} />
                         <Form.DateSelect label="Fecha a marcar en calendario:"
                             controlId="date"
                             startDate={task.date}
                             minDate={fragmentDate(SYSDATE)}
-                            maxDate={maxDate}
+                            maxDate={MAXDATE}
                             handleChange={onChangeTime} />
                         <Form.CheckBox name="alarm" label="Crear recordatorio" value={task.alarm} onChange={onCheck} />
                         {task.alarm ? <Form.MultiGroup>
@@ -85,10 +76,7 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
                 </div>
             </Modal.Body>
             <Modal.FormFooter handleClose={handleClose} />
-        </Form> : <div className="text-center p-4">
-                <p>Inicia sesión para poder guardar notas</p>
-                <button className="btn btn-primary" onClick={login}>Iniciar sesión</button>
-            </div>}
+        </Form> : <Modal.WithoutSession handleClose={handleClose} />}
     </Modal.DropContent>
 }
 
@@ -99,9 +87,7 @@ TaskForm.propTypes = {
     idxDashboard: PropTypes.number.isRequired,
     idGroup: PropTypes.number,
     task: TASK_PROP_SHAPE,
-    createTask: PropTypes.func.isRequired,
-    updateTask: PropTypes.func.isRequired,
-    updateDashboard: PropTypes.func.isRequired
+    processTask: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -113,5 +99,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { handleClose, createTask, updateTask, updateDashboard }
+    { handleClose, processTask }
 )(TaskForm);

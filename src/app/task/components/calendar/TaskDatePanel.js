@@ -6,12 +6,12 @@ import TaskCard from '../TaskCard'
 import TaskForm from '../TaskForm'
 import { getDaysInPanel } from '../../util/funcCalendar'
 import { fragmentDate, evalueDate, onDragOver } from '../../../commons/util/func'
-import { updateTask, setDate } from '../../actions/taskActions'
+import { processTask, setDate } from '../../actions/taskActions'
 import { getModalMessage, getModalContent } from '../../../commons/actions/modalActions'
 import { DATE_PROP_SHAPE, DAYS_SP, PAST } from '../../../commons/util/const'
 import { MonthBackForward } from '../TaskElements'
 
-const TaskDatePanel = ({ date, tasksByMonth, updateTask, getModalMessage, setDate, getModalContent }) => {
+const TaskDatePanel = ({ date, dashboards, tasksByMonth, processTask, getModalMessage, setDate, getModalContent }) => {
     const days = getDaysInPanel(date, tasksByMonth);
     const [dragging, setDragging] = React.useState(false)
     const dragTask = React.useRef();
@@ -35,8 +35,8 @@ const TaskDatePanel = ({ date, tasksByMonth, updateTask, getModalMessage, setDat
             return getModalMessage('Editar nota', 'No se pueden asignar o afectar notas de fechas anteriores')
         }
         if (task.date.day !== newDate.day) {
-            let nTask = { ...task, dismiss: false, date: newDate }
-            return updateTask(nTask);
+            let nTask = { ...task, date: newDate }
+            return processTask(dashboards, nTask);
         }
     }
     const onDivClick = (e, d) => {
@@ -47,17 +47,19 @@ const TaskDatePanel = ({ date, tasksByMonth, updateTask, getModalMessage, setDat
     }
     const monthBack = () => setDate(fragmentDate(new Date(date.year, Number(date.month) - 1, date.day)))
     const monthFordward = () => setDate(fragmentDate(new Date(date.year, Number(date.month) + 1, date.day)))
-    return <div className="ptb-7 container">
+    return <div className="container">
         <YearMonthControl />
         <div className="ptb-7 container">
             <MonthBackForward back={monthBack} forward={monthFordward} />
             {days.map((d, index) => <div className="row" key={index} style={{ margin: '0px' }}>
-                <div className={'col col4 p-1 panel-cell ' + (d.able ? 'panel-active' : 'disable')}
+                <div className={'col col8 ptb-2 panel-cell ' + (d.able ? 'panel-active' : 'disable')}
                     onClick={(e) => onDivClick(e, d)}>
-                    <h5>{d.day}</h5>
-                    <p className="m-0" style={{ fontSize: '0.75rem' }}>
-                        {DAYS_SP[d.dayOfWeek]}
-                    </p>
+                    <h1 className="m-1">
+                        {d.day} {d.saint.holiday ? <i style={{ fontSize: '1.25rem' }}
+                            className={d.saint.holiday.icon + ' m-2'} title={d.saint.holiday.title} /> : ''}
+                    </h1>
+                    <p className="m-1"> {DAYS_SP[d.dayOfWeek]} </p>
+                    <p className="m-1" style={{ fontSize: '0.75rem' }}> {d.saint.name} </p>
                 </div>
                 <div className="col p-4 panel-cell"
                     onDrop={dragging ? e => onDrop(e, d) : null}
@@ -80,7 +82,8 @@ const TaskDatePanel = ({ date, tasksByMonth, updateTask, getModalMessage, setDat
 TaskDatePanel.propTypes = {
     date: DATE_PROP_SHAPE.isRequired,
     tasksByMonth: PropTypes.array.isRequired,
-    updateTask: PropTypes.func.isRequired,
+    dashboards: PropTypes.array.isRequired,
+    processTask: PropTypes.func.isRequired,
     setDate: PropTypes.func.isRequired,
     getModalMessage: PropTypes.func.isRequired,
     getModalContent: PropTypes.func.isRequired
@@ -88,10 +91,11 @@ TaskDatePanel.propTypes = {
 
 const mapStateToProps = state => ({
     date: state.task.date,
+    dashboards: state.task.dashboards,
     tasksByMonth: state.task.tasksByMonth
 })
 
 export default connect(
     mapStateToProps,
-    { updateTask, getModalMessage, setDate, getModalContent }
+    { processTask, getModalMessage, setDate, getModalContent }
 )(TaskDatePanel)

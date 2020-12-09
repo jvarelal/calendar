@@ -14,8 +14,8 @@ function App() {
   let navs = {
     brand: { link: '/', name: 'Postick', icon: 'fas fa-sticky-note', component: DashBoard },
     tabs: [
-      { link: '/dashboard', icon: 'fas fa-clipboard', name: 'Pendientes', component: DashBoard, private: true },
       { link: '/calendar', icon: 'fas fa-calendar-alt', name: 'Calendario', component: Calendar },
+      { link: '/dashboard', icon: 'fas fa-clipboard', name: 'Tableros', component: DashBoard, private: true },
       { link: '/list', icon: 'fas fa-columns', name: 'Listado por fecha', component: TaskDatePanel, private: true },
       { link: '/login', icon: 'fas fa-user', component: Login },
       { link: '/', icon: 'fas fa-home', component: Home }

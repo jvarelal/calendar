@@ -6,15 +6,15 @@ import Form from '../../../commons/components/styled/Form'
 import DashBoardGroup from './DashBoardGroup'
 import DashBoardForm from './DashBoardForm'
 import DashBoardGroupForm from './DashBoardGroupForm'
-import { DASHBOARD } from '../../../commons/util/const'
-import { sortByList, moveInArray, updateTasksInGroup } from '../../../commons/util/func'
+import { DASHBOARD, SELECT_STATUS_TASK, STATUS_TASK } from '../../../commons/util/const'
+import { moveInArray } from '../../../commons/util/func'
+import { filterTasks } from '../../util/funcCalendar'
 import TaskCard from '../TaskCard'
-import { updateTask, setIdxDashboard, updateDashboard } from '../../actions/taskActions'
+import { setIdxDashboard, processGroup, updateTaskPosition } from '../../actions/taskActions'
 
-const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, tasks, getModalContent, updateTask, updateDashboard }) => {
+const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, getModalContent, processGroup, updateTaskPosition }) => {
     const [dragging, setDragging] = React.useState({ group: false, task: false })
-    const tasksNotDone = tasks.filter(task => !task.done &&
-        task.dashboard.id === dashboards[idxDashboard].id)
+    const [showTasks, setShowTasks] = React.useState(STATUS_TASK.PENDING)
     const dashboard = dashboards[idxDashboard] || DASHBOARD
     const dragElement = {
         group: { target: React.useRef(), value: React.useRef() },
@@ -34,85 +34,95 @@ const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, tasks, getModalC
             setDragging({ ...dragging, [element]: false })
         }
     }
-    const onDropGroup = (idxGroup) => {
+    const onDropGroup = (e, idxGroup) => {
+        let targetClass = e.target.className
         let groupIndex = dragElement['group'].value.current
         let task = dragElement['task'].value.current
         if (!task) {
-            let newOrderGroup = moveInArray(dashboard.orderGroup, groupIndex, idxGroup)
-            return updateDashboard({ ...dashboard, orderGroup: newOrderGroup })
+            return processGroup({ ...dashboard, groups: moveInArray(dashboard.groups, groupIndex, idxGroup) })
         }
-        return onDropTask(idxGroup, 0)
+        if (targetClass.indexOf('card-group') >= 0)
+            return onDropTask(idxGroup, 0)
     }
     const onDropTask = (idxGroup, idxTask) => {
         let task = dragElement['task'].value.current
-        let idGroup = dashboard.orderGroup[idxGroup]
-        let nTask = { ...task, dashboard: { ...task.dashboard, idGroup: idGroup } }
-        if (idGroup === task.dashboard.idGroup) {
-            return updateTasksInGroup(dashboard, task, idxTask, updateDashboard)
-        }
-        nTask.cb = () => updateTasksInGroup(dashboard, task, idxTask, updateDashboard)
-        return updateTask(nTask);
+        let idGroup = dashboard.groups[idxGroup].id
+        return updateTaskPosition(dashboard, idGroup, idxTask, task);
     }
     const newDashboard = () => getModalContent(<DashBoardForm title="+ Nuevo Tablero" />)
+    const editDashboard = () => getModalContent(<DashBoardForm title="+ Editar Tablero" dashboardSelected={dashboard} />)
     const newGroup = () => getModalContent(<DashBoardGroupForm title="+ Nuevo grupo" dashboard={dashboard} />)
     return <div className="container">
         <div className="row text-center">
-            <div className="col fm-group">
-                <button className="btn btn-primary" onClick={newDashboard}>
-                    <i className="fas fa-plus" /> Nuevo Tablero
-                </button>
-            </div>
             <div className="col">
                 <Form.Select name="dashboard"
                     label="Tablero" value={idxDashboard}
                     options={dashboards.map((d, i) => ({ id: i, text: d.name }))}
-                    onChange={target => setIdxDashboard(Number(target.value))}
+                    onChange={target => setIdxDashboard(target.value)}
                     number flash />
             </div>
-            <div className="col fm-group">
-                <button className="btn btn-primary" onClick={newGroup}>
-                    <i className="fas fa-plus" /> Nuevo Grupo
-                </button>
+            <div className="col col2 fm-group">
+                <div className="btn-group">
+                    <button className="btn btn-primary" onClick={editDashboard} title="Editar Tablero">
+                        <i className="fas fa-tools" />
+                    </button>
+                    <button className="btn btn-primary" onClick={newDashboard} title="Nuevo Tablero">
+                        <i className="fas fa-clipboard" />
+                    </button>
+                    <button className="btn btn-primary" onClick={newGroup}>
+                        <i className="fas fa-columns" />
+                    </button>
+                </div>
+            </div>
+            <div className="col">
+                <Form.Select name="statusTask"
+                    label="Notas en vista" value={showTasks}
+                    options={SELECT_STATUS_TASK}
+                    onChange={target => setShowTasks(target.value)}
+                    number flash />
             </div>
         </div>
-        <div className="row">
-            {sortByList(dashboard.groups, dashboard.orderGroup).map((group, idxGroup) => <div
-                key={group.id}
-                className="col">
-                <DashBoardGroup
-                    dashboard={dashboard}
-                    group={group}
-                    onDragStart={e => onDragStart(e, idxGroup, 'group')}
-                    onDrop={dragging ? e => onDropGroup(idxGroup) : null}>
-                    {sortByList(tasksNotDone.filter(t => t.dashboard.idGroup === group.id),
-                        group.tasks).map((task, idxTask) => <TaskCard
-                            key={dashboards}
-                            task={task}
-                            expanded={true}
-                            onDragStart={e => onDragStart(e, task, 'task')}
-                            onDrop={dragging ? e => onDropTask(idxGroup, idxTask) : null} />)}
-                </DashBoardGroup>
-            </div>)}
+        <div className={dashboard.vertical ? 'container-scrollx' : ''}>
+            <div className="row" style={dashboard.vertical ? { minWidth: `${dashboard.groups.length * 375}px` } : {}}>
+                {dashboard.groups.map((group, idxGroup) => <div
+                    key={group.id}
+                    className="col">
+                    <DashBoardGroup
+                        vertical={dashboard.vertical}
+                        dashboard={dashboard}
+                        group={group}
+                        onDragStart={e => onDragStart(e, idxGroup, 'group')}
+                        onDrop={dragging ? e => onDropGroup(e, idxGroup) : null}>
+                        {filterTasks(group, showTasks).map((task, idxTask) => {
+                            let ntask = { ...task, dashboard: { id: dashboard.id, idGroup: group.id } }
+                            return <TaskCard
+                                key={idxTask}
+                                task={ntask}
+                                expanded={true}
+                                onDragStart={e => onDragStart(e, ntask, 'task')}
+                                onDrop={dragging ? e => onDropTask(idxGroup, idxTask) : null} />
+                        })}
+                    </DashBoardGroup>
+                </div>)}
+            </div>
         </div>
     </div>
 }
 
 DashBoard.propTypes = {
     dashboards: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
     getModalContent: PropTypes.func.isRequired,
-    updateTask: PropTypes.func.isRequired,
+    updateTaskPosition: PropTypes.func.isRequired,
     idxDashboard: PropTypes.number.isRequired,
-    updateDashboard: PropTypes.func.isRequired
+    processGroup: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     dashboards: state.task.dashboards,
-    idxDashboard: state.task.idxDashboard,
-    tasks: state.task.tasks
+    idxDashboard: state.task.idxDashboard
 })
 
 export default connect(
     mapStateToProps,
-    { getModalContent, updateTask, setIdxDashboard, updateDashboard }
+    { getModalContent, updateTaskPosition, setIdxDashboard, processGroup }
 )(DashBoard)

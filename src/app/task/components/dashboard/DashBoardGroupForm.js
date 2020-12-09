@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import Modal from '../../../commons/components/styled/Modal'
 import Form from '../../../commons/components/styled/Form'
 import { GROUP_DASHBOARD, DASHBOARD_PROP_SHAPE } from '../../../commons/util/const'
-import { updateDashboard } from '../../actions/taskActions'
+import { processGroup } from '../../actions/taskActions'
 import { handleClose } from '../../../commons/actions/modalActions'
 import { insertArrayWithId } from '../../../commons/util/func'
 
-const DashBoardGroupForm = ({ title, dashboard, group = {}, handleClose, updateDashboard }) => {
+const DashBoardGroupForm = ({ title, dashboard, group = {}, handleClose, processGroup }) => {
     const [nGroup, setNGroup] = React.useState(group.id ? group : GROUP_DASHBOARD)
     const onChange = (target) => setNGroup({ ...nGroup, [target.name]: target.value })
     const onSubmit = e => {
@@ -23,13 +23,13 @@ const DashBoardGroupForm = ({ title, dashboard, group = {}, handleClose, updateD
         } else {
             groups = insertArrayWithId(groups, nGroup)
         }
-        updateDashboard({ ...dashboard, groups: groups, orderGroup: groups.map(g => g.id) })
+        processGroup({ ...dashboard, groups: groups })
     }
-    return <Modal.DropContent title={title} handleClose={handleClose}>
+    return <Modal.DropContent title={title} handleClose={handleClose} left>
         <Form onSubmit={onSubmit}>
             <Modal.Body>
                 <Form.Input name="name" required={true} label="Nombre"
-                    value={nGroup.name} onChange={onChange} upperCase />
+                    value={nGroup.name} onChange={onChange} upperCase focus />
             </Modal.Body>
             <Modal.FormFooter handleClose={handleClose} />
         </Form>
@@ -41,7 +41,7 @@ DashBoardGroupForm.propTypes = {
     dashboard: DASHBOARD_PROP_SHAPE.isRequired,
     group: PropTypes.object,
     handleClose: PropTypes.func.isRequired,
-    updateDashboard: PropTypes.func.isRequired
+    processGroup: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -50,5 +50,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { handleClose, updateDashboard }
+    { handleClose, processGroup }
 )(DashBoardGroupForm)

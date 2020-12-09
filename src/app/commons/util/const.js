@@ -26,10 +26,6 @@ const THEMES = [
         CREATOR: 'https://noumevon.com/'
     },
     {
-        NAME: 'Brijan',
-        CREATOR: 'https://twitter.com/brijanp'
-    },
-    {
         NAME: 'Kitty',
         CREATOR: 'http://thepatternlibrary.com/#kitty'
     },
@@ -49,7 +45,9 @@ const THEMES = [
 
 const SYSDATE = new Date();
 
-const DAYS_SP = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
+const MAXDATE = { year: SYSDATE.getFullYear() + 4, month: 11, day: 31 }
+
+const DAYS_SP = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
 
 const MONTHS_SP = [
     'Enero', 'Febrero', 'Marzo',
@@ -72,7 +70,6 @@ const COLORS = [
     { id: 'purple', text: 'Morado' }
 ];
 
-
 const KEYCODES = {
     LEFT: 37,
     UP: 38,
@@ -94,6 +91,20 @@ const TASK = {
     editions: []
 }
 
+
+const STATUS_TASK = {
+    PENDING: 1,
+    COMPLETE: 2,
+    ALL: 3
+}
+
+const SELECT_STATUS_TASK = [
+    { id: STATUS_TASK.PENDING, text: 'Pendientes' },
+    { id: STATUS_TASK.COMPLETE, text: 'Completadas' },
+    { id: STATUS_TASK.ALL, text: 'Todas' }
+
+]
+
 const GROUP_DASHBOARD = {
     id: 0,
     name: '',
@@ -108,7 +119,8 @@ const DASHBOARD = {
     groups: [],
     orderGroup: [],
     creation: '',
-    editions: []
+    editions: [],
+    vertical: 0
 }
 
 const TEMPLATES = {
@@ -174,9 +186,11 @@ const RGX = {
     NUMBERS: /^([0-9-]*)$/
 }
 
+
 export {
     THEMES,
     SYSDATE,
+    MAXDATE,
     DAYS_SP,
     MONTHS_SP,
     PAST,
@@ -185,6 +199,8 @@ export {
     COLORS,
     KEYCODES,
     TASK,
+    STATUS_TASK,
+    SELECT_STATUS_TASK,
     TEMPLATES,
     GROUP_DASHBOARD,
     DASHBOARD,

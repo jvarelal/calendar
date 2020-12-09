@@ -1,5 +1,6 @@
-import { fragmentDate, evalueDate, getLastDayMonth } from '../../commons/util/func'
-import { KEYCODES, SYSDATE, DAYS_SP, FUTURE, PAST } from '../../commons/util/const'
+import { fragmentDate, evalueDate, getLastDayMonth, getWeek } from '../../commons/util/func'
+import { KEYCODES, SYSDATE, DAYS_SP, FUTURE, PAST, STATUS_TASK } from '../../commons/util/const'
+import SAINTS from './saints'
 
 const addNewYearToList = (date = {}, yearslist = []) => {
     if (date.year < yearslist[0]) {
@@ -9,6 +10,21 @@ const addNewYearToList = (date = {}, yearslist = []) => {
         yearslist = [...yearslist, date.year]
     }
     return yearslist;
+}
+
+const getTaskFromDashboards = (dashboards = []) => {
+    let tasks = []
+    dashboards.forEach(dashboard => dashboard.groups.forEach(group => {
+        if (group.tasks && group.tasks.length > 0)
+            tasks = [
+                ...tasks,
+                ...group.tasks.map(task => ({
+                    ...task,
+                    dashboard: { id: dashboard.id, idGroup: group.id }
+                }))
+            ]
+    }));
+    return tasks
 }
 
 const getTaskByMonth = (tasks = [], date = {}) => {
@@ -39,6 +55,7 @@ const getDaysInPanel = (date, tasks) => {
         days.push({
             day: day,
             dayOfWeek: dayOfWeek,
+            saint: SAINTS[date.month].DAYS[day - 1] || {},
             able: evalueDate({ ...date, day: day }) !== PAST,
             tasks: tasks.filter(t => t.date.day === day)
         })
@@ -50,15 +67,16 @@ const getDaysInPanel = (date, tasks) => {
 const getCalendarTableByMonth = (date, tasks) => {
     const daysPrevMonth = getLastDayMonth(date.year, Number(date.month) - 1);
     const lastDayMonth = getLastDayMonth(date.year, date.month);
-    const nextMonth = fragmentDate(new Date(date.year, Number(date.month) + 1, 1))
     const prevMonth = fragmentDate(daysPrevMonth)
+    const nextMonth = fragmentDate(new Date(date.year, Number(date.month) + 1, 1))
     let days = [];
-    let day = daysPrevMonth.getDate() - daysPrevMonth.getDay()
+    let day = daysPrevMonth.getDate() - daysPrevMonth.getDay() + 1
     while (day <= daysPrevMonth.getDate() && daysPrevMonth.getDay() < 6) {
         _fillRowGrid(days, {
             fullDate: { ...prevMonth, day: day },
             able: false,
-            className: 'disable'
+            className: 'disable',
+            saint: SAINTS[prevMonth.month].DAYS[day - 1] || {}
         });
         day++;
     }
@@ -67,7 +85,8 @@ const getCalendarTableByMonth = (date, tasks) => {
             fullDate: { ...date, month: Number(date.month), day: day },
             able: true,
             className: day === Number(date.day) ? 'selected' : evalueDate({ ...date, day: day }),
-            tasks: tasks.filter(t => t.date.day === day)
+            tasks: tasks.filter(t => t.date.day === day),
+            saint: SAINTS[date.month].DAYS[day - 1] || {}
         });
     }
     day = 1;
@@ -75,7 +94,8 @@ const getCalendarTableByMonth = (date, tasks) => {
         _fillRowGrid(days, {
             fullDate: { ...nextMonth, day: day },
             able: false,
-            className: 'disable'
+            className: 'disable',
+            saint: SAINTS[nextMonth.month].DAYS[day - 1] || {}
         });
         day++;
     }
@@ -83,10 +103,22 @@ const getCalendarTableByMonth = (date, tasks) => {
 }
 
 const _fillRowGrid = (daysRow = [], newDay = {}) => {
-    if (daysRow.length > 0 && daysRow[daysRow.length - 1].length < DAYS_SP.length)
+    if (daysRow.length > 0 && daysRow[daysRow.length - 1].length < DAYS_SP.length) {
         daysRow[daysRow.length - 1].push(newDay);
-    else
-        daysRow.push([newDay]);
+    } else {
+        daysRow.push([{ ...newDay, week: getWeek(newDay.fullDate) }]);
+    }
+}
+
+const filterTasks = (group, status) => {
+    switch (status) {
+        case STATUS_TASK.PENDING:
+            return group.tasks.filter(t => !t.done)
+        case STATUS_TASK.COMPLETE:
+            return group.tasks.filter(t => t.done)
+        default:
+            return group.tasks
+    }
 }
 
 const keyBoardMove = (kbOperation) => {
@@ -122,14 +154,14 @@ const keyBoardMove = (kbOperation) => {
     }
 }
 
-
 export {
     addNewYearToList,
     getTaskByMonth,
     getTdByMonth,
-    //   sortTasksByColor,
+    getTaskFromDashboards,
     isDifferentYYMM,
     getDaysInPanel,
     getCalendarTableByMonth,
+    filterTasks,
     keyBoardMove
 }
