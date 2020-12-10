@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { readDashboards, createDashboard } from '../../task/actions/taskActions'
 import { checkSession } from '../actions/userActions'
-import { THEMES, TEMPLATES } from '../../commons/util/const'
+import { THEMES, TEMPLATES, LOADING } from '../../commons/util/const'
+import ErrorBoundary from '../../commons/components/ErrorBoundary'
 import Footer from '../../commons/components/Footer'
 
 const LoadUser = ({ user, checkSession, readDashboards, createDashboard, children }) => {
@@ -20,15 +21,12 @@ const LoadUser = ({ user, checkSession, readDashboards, createDashboard, childre
                 }
             })
     }, [user.id, readDashboards, createDashboard])
-    return pending ? <div className="flex-center">
-        <div className="m-auto ptb-9">
-            <div className="loading" /> <br />Cargando
-        </div>
-    </div>
-        : <div className={`wrapper ${THEME.NAME}`}>
+    return pending ? LOADING : <div className={`wrapper ${THEME.NAME}`}>
+        <ErrorBoundary>
             {children}
-            <Footer theme={THEME} />
-        </div>
+        </ErrorBoundary>
+        <Footer theme={THEME} />
+    </div>
 }
 
 LoadUser.propTypes = {

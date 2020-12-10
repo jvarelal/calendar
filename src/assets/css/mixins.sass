@@ -137,26 +137,25 @@ $RedColor: #dc3545
         opacity: 0.75
         height: 10rem
         width: 10rem
-    .fm-group
-        label.active
-            @if $label == "black"
-                @extend %ElementBlack
-                border: 1px solid #dddddd
-            @else if $label == "pink"
-                @extend %ElementPink
-            @else if $label == "green"
-                @extend %ElementGreen
-            @else if $label == "orange"
-                @extend %ElementOrange
-            @else if $label == "cyan"
-                @extend %ElementCyan
-            @else if $label == "purple"
-                @extend %ElementPurple
-            @else if $label == "yellow"
-                @extend %ElementYellow
-            @else
-                @extend %ElementWhite
-                border: 1px solid #444444
+    .fm-group label.active, .week
+        @if $label == "black"
+            @extend %ElementBlack
+            border: 1px solid #dddddd
+        @else if $label == "pink"
+            @extend %ElementPink
+        @else if $label == "green"
+            @extend %ElementGreen
+        @else if $label == "orange"
+            @extend %ElementOrange
+        @else if $label == "cyan"
+            @extend %ElementCyan
+        @else if $label == "purple"
+            @extend %ElementPurple
+        @else if $label == "yellow"
+            @extend %ElementYellow
+        @else
+            @extend %ElementWhite
+            border: 1px solid #444444
     .btn-primary
         @if $button == "black"
             @extend %ElementBlackH

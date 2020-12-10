@@ -13,6 +13,8 @@ const TaskCard = ({ expanded = false, task = {}, dashboards, backgroundCards, on
     const messageOnDelete = `¿Desea eliminar la nota ${task.name}?`;
     const confirmDelete = () => deleteTask(dashboards, task)
     const doneUndone = () => processTask(dashboards, { ...task, done: !task.done })
+    const dashboard = dashboards.find(d => d.id === task.dashboard.id)
+    const group = dashboard.groups.find(g => g.id === task.dashboard.idGroup)
     return <DropCard title={task.name}
         variant={task.color ? (backgroundCards === '1' ? task.color : 'outline-' + task.color) : ''}
         onDragStart={onDragStart}
@@ -20,8 +22,9 @@ const TaskCard = ({ expanded = false, task = {}, dashboards, backgroundCards, on
         expanded={expanded}>
         <div>
             <p>{task.detail}</p>
-            <div className="p-1 text-muted" style={{ fontSize: '.7rem' }}>
-                Creación: {task.creation}
+            <div className="p-1 text-muted text-sm">
+                Creación: {task.creation} <br/>
+                Tablero: {dashboard.name} | Grupo: {group.name}
             </div>
         </div>
         <div className="card-footer">

@@ -113,14 +113,16 @@ const FormFooter = ({ handleClose }) => <div className="row card-footer">
 
 const WithoutSession = ({ handleClose }) => {
     const history = useHistory();
+    const buttonEl = React.useRef(null)
     const login = () => {
         history.push('/login');
         handleClose()
     }
     return <div className="text-center p-4">
         <p>Para poder avanzar es necesario iniciar sesión</p>
-        <button className="btn btn-primary" onClick={login}>
-            Continuar
+        <h1><i className="fas fa-door-closed" /></h1>
+        <button className="btn btn-primary" onClick={login} ref={buttonEl}>
+            Continuar <i className="fas fa-arrow-right" />
         </button>
     </div>
 }

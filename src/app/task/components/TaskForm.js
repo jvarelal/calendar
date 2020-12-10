@@ -11,11 +11,7 @@ import { handleClose } from '../../commons/actions/modalActions'
 
 
 const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGroup, handleClose, processTask }) => {
-    const initialTask = taskSelected || {
-        ...TASK,
-        date: { ...date, hour: '00', minute: '00' },
-        dashboard: { id: (dashboards[idxDashboard] || {}).id, idGroup: idGroup || 0 }
-    }
+    const initialTask = setInitialTask(taskSelected, date, dashboards, idxDashboard, idGroup)
     const [task, setTask] = React.useState(initialTask);
     const onChange = target => setTask({ ...task, [target.name]: target.value })
     const onCheck = event => setTask({ ...task, [event.target.name]: !task[event.target.name] })
@@ -78,6 +74,17 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
             <Modal.FormFooter handleClose={handleClose} />
         </Form> : <Modal.WithoutSession handleClose={handleClose} />}
     </Modal.DropContent>
+}
+
+const setInitialTask = (taskSelected, date, dashboards, idxDashboard, idGroup) => {
+    let initialTask = taskSelected || { ...TASK, date: { ...date, hour: '00', minute: '00' } }
+    if (dashboards[idxDashboard]) {
+        initialTask.dashboard = {
+            id: dashboards[idxDashboard].id,
+            idGroup: idGroup || dashboards[idxDashboard].groups[0].id
+        }
+    }
+    return initialTask
 }
 
 TaskForm.propTypes = {

@@ -53,10 +53,6 @@ const deleteGroup = (dashboard, group) => {
 const processGroup = (dashboard) => dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
 
 const updateTaskPosition = (dashboard, newIdGroup, idxTask, task) => {
-    console.log(dashboard)
-    console.log(newIdGroup)
-    console.log(idxTask)
-    console.log(task)
     const idGroup = task.dashboard.idGroup
     for (let i = 0; i < dashboard.groups.length; i++) {
         if (dashboard.groups[i].id === idGroup) {
@@ -66,26 +62,23 @@ const updateTaskPosition = (dashboard, newIdGroup, idxTask, task) => {
             dashboard.groups[i].tasks.splice(idxTask, 0, task);
         }
     }
-    console.log(dashboard)
     return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
 }
 
 const createDashboard = dashboard => dashboardClient(DASHBOARD_TYPES.CREATE_DASHBOARD, {
     ...dashboard,
-    creation: new Date().toLocaleDateString(),
-    editions: [new Date().toLocaleDateString()]
+    creation: new Date().toLocaleDateString()
 })
 
 const readDashboards = user => dashboardClient(DASHBOARD_TYPES.LIST_DASHBOARDS, user)
 
-const updateDashboard = dashboard => {
-    dashboard.editions.push(new Date().toLocaleDateString())
-    return dashboardClient(DASHBOARD_TYPES.EDIT_DASHBOARD, dashboard)
-}
+const updateDashboard = dashboard => dashboardClient(DASHBOARD_TYPES.EDIT_DASHBOARD, dashboard)
 
 const deleteDashboard = dashboard => dashboardClient(DASHBOARD_TYPES.DELETE_DASHBOARD, dashboard)
 
 const setIdxDashboard = idx => ({ type: DASHBOARD_TYPES.SET_IDX_DASHBOARD, payload: idx })
+
+const resetDashboard = () => ({ type: DASHBOARD_TYPES.LIST_DASHBOARDS, payload: [] })
 
 export { createDashboard, readDashboards, updateDashboard, deleteDashboard, setIdxDashboard }
 
@@ -96,5 +89,6 @@ export {
     processTask,
     deleteGroup,
     processGroup,
+    resetDashboard,
     updateTaskPosition
 }

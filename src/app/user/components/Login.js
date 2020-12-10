@@ -52,10 +52,10 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
                                     value={user.name} onChange={onChange}
                                     rgx={RGX.ALPHANUMERICAL1} /> : null}
                             <Form.Input name="email" required={true} label="Email"
-                                type="password"
                                 value={user.email} onChange={onChange}
                                 rgx={RGX.EMAIL} validateValue={validateEmail} />
                             <Form.Input name="password" required={true} label="Password"
+                                type="password"
                                 value={user.password} onChange={onChange}
                                 minLength="6" />
                         </div>

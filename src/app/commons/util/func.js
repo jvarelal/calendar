@@ -221,7 +221,7 @@ const onTextChange = (e, rg, setValue, upperCase) => {
     let input = e.target;
     let value = input.value && upperCase ? input.value.toUpperCase() : input.value
     if ((!value || (rg.test(input.value)
-        && (input.value.length <= input.maxLength))) && input.value.trim() !== '') {
+        && (input.value.length <= input.maxLength))) && (input.value.trim() !== '' || input.value.length === 0)) {
         return setValue(value ? value : '')
     }
 }

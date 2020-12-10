@@ -33,7 +33,6 @@ const user = (state = { ...initialState }, action) => {
         case USER_TYPES.GET_LOGIN.BY_GOOGLE:
         case USER_TYPES.GET_LOGIN.BY_FACEBOOK:
         case USER_TYPES.CHECK_SESSION:
-            console.log(action.payload)
             return {
                 ...state,
                 id: action.payload.user.uid,
@@ -52,7 +51,6 @@ const user = (state = { ...initialState }, action) => {
                 location: { ...state.location, weather: action.payload }
             }
         case USER_TYPES.SET_PREFERENCE:
-            console.log(action.payload)
             return {
                 ...state,
                 preferences: { ...state.preferences, ...action.payload }

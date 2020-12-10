@@ -6,18 +6,15 @@ import { fragmentDate } from '../../../commons/util/func'
 import { getCalendarTableByMonth, keyBoardMove } from '../../util/funcCalendar'
 import { setDate } from '../../actions/taskActions'
 import TaskForm from '../TaskForm'
-import { TableWithHeader, AlertFooter, MonthBackForward } from '../TaskElements'
+import { TableWithHeader, CalendarCell, AlertFooter, MonthBackForward } from '../TaskElements'
 import { getModalContent, getModalConfirmation } from '../../../commons/actions/modalActions'
 
 const alertBase = { show: false, msg: '' };
 
-const DAYS_CALENDAR_HEAD = DAYS_SP.map((DAY, i) => <React.Fragment key={i}>
-    <span className="normal-th">{DAY}</span><span className="sm-th">{DAY[0]}</span>
-</React.Fragment>)
-
 const CalendarTable = ({ date, tasksByMonth, setDate, getModalContent }) => {
     const tableDays = getCalendarTableByMonth(date, tasksByMonth);
     const [alert, setAlert] = React.useState(alertBase)
+    const tableEl = React.useRef(null)
     const keyboardOperation = {
         date: date,
         tasks: tasksByMonth,
@@ -27,20 +24,14 @@ const CalendarTable = ({ date, tasksByMonth, setDate, getModalContent }) => {
     }
     const monthBack = () => setDate(fragmentDate(new Date(date.year, Number(date.month) - 1, date.day)))
     const monthFordward = () => setDate(fragmentDate(new Date(date.year, Number(date.month) + 1, date.day)))
+    React.useEffect(() => tableEl.current.focus(), [])
     React.useEffect(() => setAlert(alertBase), [date])
-    return <TableWithHeader className="dayGrid" headers={DAYS_CALENDAR_HEAD}>
-        <tbody tabIndex="0" onKeyDown={e => keyBoardMove({ ...keyboardOperation, keyCode: e.keyCode })}>
+    return <TableWithHeader className="dayGrid" headers={DAYS_SP}>
+        <tbody tabIndex="0" ref={tableEl}
+            onKeyDown={e => keyBoardMove({ ...keyboardOperation, keyCode: e.keyCode })}>
             {tableDays.map((row, index) => <tr key={index}>
                 {row.map((d, i) => <td key={i} className={d.className} onClick={e => setDate(d.fullDate)}>
-                    {d.tasks && d.tasks.length > 0 ? <div className="flag"></div> : null}
-                    <div className="space">
-                        <h2 className="lighter m-auto">
-                            {d.fullDate.day} {d.saint.holiday ? <i style={{ fontSize: '1.25rem' }}
-                                className={d.saint.holiday.icon + ' m-2'} title={d.saint.holiday.title} /> : ''}
-                        </h2>
-                        {d.week ? <div className="week">{d.week}</div> : null}
-                        <p className="m-auto ptb-4 text-sm">{d.saint.name}</p>
-                    </div>
+                    <CalendarCell day={d} />
                 </td>)}
             </tr>)}
             <tr>
@@ -51,7 +42,6 @@ const CalendarTable = ({ date, tasksByMonth, setDate, getModalContent }) => {
         </tbody>
         <AlertFooter colSpan={DAYS_SP.length} alert={alert} onClose={() => setAlert(alertBase)} />
     </TableWithHeader>
-
 }
 
 CalendarTable.propTypes = {

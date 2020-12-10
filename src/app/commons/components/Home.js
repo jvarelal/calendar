@@ -15,9 +15,8 @@ const Home = () => {
                 <div className="start-info">
                     <h3 className="text-center">Agenda tus actividades </h3>
                     <p>
-                        Selecciona una fecha especifica en tu calendario y genera las notas
-                        que requieras para alistar tus actividades con la posibilidad
-                        de recordatorios a la hora que especifiques.
+                        Selecciona una fecha en tu calendario y genera las notas
+                        que requieras para alistar tus actividades.
                        </p>
                     <Link to="/calendar" className="btn btn-primary" style={styleLink}>
                         <i className="fas fa-arrow-right" /> Comenzar
@@ -33,8 +32,7 @@ const Home = () => {
                     <h3 className="text-center">Enlista tus pendientes</h3>
                     <p>
                         Redacta tus pendientes y visualizalos
-                        en los tableros y grupos que tu definas para su
-                        clasificación.
+                        en los tableros y grupos que tu definas.
                     </p>
                     <Link to="/dashboard" className="btn btn-primary" style={styleLink}>
                         <i className="fas fa-arrow-right" /> Comenzar

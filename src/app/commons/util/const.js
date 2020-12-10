@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const THEMES = [
@@ -48,6 +49,7 @@ const SYSDATE = new Date();
 const MAXDATE = { year: SYSDATE.getFullYear() + 4, month: 11, day: 31 }
 
 const DAYS_SP = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
+
 
 const MONTHS_SP = [
     'Enero', 'Febrero', 'Marzo',
@@ -119,7 +121,6 @@ const DASHBOARD = {
     groups: [],
     orderGroup: [],
     creation: '',
-    editions: [],
     vertical: 0
 }
 
@@ -152,8 +153,7 @@ const DASHBOARD_PROP_SHAPE = PropTypes.shape({
     name: PropTypes.string.isRequired,
     detail: PropTypes.string.isRequired,
     groups: PropTypes.arrayOf(GROUP_PROP_SHAPE).isRequired,
-    creation: PropTypes.string.isRequired,
-    editions: PropTypes.array.isRequired
+    creation: PropTypes.string.isRequired
 })
 
 const TASK_PROP_SHAPE = PropTypes.shape({
@@ -186,6 +186,13 @@ const RGX = {
     NUMBERS: /^([0-9-]*)$/
 }
 
+const LOADING = <div className="container">
+    <div className="flex-center m-9 ptb-9">
+        <div className="m-auto ptb-9">
+            <div className="loading" /> <br />Cargando
+        </div>
+    </div>
+</div>
 
 export {
     THEMES,
@@ -207,5 +214,6 @@ export {
     DASHBOARD_PROP_SHAPE,
     DATE_PROP_SHAPE,
     TASK_PROP_SHAPE,
-    RGX
+    RGX,
+    LOADING
 }

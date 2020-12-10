@@ -1,4 +1,4 @@
-import { CALENDAR_TYPES, DASHBOARD_TYPES } from '../../task/actions/taskTypes'
+import { DASHBOARD_TYPES } from '../../task/actions/taskTypes'
 import { USER_TYPES } from '../../user/actions/userTypes'
 import { provider, db, auth } from './firebase'
 import axios from 'axios'

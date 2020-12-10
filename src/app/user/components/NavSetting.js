@@ -7,12 +7,13 @@ import Form from '../../commons/components/styled/Form'
 import { THEMES } from '../../commons/util/const'
 import { getLocation, getWeather } from '../actions/userActions'
 import { setUserPreference, logout } from '../actions/userActions'
+import { resetDashboard } from '../../task/actions/taskActions'
 
-const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPreference, logout }) => {
+const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPreference, logout, resetDashboard }) => {
     const getWeatherByLocation = (userlocation = {}) => {
         getWeather({ latitude: userlocation.latitude, longitude: userlocation.longitude })
     }
-    React.useEffect(() => getLocation(getWeatherByLocation), [getLocation])
+    React.useEffect(() => getLocation(getWeatherByLocation), [])// eslint-disable-line react-hooks/exhaustive-deps
     const weather = location.weather || { temp: {} }
     const history = useHistory();
     const profileImg = !user.photo ? <i className="fas fa-user" /> :
@@ -42,19 +43,25 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
                     options={BACKGROUND_NOTE} flash />
             </div>
             <div className="card-footer">
-                <Header.NavLink onClick={() => logout({ cb: () => history.push('/login') })}>
-                    <i className="fas fa-columns"></i> <span>Cerrar sesión</span>
+                <Header.NavLink onClick={() => logout({
+                    cb: () => {
+                        resetDashboard();
+                        history.push('/login')
+                    }
+                })}>
+                    <i className="fas fa-sign-out-alt"></i> <span>Cerrar sesión</span>
                 </Header.NavLink>
             </div>
         </div>
     </Header.NavDropMenu>
 }
 
-const BACKGROUND_NOTE = [{ id: 0, text: 'Light' }, { id: 1, text: 'Boldo' }];
+const BACKGROUND_NOTE = [{ id: 0, text: 'Light' }, { id: 1, text: 'Bold' }];
 
 NavSetting.propTypes = {
     user: PropTypes.object.isRequired,
     setUserPreference: PropTypes.func.isRequired,
+    resetDashboard: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
     getLocation: PropTypes.func.isRequired,
@@ -68,5 +75,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { setUserPreference, getLocation, getWeather, logout }
+    { setUserPreference, getLocation, getWeather, logout, resetDashboard }
 )(NavSetting);

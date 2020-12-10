@@ -43,6 +43,10 @@ button, li, a, input, select, textarea, label, input[type="submit"]
 a
     color: inherit
 
+p
+    margin-bottom: 1rem
+    white-space: pre-wrap
+
 .lighter
     font-weight: lighter
 
@@ -296,9 +300,6 @@ a
         padding: 0.25rem 0
         color: #444444
 
-p
-    margin-bottom: 1rem
-
 .flex-center
     display: flex
     justify-content: space-between
@@ -378,6 +379,8 @@ p
     margin: .5rem
 .m-8
     margin: .8rem
+.m-9
+    margin: .9rem
 .p-2
     padding: .2rem
 
@@ -693,7 +696,8 @@ p
         padding: 0 .25rem
     .navbar
         height: 2.5rem
-
+    .btn
+        padding: .25rem .5rem
     .nav-logo
         padding: 0
         span
@@ -748,9 +752,12 @@ p
                 display: block
         td
             font-size: 1.5rem
-            color: #666
             .space
-                padding: .25rem
+                padding: .5rem .15rem
+            .week
+                font-size: 0.6rem
+            .text-sm
+                font-size: 0.65rem
 
     .flag
         width: 0
@@ -775,3 +782,7 @@ p
 
     .start-info
         font-size: 1rem
+
+@media screen and (max-width:400px)
+    .saint
+        display: none

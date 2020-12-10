@@ -6,12 +6,24 @@ const TableWithHeader = ({ headers, className, children }) => {
     return <table className="tbl text-center">
         <thead className={className}>
             <tr>
-                {headers.map((header, index) => <th key={index} style={{ width: widthCell }}>{header}</th>)}
+                {headers.map((header, index) => <th key={index} style={{ width: widthCell }}>
+                    <span className="normal-th">{header}</span><span className="sm-th">{header[0]}</span>
+                </th>)}
             </tr>
         </thead>
         {children}
     </table>
 }
+
+const CalendarCell = ({ day }) => <div className="space">
+    {day.tasks && day.tasks.length > 0 ? <div className="flag"></div> : null}
+    <h2 className="lighter m-auto">
+        {day.fullDate.day} {day.saint.holiday ? <i style={{ fontSize: '1.25rem' }}
+            className={day.saint.holiday.icon + ' m-2'} title={day.saint.holiday.title} /> : ''}
+    </h2>
+    {day.week ? <div className="week">{day.week}</div> : null}
+    <p className="m-auto ptb-4 text-sm saint">{day.saint.name}</p>
+</div>
 
 const AlertFooter = ({ colSpan, alert, onClose }) => <tfoot>
     <tr>
@@ -86,6 +98,7 @@ const DropCard = ({ title, variant, onDragStart, onDrop, children, expanded = fa
 
 export {
     TableWithHeader,
+    CalendarCell,
     AlertFooter,
     MonthBackForward,
     DivColorOption,
