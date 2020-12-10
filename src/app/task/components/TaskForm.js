@@ -78,7 +78,7 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
 
 const setInitialTask = (taskSelected, date, dashboards, idxDashboard, idGroup) => {
     let initialTask = taskSelected || { ...TASK, date: { ...date, hour: '00', minute: '00' } }
-    if (dashboards[idxDashboard]) {
+    if (!taskSelected && dashboards[idxDashboard]) {
         initialTask.dashboard = {
             id: dashboards[idxDashboard].id,
             idGroup: idGroup || dashboards[idxDashboard].groups[0].id
