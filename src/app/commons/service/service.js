@@ -51,12 +51,14 @@ export default function service({ nameService = '', type = '', body = {}, cb = (
             {
                 type: USER_TYPES.GET_LOCATION,
                 url: 'http://api.ipstack.com/check?access_key=aa8dbbb07ed7fe7245663642cf668b9b',
-                method: 'GET'
+                method: 'GET',
+                ignoreError: true
             },
             {
                 type: USER_TYPES.GET_WEATHER,
                 url: `https://api.climacell.co/v3/weather/realtime?lat=${body.latitude}&lon=${body.longitude}&unit_system=si&fields=precipitation,wind_gust,humidity,wind_speed,temp`,
                 method: 'GET',
+                ignoreError: true,
                 config: {
                     headers: {
                         'content-type': 'application/json',
@@ -205,7 +207,7 @@ const getJSONService = (operation, cb, cbError) => {
             res = { data: res, status: response.status }
         }
         cb(res)
-    }, (error) => isNetworkError(error, cbError));
+    }, (error) => isNetworkError(error, cbError, operation));
 }
 
 const getTextService = (operation, cb, cbError) => {
@@ -220,7 +222,7 @@ const getTextService = (operation, cb, cbError) => {
             res = { data: res, status: response.status }
         }
         cb(res)
-    }, (error) => isNetworkError(error, cbError));
+    }, (error) => isNetworkError(error, cbError, operation));
 }
 
 const postJSONService = (operation, params, cb, cbError) => {
@@ -229,10 +231,10 @@ const postJSONService = (operation, params, cb, cbError) => {
             res = { data: res, status: response.status }
         }
         cb(res)
-    }, (error) => isNetworkError(error, cbError));
+    }, (error) => isNetworkError(error, cbError, operation));
 }
 
-const isNetworkError = (error, cbError) => {
+const isNetworkError = (error, cbError, operation) => {
     let msg = '';
     try {
         if (error.response) {
@@ -245,5 +247,5 @@ const isNetworkError = (error, cbError) => {
     } catch (e) {
         msg = 'Se ha generado un fallo en la solicitud'
     }
-    cbError(msg)
+    cbError({ message: msg, ignore: operation.ignoreError })
 }

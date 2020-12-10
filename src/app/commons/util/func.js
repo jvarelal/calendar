@@ -58,7 +58,10 @@ const validateAlarm = (time, date) => {
 }
 
 const getNotifications = (tasks, time = new Date().toLocaleTimeString()) => {
-    return tasks.filter(t => t.alarm && validateAlarm(time, t.date) && !t.dismiss)
+    return tasks.filter(t => t.alarm && 
+        evalueDate(t.date) === PRESENT &&
+        validateAlarm(time, t.date) && 
+        !t.dismiss)
 }
 
 const notificationsBySecond = (setNotifications, tasks, setTime) => {

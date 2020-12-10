@@ -64,9 +64,9 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
                         <Form.CheckBox name="alarm" label="Crear recordatorio" value={task.alarm} onChange={onCheck} />
                         {task.alarm ? <Form.MultiGroup>
                             <Form.Select name="hour" label="Hora" value={task.date.hour}
-                                options={fillNumberList(0, 23)} onChange={onChangeTime} number inline />
+                                options={fillNumberList(0, 23)} onChange={onChangeTime} inline />
                             <Form.Select name="minute" label="Minuto" value={task.date.minute}
-                                options={fillNumberList(0, 59)} onChange={onChangeTime} number inline />
+                                options={fillNumberList(0, 59)} onChange={onChangeTime} inline />
                         </Form.MultiGroup> : null}
                     </div>
                 </div>

@@ -14,7 +14,6 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
         getWeather({ latitude: userlocation.latitude, longitude: userlocation.longitude })
     }
     React.useEffect(() => getLocation(getWeatherByLocation), [])// eslint-disable-line react-hooks/exhaustive-deps
-    const weather = location.weather || { temp: {} }
     const history = useHistory();
     const profileImg = !user.photo ? <i className="fas fa-user" /> :
         <img src={user.photo} alt="profile" className="profile" />
@@ -23,12 +22,14 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
             <div className="card-header text-center">
                 <div>{user.displayName}</div>
                 <div className="text-sm text-gray m-1">{user.email}</div>
-                <div className="row text-sm m-5">
-                    <div className="col">{location.country_name}, {location.city}</div>
-                    <div className="col">{weather.temp.value} °C</div>
-                </div>
             </div>
             <div className="card-body">
+                <div className="row text-sm m-5">
+                    {location.country_name ? <div className="col">
+                        <i className="fas fa-map-marker-alt" /> {location.country_name}, {location.city}
+                    </div> : null}
+                    <Weather weather={location.weather} />
+                </div>
                 <Form.FmGroup label="Fondos" active>
                     <div className="square-group text-center ptb-7" id="theme">
                         {THEMES.map((THEME, index) => <div key={index}
@@ -49,7 +50,7 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
                         history.push('/login')
                     }
                 })}>
-                    <i className="fas fa-sign-out-alt"></i> <span>Cerrar sesión</span>
+                    <i className="fas fa-sign-out-alt" /> <span>Cerrar sesión</span>
                 </Header.NavLink>
             </div>
         </div>
@@ -57,6 +58,39 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
 }
 
 const BACKGROUND_NOTE = [{ id: 0, text: 'Light' }, { id: 1, text: 'Bold' }];
+
+const Weather = ({ weather }) => {
+    try {
+        const temp = Number(weather.temp.value)
+        let thermometer = ''
+        switch (true) {
+            case temp < 5:
+                thermometer = 'thermometer-empty'
+                break;
+            case temp < 15:
+                thermometer = 'thermometer-quarter'
+                break;
+            case temp < 25:
+                thermometer = 'thermometer-half'
+                break;
+            case temp < 35:
+                thermometer = 'thermometer-three-quarters'
+                break;
+            case temp < 45:
+                thermometer = 'thermometer-full'
+                break;
+            default:
+                thermometer = 'thermometer-half'
+                break;
+
+        }
+        return <div className="col">
+            <i className={`fas fa-${thermometer}`} /> {weather.temp.value} °C
+        </div>
+    } catch (e) {
+        return null
+    }
+}
 
 NavSetting.propTypes = {
     user: PropTypes.object.isRequired,

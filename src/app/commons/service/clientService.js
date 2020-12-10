@@ -28,6 +28,9 @@ const client = (nameService, tipoRequest, body = {}, loader = true) => dispatch 
             }
         },
         error: err => {
+            if (err.ignore) {
+                return dispatch(getModalLoader(false))
+            }
             let msj = typeof err == 'string' ? err : err.message || 'Fallo en la operación'
             const errores = { message: msj, status: 500, title: tipoRequest }
             console.log(errores)

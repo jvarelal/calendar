@@ -1,14 +1,15 @@
 import React from 'react'
 
 const Footer = ({ ...props }) => {
-    const theme = props.theme
+    const theme = props.theme || {}
     return <footer className="navbar-footer flex-center">
-        <div>2020 - J Varela</div>
         <div>
-            {theme && theme.CREATOR ? <a
-                href={theme.CREATOR}
-                target="_blank" rel="noopener noreferrer">
-                <u>Patrón de fondo</u>
+            2020 - <a href="https://github.com/jvarelal"
+                target="_blank" rel="noopener noreferrer">J Varela</a>
+        </div>
+        <div>
+            {theme.CREATOR ? <a href={theme.CREATOR} target="_blank" rel="noopener noreferrer">
+                <u>Creador de fondo</u>
             </a> : null}
         </div>
     </footer>
