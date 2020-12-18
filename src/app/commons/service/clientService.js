@@ -1,6 +1,6 @@
-import { MODAL_TYPES } from '../actions/modalTypes'
+import { MODAL_TYPES } from '../../layout/actions/modalTypes'
 import service from './service'
-import { getModalLoader } from '../actions/modalActions'
+import { getModalLoader } from '../../layout/actions/modalActions'
 
 const client = (nameService, tipoRequest, body = {}, loader = true) => dispatch => {
     let serviceRequest = {
@@ -16,15 +16,20 @@ const client = (nameService, tipoRequest, body = {}, loader = true) => dispatch 
                 if (body.cb) {
                     body.cb(resp.data)
                 }
-                dispatch(getModalLoader(false))
-            } else {
-                if (resp.ignore) {
-                    return dispatch(getModalLoader(false))
+                if (loader) {
+                    dispatch(getModalLoader(false))
                 }
-                dispatch({
-                    type: MODAL_TYPES.SHOW_MESSAGE,
-                    payload: { ...resp, title: tipoRequest }
-                })
+            } else {
+                if (!resp.ignore) {
+                    dispatch({
+                        type: MODAL_TYPES.SHOW_MESSAGE,
+                        payload: { ...resp, title: tipoRequest }
+                    })
+                } else {
+                    if (loader) {
+                        return dispatch(getModalLoader(false))
+                    }
+                }
             }
         },
         error: err => {
@@ -37,7 +42,7 @@ const client = (nameService, tipoRequest, body = {}, loader = true) => dispatch 
             dispatch({ type: MODAL_TYPES.SHOW_MESSAGE, payload: errores })
         }
     };
-    if(loader){
+    if (loader) {
         dispatch(getModalLoader(true))
     }
     service(serviceRequest);

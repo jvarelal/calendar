@@ -2,18 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import Header from '../../commons/components/styled/Header'
-import Form from '../../commons/components/styled/Form'
+import Header from '../../commons/components/Header'
+import Form from '../../commons/components/Form'
+import LocationWeather from './LocationWeather'
 import { THEMES } from '../../commons/util/const'
-import { getLocation, getWeather } from '../actions/userActions'
 import { setUserPreference, logout } from '../actions/userActions'
 import { resetDashboard } from '../../task/actions/taskActions'
 
-const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPreference, logout, resetDashboard }) => {
-    const getWeatherByLocation = (userlocation = {}) => {
-        getWeather({ latitude: userlocation.latitude, longitude: userlocation.longitude })
-    }
-    React.useEffect(() => getLocation(getWeatherByLocation), [])// eslint-disable-line react-hooks/exhaustive-deps
+const NavSetting = ({ user, setUserPreference, logout, resetDashboard }) => {
     const history = useHistory();
     const profileImg = !user.photo ? <i className="fas fa-user" /> :
         <img src={user.photo} alt="profile" className="profile" />
@@ -24,24 +20,17 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
                 <div className="text-sm text-gray m-1">{user.email}</div>
             </div>
             <div className="card-body">
-                <div className="row text-sm m-5">
-                    {location.country_name ? <div className="col">
-                        <i className="fas fa-map-marker-alt" /> {location.country_name}, {location.city}
-                    </div> : null}
-                    <Weather weather={location.weather} />
-                </div>
+                <LocationWeather />
                 <Form.FmGroup label="Fondos" active>
                     <div className="square-group text-center ptb-7" id="theme">
                         {THEMES.map((THEME, index) => <div key={index}
-                            title={THEME.NAME}
-                            className={`small-square ${THEME.NAME}`}
-                            onClick={e => setUserPreference({ name: 'theme', value: index })}
-                        />)}
+                            title={THEME.NAME} className={`small-square ${THEME.NAME}`}
+                            onClick={() => setUserPreference({ name: 'theme', value: index })} />)}
                     </div>
                 </Form.FmGroup>
                 <Form.Select name="backgroundCards" value={user.preferences.backgroundCards}
                     label="Color de notas" onChange={setUserPreference}
-                    options={BACKGROUND_NOTE} flash />
+                    options={BACKGROUND_NOTE} />
             </div>
             <div className="card-footer">
                 <Header.NavLink onClick={() => logout({
@@ -59,55 +48,16 @@ const NavSetting = ({ user, location = {}, getLocation, getWeather, setUserPrefe
 
 const BACKGROUND_NOTE = [{ id: 0, text: 'Light' }, { id: 1, text: 'Bold' }];
 
-const Weather = ({ weather }) => {
-    try {
-        const temp = Number(weather.temp.value)
-        let thermometer = ''
-        switch (true) {
-            case temp < 5:
-                thermometer = 'thermometer-empty'
-                break;
-            case temp < 15:
-                thermometer = 'thermometer-quarter'
-                break;
-            case temp < 25:
-                thermometer = 'thermometer-half'
-                break;
-            case temp < 35:
-                thermometer = 'thermometer-three-quarters'
-                break;
-            case temp < 45:
-                thermometer = 'thermometer-full'
-                break;
-            default:
-                thermometer = 'thermometer-half'
-                break;
-
-        }
-        return <div className="col">
-            <i className={`fas fa-${thermometer}`} /> {weather.temp.value} °C
-        </div>
-    } catch (e) {
-        return null
-    }
-}
-
 NavSetting.propTypes = {
     user: PropTypes.object.isRequired,
     setUserPreference: PropTypes.func.isRequired,
     resetDashboard: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
-    getLocation: PropTypes.func.isRequired,
-    getWeather: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired
 }
 
-const mapStateToProps = state => ({
-    user: state.user,
-    location: state.user.location
-})
+const mapStateToProps = state => ({ user: state.user })
 
 export default connect(
     mapStateToProps,
-    { setUserPreference, getLocation, getWeather, logout, resetDashboard }
+    { setUserPreference, logout, resetDashboard }
 )(NavSetting);

@@ -1,6 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const ACCESS = {
+    LOGIN: { ID: 1, NAME: 'Login' },
+    REGISTER: { ID: 2, NAME: 'Registrarse' }
+}
+
+const LIST_ACCESS = [ACCESS.LOGIN, ACCESS.REGISTER]
+
+
 const THEMES = [
     {
         NAME: 'White',
@@ -78,7 +86,8 @@ const KEYCODES = {
     RIGHT: 39,
     DOWN: 40,
     ENTER: 13,
-    SUPR: 46
+    SUPR: 46,
+    ESC: 27
 }
 
 const TASK = {
@@ -119,7 +128,6 @@ const DASHBOARD = {
     name: '',
     detail: '',
     groups: [],
-    orderGroup: [],
     creation: '',
     vertical: 0
 }
@@ -130,8 +138,7 @@ const TEMPLATES = {
             ...DASHBOARD,
             name: 'PENDIENTES',
             detail: 'Mis pendientes',
-            groups: [{ ...GROUP_DASHBOARD, name: 'MI LISTA', id: 1 }],
-            orderGroup: [1]
+            groups: [{ ...GROUP_DASHBOARD, name: 'MI LISTA', id: 1 }]
         }
     }
 }
@@ -152,6 +159,7 @@ const GROUP_PROP_SHAPE = PropTypes.shape({
 const DASHBOARD_PROP_SHAPE = PropTypes.shape({
     name: PropTypes.string.isRequired,
     detail: PropTypes.string.isRequired,
+    members: PropTypes.array.isRequired,
     groups: PropTypes.arrayOf(GROUP_PROP_SHAPE).isRequired,
     creation: PropTypes.string.isRequired
 })
@@ -195,6 +203,8 @@ const LOADING = <div className="container">
 </div>
 
 export {
+    ACCESS,
+    LIST_ACCESS,
     THEMES,
     SYSDATE,
     MAXDATE,

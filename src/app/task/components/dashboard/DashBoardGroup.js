@@ -5,18 +5,16 @@ import { DASHBOARD_PROP_SHAPE } from '../../../commons/util/const'
 import TaskForm from '../TaskForm'
 import DashBoardGroupForm from './DashBoardGroupForm'
 import { deleteGroup } from '../../actions/taskActions'
-import { getModalContent, getModalConfirmation } from '../../../commons/actions/modalActions'
+import { getModalContent, getModalConfirmation } from '../../../layout/actions/modalActions'
 import { onDragOver } from '../../../commons/util/func'
 
-const DashBoardGroup = ({ dashboard, group, children, getModalContent, onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
-    const newTask = () => getModalContent(<TaskForm idDashboard={dashboard.id} idGroup={group.id} />)
+const DashBoardGroup = ({ dashboard = {}, group = {}, children, getModalContent, onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
+    const newTask = () => getModalContent(<TaskForm idGroup={group.id} />)
     const editGroup = () => getModalContent(<DashBoardGroupForm title="Editar grupo" dashboard={dashboard} group={group} />)
     const titleOnDelete = `Eliminar grupo`;
     const messageOnDelete = `¿Desea eliminar el grupo ${group.name}?`;
     const deleteCurrent = () => getModalConfirmation(titleOnDelete, messageOnDelete, () => deleteGroup(dashboard, group))
-    const thereAreNotes = group.tasks.length > 0
-    const uniqueGroup = dashboard.groups.length === 1
-    return <div className="card-group mtb-2"
+    return <div className="card-group glass"
         onDrop={onDrop}
         draggable={onDragStart ? true : false}
         onDragStart={onDragStart}
@@ -24,20 +22,22 @@ const DashBoardGroup = ({ dashboard, group, children, getModalContent, onDragSta
         <div className="card-group-header">
             <div className="p-2">{group.name}</div>
             <div className="btn-group ml-auto">
-                <button className="btn-sm" onClick={editGroup}>
-                    <i className="fas fa-edit"></i>
-                </button>
                 <button className="btn-sm" onClick={newTask}>
                     <i className="fas fa-plus"></i>
                 </button>
-                {!thereAreNotes && !uniqueGroup ? <button className="btn-sm"
-                    onClick={deleteCurrent} >
-                    <i className="fas fa-trash"></i>
-                </button> : null}
+                {group.id ? <>
+                    <button className="btn-sm" onClick={editGroup}>
+                        <i className="fas fa-edit"></i>
+                    </button>
+                    {dashboard.groups.length > 1 && group.tasks.length === 0 ? <button className="btn-sm"
+                        onClick={deleteCurrent} >
+                        <i className="fas fa-trash"></i>
+                    </button> : null}
+                </> : null}
             </div>
         </div>
-        <div className="card-group-body">
-            {thereAreNotes ? <div className={'card-group-child' + (vertical ? '' : ' row m-1')}>
+        <div className="card-group-body mtb-8">
+            {children.length > 0 ? <div className={'card-group-child' + (vertical ? '' : ' row m-1')}>
                 {children.map((child, index) => <div
                     className="col plr-2 card-group-child"
                     key={index}>
@@ -45,8 +45,8 @@ const DashBoardGroup = ({ dashboard, group, children, getModalContent, onDragSta
                 </div>)}
             </div> :
                 <div className="card-group-empty">
-                    <i className="far fa-sticky-note card-group-child" style={{ fontSize: '4rem' }} /> <br /><br />
-                    No se ha agregado ninguna nota
+                    <h3 className="text-center m-1 card-group-child">Sin notas</h3>
+                    <div className="empty-img card-group-child" />
                 </div>}
         </div>
     </div>
@@ -54,7 +54,7 @@ const DashBoardGroup = ({ dashboard, group, children, getModalContent, onDragSta
 
 
 DashBoardGroup.propTypes = {
-    dashboard: DASHBOARD_PROP_SHAPE.isRequired,
+    dashboard: DASHBOARD_PROP_SHAPE,
     group: PropTypes.object.isRequired,
     getModalContent: PropTypes.func.isRequired,
     getModalConfirmation: PropTypes.func.isRequired,

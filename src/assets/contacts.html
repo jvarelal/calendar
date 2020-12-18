@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/index.sass">
+    <script src="https://kit.fontawesome.com/3ae38b6676.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div class="wrapper Illusionist">
+            <header class="navbar flex-center"> <a class="nav-logo nav-link" href="#/"><i class="fas fa-sticky-note"
+                        aria-hidden="true"></i> <span><i>Agenda</i></span></a>
+                <nav>
+                    <ul class="navbar-list">
+                        <li class="nav-item"><a class="nav-link" href="#/calendar"><i class="fas fa-calendar-alt icon"
+                                    aria-hidden="true"></i> <span>Calendario</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#/dashboard"><i class="fas fa-clipboard icon"
+                                    aria-hidden="true"></i> <span>Tableros</span></a></li>
+                    </ul>
+                </nav>
+                <nav>
+                    <ul class="navbar-list">
+                        <li class="nav-item">
+                            <div class="nav-link user-menu"><i class="fas fa-clock icon-g" aria-hidden="true"></i>
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        <div>Sin recordatorios</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="nav-link user-menu"><img
+                                    src="https://lh3.googleusercontent.com/a-/AOh14GjrFQzIdJUci1F-Q6lXTEKuXR38h_eEZ4R6Gg45=s96-c"
+                                    alt="profile" class="profile">
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        <div>Jose Varela León</div>
+                                        <div class="text-sm text-gray m-1">ljvarela93@gmail.com</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row text-sm m-5">
+                                            <div class="col"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                                Mexico, Ciudad Nezahualcoyotl</div>
+                                            <div class="col"><i class="fas fa-thermometer-half" aria-hidden="true"></i>
+                                                19 °C</div>
+                                        </div>
+                                        <div class="fm-group ">
+                                            <div class="square-group text-center ptb-7" id="theme">
+                                                <div title="White" class="small-square White"></div>
+                                                <div title="Wood" class="small-square Wood"></div>
+                                                <div title="Illusionist" class="small-square Illusionist"></div>
+                                                <div title="Alchemy" class="small-square Alchemy"></div>
+                                                <div title="Ahoy" class="small-square Ahoy"></div>
+                                                <div title="Asteroids" class="small-square Asteroids"></div>
+                                                <div title="Kitty" class="small-square Kitty"></div>
+                                                <div title="Glitch" class="small-square Glitch"></div>
+                                                <div title="Cuadros" class="small-square Cuadros"></div>
+                                                <div title="Celebration" class="small-square Celebration"></div>
+                                            </div><label class="fm-label active">Fondos</label>
+                                        </div>
+                                        <div class="fm-group "><select id="backgroundCards" name="backgroundCards"
+                                                class="fm-input">
+                                                <option value="0">Light</option>
+                                                <option value="1">Bold</option>
+                                            </select><label for="backgroundCards" class="fm-label active">Color de
+                                                notas</label></div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="nav-link" style="cursor: pointer;"><i class="fas fa-sign-out-alt"
+                                                aria-hidden="true"></i> <span>Cerrar sesión</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col col3">
+                        <div class="fm-group "><span class="overlabel"></span>
+                            <div class="fm-group flex-center">
+                                <div class="fm-group inline"><input id="group" name="group" type="text" maxlength="100"
+                                        minlength="0" class="fm-input" value=""><label for="group"
+                                        class="fm-label">Buscar compañero</label></div><span
+                                    class="btn btn-primary set-right"><i class="fas fa-plus"
+                                        aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="fm-group "><select id="statusTask" name="statusTask" class="fm-input">
+                                <option value="1">Pendientes</option>
+                                <option value="2">Completadas</option>
+                                <option value="3">Todas</option>
+                            </select><label for="statusTask" class="fm-label active">Notas en vista</label></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal "></div>
+            <footer class="navbar-footer flex-center">
+                <div>2020 - <a href="https://github.com/jvarelal" target="_blank" rel="noopener noreferrer">J Varela</a>
+                </div>
+                <div><a href="http://julien-bailly.com/" target="_blank" rel="noopener noreferrer"><u>Creador de
+                            fondo</u></a></div>
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>

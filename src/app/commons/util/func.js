@@ -1,4 +1,5 @@
 import { SYSDATE, FUTURE, PRESENT, PAST, THEMES } from './const'
+import square from '../../../assets/img/squares.svg'
 
 const goToTheTop = () => {
     document.body.scrollTop = 0; // For Safari
@@ -58,10 +59,30 @@ const validateAlarm = (time, date) => {
 }
 
 const getNotifications = (tasks, time = new Date().toLocaleTimeString()) => {
-    return tasks.filter(t => t.alarm && 
+    let notifications = tasks.filter(t => t.alarm &&
         evalueDate(t.date) === PRESENT &&
-        validateAlarm(time, t.date) && 
+        validateAlarm(time, t.date) &&
         !t.dismiss)
+    notifyMe(notifications)
+    return notifications
+}
+
+const notifyMe = (tasks) => {
+    let display = () => tasks.forEach(t => {
+        new Notification(`Agenda - ${t.name} [${completeZero(t.date.hour)}:${completeZero(t.date.minute)}]`, {
+            body: t.detail || 'Recordatorio',
+            icon: square
+        })
+    })
+    if (Notification.permission === "granted") {
+        display()
+    } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission(permission => {
+            if (permission === "granted") {
+                display()
+            }
+        });
+    }
 }
 
 const notificationsBySecond = (setNotifications, tasks, setTime) => {
@@ -124,11 +145,11 @@ const getRandomNumber = (min, max) => {
 
 const insertArrayWithId = (array = [], element = {}) => {
     if (array.length === 0) {
-        return [{ ...element, id: 1 }]
+        return [{...element, id: 1 }]
     }
     let ids = array.map(o => Number(o.id));
     let nextId = Math.max(...ids) + 1;
-    return [...array, { ...element, id: nextId }]
+    return [...array, {...element, id: nextId }]
 }
 
 const replaceById = (array = [], element = {}) => {
@@ -202,7 +223,7 @@ const getTheme = () => {
 
 const setPrefence = preference => {
     let user = getUserLocalData()
-    setUserLocalData({ ...user, ...preference })
+    setUserLocalData({...user, ...preference })
 }
 
 const getUserLocalData = () => {
@@ -223,8 +244,8 @@ const setUserLocalData = (data) => {
 const onTextChange = (e, rg, setValue, upperCase) => {
     let input = e.target;
     let value = input.value && upperCase ? input.value.toUpperCase() : input.value
-    if ((!value || (rg.test(input.value)
-        && (input.value.length <= input.maxLength))) && (input.value.trim() !== '' || input.value.length === 0)) {
+    if ((!value || (rg.test(input.value) &&
+            (input.value.length <= input.maxLength))) && (input.value.trim() !== '' || input.value.length === 0)) {
         return setValue(value ? value : '')
     }
 }

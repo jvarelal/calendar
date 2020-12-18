@@ -1,14 +1,20 @@
-import { createStore, applyMiddleware } from 'redux'
+import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import combineReducers from './commons/reducers/index'
+import task from './task/reducers/task'
+import modal from './layout/reducers/modal'
+import user from './user/reducers/user'
 
 const initialState = {};
 
 const middleware = [thunk];
 
+const reducers = combineReducers({
+    task, modal, user
+})
+
 const store = createStore(
-	combineReducers,
+	reducers,
 	initialState,
 	composeWithDevTools(applyMiddleware(...middleware))
 )

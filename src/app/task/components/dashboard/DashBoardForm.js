@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Modal from '../../../commons/components/styled/Modal'
-import Form from '../../../commons/components/styled/Form'
-import { handleClose } from '../../../commons/actions/modalActions'
+import Modal from '../../../commons/components/Modal'
+import Form from '../../../commons/components/Form'
 import { createDashboard, updateDashboard, setIdxDashboard } from '../../actions/taskActions'
 import { DASHBOARD, DASHBOARD_PROP_SHAPE, GROUP_DASHBOARD } from '../../../commons/util/const'
 import { insertArrayWithId } from '../../../commons/util/func'
 
 const DISTRIBUTION = [{ id: 0, text: 'Automática' }, { id: 1, text: 'Vertical' }]
 
-const DashBoardForm = ({ title, userId, dashboardSelected, dashboards, handleClose, createDashboard, updateDashboard, setIdxDashboard }) => {
+const DashBoardForm = ({ title, userId, dashboardSelected, dashboards, createDashboard, updateDashboard, setIdxDashboard }) => {
     const [dashboard, setDashBoard] = React.useState(dashboardSelected || { ...DASHBOARD })
     const [group, setGroup] = React.useState('')
     const [alert, setAlert] = React.useState(null)
@@ -29,24 +28,23 @@ const DashBoardForm = ({ title, userId, dashboardSelected, dashboards, handleClo
         alterGroup.splice(index, 1)
         setDashBoard({ ...dashboard, groups: alterGroup })
     }
-    const onSubmit = (e) => {
-        e.preventDefault();
+    const onSubmit = () => {
         if (dashboard.id) {
             return updateDashboard(dashboard)
         }
-        let nDashboard = { ...dashboard, userId: userId, orderGroup: dashboard.groups.map(g => g.id) }
+        let nDashboard = { ...dashboard, author: userId, members: [userId]}
         if (nDashboard.groups.length > 0) {
             return createDashboard({ ...nDashboard, cb: () => setIdxDashboard(dashboards.length) });
         }
         return setAlert('Agregue al menos un grupo al nuevo tablero')
     }
-    return <Modal.DropContent title={title} handleClose={handleClose} left>
-        <Form onSubmit={onSubmit} error={alert}>
+    return <Modal.DropContent title={title} left>
+        <Form onSubmit={onSubmit} outsideError={alert}>
             <Modal.Body>
-                <Form.Input name="name" required={true} label="Nombre"
+                <Form.Input name="name" required={true} label="Nombre" minLength="5"
                     value={dashboard.name} onChange={onChange} upperCase focus />
-                <Form.TextArea name="detail" value={dashboard.detail} label="Descripción"
-                    rows="2" onChange={onChange} />
+                <Form.Input type="textarea" name="detail" value={dashboard.detail}
+                    label="Descripción" rows="2" onChange={onChange} />
                 {!dashboard.id ? <>
                     <Form.InputButton name="group" label="Nuevo Grupo"
                         value={group} onChange={target => setGroup(target.value)}
@@ -68,7 +66,7 @@ const DashBoardForm = ({ title, userId, dashboardSelected, dashboards, handleClo
                 <Form.Select name="vertical" value={dashboard.vertical} label="Distribución"
                     options={DISTRIBUTION} onChange={onChange} number />
             </Modal.Body>
-            <Modal.FormFooter handleClose={handleClose} />
+            <Modal.FormFooter />
         </Form>
     </Modal.DropContent>
 }
@@ -78,7 +76,6 @@ DashBoardForm.propTypes = {
     userId: PropTypes.string,
     dashboardSelected: DASHBOARD_PROP_SHAPE,
     dashboards: PropTypes.array.isRequired,
-    handleClose: PropTypes.func.isRequired,
     createDashboard: PropTypes.func.isRequired,
     updateDashboard: PropTypes.func.isRequired,
     setIdxDashboard: PropTypes.func.isRequired
@@ -89,4 +86,4 @@ const mapToStateProp = state => ({
     userId: state.user.id
 })
 
-export default connect(mapToStateProp, { handleClose, createDashboard, updateDashboard, setIdxDashboard })(DashBoardForm)
+export default connect(mapToStateProp, { createDashboard, updateDashboard, setIdxDashboard })(DashBoardForm)

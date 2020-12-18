@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getModalContent } from '../../../commons/actions/modalActions'
-import Form from '../../../commons/components/styled/Form'
+import { getModalContent } from '../../../layout/actions/modalActions'
+import Form from '../../../commons/components/Form'
 import DashBoardGroup from './DashBoardGroup'
 import DashBoardForm from './DashBoardForm'
 import DashBoardGroupForm from './DashBoardGroupForm'
@@ -46,8 +46,10 @@ const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, getModalContent,
     }
     const onDropTask = (idxGroup, idxTask) => {
         let task = dragElement['task'].value.current
-        let idGroup = dashboard.groups[idxGroup].id
-        return updateTaskPosition(dashboard, idGroup, idxTask, task);
+        if (task) {
+            let idGroup = dashboard.groups[idxGroup].id
+            return updateTaskPosition(dashboard, idGroup, idxTask, task);
+        }
     }
     const newDashboard = () => getModalContent(<DashBoardForm title="+ Nuevo Tablero" />)
     const editDashboard = () => getModalContent(<DashBoardForm title="+ Editar Tablero" dashboardSelected={dashboard} />)
@@ -59,7 +61,7 @@ const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, getModalContent,
                     label="Tablero" value={idxDashboard}
                     options={dashboards.map((d, i) => ({ id: i, text: d.name }))}
                     onChange={target => setIdxDashboard(target.value)}
-                    number flash />
+                    number />
             </div>
             <div className="col col2 fm-group">
                 <div className="btn-group">
@@ -67,10 +69,10 @@ const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, getModalContent,
                         <i className="fas fa-tools" />
                     </button>
                     <button className="btn btn-primary" onClick={newDashboard} title="Nuevo Tablero">
-                        <i className="fas fa-clipboard" />
+                        <i className="fas fa-plus" /> <i className="fas fa-clipboard" />
                     </button>
-                    <button className="btn btn-primary" onClick={newGroup}>
-                        <i className="fas fa-columns" />
+                    <button className="btn btn-primary" onClick={newGroup} title="Nuevo Grupo">
+                        <i className="fas fa-plus" /> <i className="fas fa-columns" />
                     </button>
                 </div>
             </div>
@@ -79,7 +81,7 @@ const DashBoard = ({ dashboards, idxDashboard, setIdxDashboard, getModalContent,
                     label="Notas en vista" value={showTasks}
                     options={SELECT_STATUS_TASK}
                     onChange={target => setShowTasks(target.value)}
-                    number flash />
+                    number />
             </div>
         </div>
         <div className={dashboard.vertical ? 'container-scrollx' : ''}>

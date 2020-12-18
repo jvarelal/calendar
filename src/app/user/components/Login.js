@@ -2,17 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import Form from '../../commons/components/styled/Form'
+import Form from '../../commons/components/Form'
 import { validateEmail } from '../../commons/util/func'
-import { RGX } from '../../commons/util/const'
+import { ACCESS, LIST_ACCESS, RGX } from '../../commons/util/const'
 import { register, login, loginGoogle, loginFacebook } from '../actions/userActions'
-
-const ACCESS = {
-    LOGIN: { ID: 1, NAME: 'Login' },
-    REGISTER: { ID: 2, NAME: 'Registrarse' }
-}
-
-const LIST_ACCESS = [ACCESS.LOGIN, ACCESS.REGISTER]
 
 const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => {
     const [user, setUser] = React.useState({ name: '', email: '', password: '' });
@@ -22,9 +15,8 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
     const changeAccess = type => typeLogin !== type ? setTypeLogin(type) : null
     const history = useHistory();
     const cbLogin = { cb: () => history.push('/') }
-    const style = {margin: '0 1.5rem'}
-    const onSubmit = (e) => {
-        e.preventDefault();
+    const style = { margin: '0 1.5rem' }
+    const onSubmit = () => {
         try {
             let validateUser = { ...user, ...cbLogin }
             typeLogin === ACCESS.REGISTER ? register(validateUser) : login(validateUser)
@@ -35,7 +27,7 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
     React.useEffect(() => { if (currentUser.id) history.push('/') }, [currentUser, history])
     return <div className="row h50 flex-center">
         <div className="col text-center">
-            <div className="login">
+            <div className="login glass">
                 <ul className="navbar-list">
                     {LIST_ACCESS.map((access, i) => <li className="w50 flex-center" key={i}>
                         {typeLogin === access.ID ? <span className="m-auto">{access.NAME}</span> :
@@ -84,6 +76,7 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
 }
 
 Login.propTypes = {
+    currentUser: PropTypes.object.isRequired, 
     register: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired,
     loginGoogle: PropTypes.func.isRequired,

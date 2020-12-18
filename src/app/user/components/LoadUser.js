@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import { readDashboards, createDashboard } from '../../task/actions/taskActions'
 import { checkSession } from '../actions/userActions'
 import { THEMES, TEMPLATES, LOADING } from '../../commons/util/const'
-import ErrorBoundary from '../../commons/components/ErrorBoundary'
-import Footer from '../../commons/components/Footer'
 
 const LoadUser = ({ user, checkSession, readDashboards, createDashboard, children }) => {
     const THEME = THEMES[user.preferences.theme]
@@ -21,12 +19,10 @@ const LoadUser = ({ user, checkSession, readDashboards, createDashboard, childre
                 }
             })
     }, [user.id, readDashboards, createDashboard])
-    return pending ? LOADING : <div className={`wrapper ${THEME.NAME}`}>
-        <ErrorBoundary>
+    return pending ? LOADING :
+        <div className={`wrapper ${THEME.NAME}`}>
             {children}
-        </ErrorBoundary>
-        <Footer theme={THEME} />
-    </div>
+        </div>
 }
 
 LoadUser.propTypes = {

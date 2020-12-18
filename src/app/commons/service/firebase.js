@@ -10,8 +10,10 @@ var firebaseConfig = {
     projectId: "b-agenda",
     storageBucket: "b-agenda.appspot.com",
     messagingSenderId: "1099082418017",
-    appId: "1:1099082418017:web:338659d70d7b5229d2a720"
+    appId: "1:1099082418017:web:338659d70d7b5229d2a720",
+    measurementId: "G-DVT9YW64HY"
 };
+
 // Initialize Firebase
 const fb = firebase.initializeApp(firebaseConfig);
 

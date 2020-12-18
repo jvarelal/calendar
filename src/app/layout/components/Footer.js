@@ -1,7 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { THEMES } from '../../commons/util/const'
 
-const Footer = ({ ...props }) => {
-    const theme = props.theme || {}
+const Footer = ({ user }) => {
+    const theme = THEMES[user.preferences.theme]
     return <footer className="navbar-footer flex-center">
         <div>
             2020 - <a href="https://github.com/jvarelal"
@@ -15,4 +17,8 @@ const Footer = ({ ...props }) => {
     </footer>
 }
 
-export default Footer
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps, null)(Footer);

@@ -132,8 +132,8 @@ $RedColor: #dc3545
     .empty-img
         background-repeat: no-repeat
         background-image: url($imgVoid)
-        background-size: 10rem 10rem
-        margin: 2rem auto
+        background-size: 100% 100%
+        margin: 1rem auto
         opacity: 0.75
         height: 10rem
         width: 10rem
@@ -206,10 +206,16 @@ $RedColor: #dc3545
 =NormalTheme($url, $header, $label, $button, $cardButton, $imgVoid)
     +BackgroundTheme($url, black, $header, $label, $button, $cardButton, $imgVoid, 'white')
     .container
-        +ScaleWhite(0.5)
-    .login, .tbl
-        +ScaleWhite(0.75)
-        color: #444444
+        +ScaleWhite(0.25)
+    .tbl, .glass
+        +ScaleWhite(0.4)
+        backdrop-filter: blur(4px)
+        background-clip: padding-box
+        border: solid 2px transparent
+        color: #333333
+    .start-text
+        background-color: rgba(255,255,255,0.5)
+        color: black
     .start-img-l
         +BackgroundStart("../img/Layout.png")
     .start-img-r
@@ -217,16 +223,22 @@ $RedColor: #dc3545
     .tbl
         tbody
             &:focus
-                box-shadow: 0 6px 5px rgba(0, 0, 0, 0.75)
+                box-shadow: 0 6px 5px rgba(0, 0, 0, 0.5)
 
 =BlackTheme($url, $header, $label, $button, $cardButton, $imgVoid)
     +BackgroundTheme($url, white, $header, $label, $button, $cardButton, $imgVoid, 'black')
     .container
-        +ScaleBlack(0.5)
+        +ScaleBlack(0.25)
         color: white
-    .login, .tbl
-        +ScaleBlack(0.7)
+    .tbl, .glass
+        +ScaleBlack(0.5)
+        backdrop-filter: blur(4px)
+        background-clip: padding-box
+        border: solid 2px transparent
         color: #eeeeee
+    .start-text
+        background-color: rgba(0,0,0,0.25)
+        color: white
     .start-img-l
         +BackgroundStart("../img/Layout.png")
     .start-img-r
@@ -234,4 +246,4 @@ $RedColor: #dc3545
     .tbl
         tbody
             &:focus
-                box-shadow: 0 6px 5px rgba(255, 255, 255, 0.75)
+                box-shadow: 0 6px 5px rgba(255, 255, 255, 0.5)

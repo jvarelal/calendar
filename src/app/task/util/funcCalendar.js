@@ -49,13 +49,15 @@ const getDaysInPanel = (date, tasks) => {
     const finalDayOfWeekPrevMonth = getLastDayMonth(date.year, Number(date.month) - 1).getDay();
     const lastDayMonth = getLastDayMonth(date.year, date.month);
     let days = [];
-    let dayOfWeek = finalDayOfWeekPrevMonth + 1
+    let dayOfWeek = finalDayOfWeekPrevMonth
     for (let day = 1; day <= lastDayMonth.getDate(); day++) {
         dayOfWeek = dayOfWeek === 7 ? 0 : dayOfWeek;
         days.push({
-            day: day,
+            fullDate: { ...date, day: day },
             dayOfWeek: dayOfWeek,
+            week: getWeek({ ...date, day: day }),
             saint: SAINTS[date.month].DAYS[day - 1] || {},
+            className: day === Number(date.day) ? 'selected' : evalueDate({ ...date, day: day }),
             able: evalueDate({ ...date, day: day }) !== PAST,
             tasks: tasks.filter(t => t.date.day === day)
         })

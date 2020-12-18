@@ -1,16 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Modal from '../../commons/components/styled/Modal'
-import Form from '../../commons/components/styled/Form'
+import Modal from '../../commons/components/Modal'
+import Form from '../../commons/components/Form'
 import { fillNumberList, evalueDate, fragmentDate } from '../../commons/util/func'
 import { SYSDATE, MAXDATE, DATE_PROP_SHAPE, TASK_PROP_SHAPE, COLORS, TASK, PAST } from '../../commons/util/const'
 import { processTask } from '../actions/taskActions'
-import { DivColorOption } from './TaskElements'
-import { handleClose } from '../../commons/actions/modalActions'
 
-
-const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGroup, handleClose, processTask }) => {
+const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGroup, processTask }) => {
     const initialTask = setInitialTask(taskSelected, date, dashboards, idxDashboard, idGroup)
     const [task, setTask] = React.useState(initialTask);
     const onChange = target => setTask({ ...task, [target.name]: target.value })
@@ -20,14 +17,9 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
         let newDate = { ...task.date, [target.name]: target.value }
         setTask({ ...task, date: evalueDate(newDate) !== PAST ? newDate : fragmentDate(SYSDATE) })
     }
-    const onSubmit = (event) => {
-        event.preventDefault();
-        processTask(dashboards, task)
-    }
+    const onSubmit = () => processTask(dashboards, { ...task, author: userId })
     React.useEffect(() => setTask(initialTask), [taskSelected]) // eslint-disable-line react-hooks/exhaustive-deps
-    return <Modal.DropContent lg={userId} left={userId}
-        title={task.id ? 'Editar tarea' : '+ Nueva tarea'}
-        handleClose={handleClose} >
+    return <Modal.DropContent lg={userId} left={userId} title={task.id ? 'Editar tarea' : '+ Nueva tarea'} >
         {userId ? <Form onSubmit={onSubmit}>
             <Modal.Body>
                 <div className="row">
@@ -41,20 +33,22 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
                             onChange={onChangeDashboard}
                             number disabled={idGroup || task.id} />
                         <Form.SelectDiv name="color" value={task.color} label="Color"
-                            options={COLORS}>
-                            {COLORS.map((color, index) => <DivColorOption
-                                key={index}
-                                id={color.id}
-                                text={color.text}
-                                onClick={e => onChange({ name: 'color', value: color.id })} />)}
+                            onChange={onChange} options={COLORS}>
+                            {COLORS.map((color, index) => <div key={index}
+                                className={`select-option flex-center ${task.color === color.id ? 'selected' : ''}`}
+                                onMouseOver={e => onChange({ name: 'color', value: color.id })}>
+                                <div className={`mini-square ${color.id}`}></div>
+                                <div className="mr-auto">{color.text}</div>
+                            </div>)}
                         </Form.SelectDiv>
                         <div className={'square m-auto ' + task.color}></div>
                     </div>
                     <div className="col bl-gray">
                         <Form.Input name="name" required={true} label="Titulo"
-                            value={task.name} onChange={onChange} upperCase focus />
-                        <Form.TextArea name="detail" value={task.detail} label="Descripción"
-                            rows="3" onChange={onChange} />
+                            value={task.name} onChange={onChange}
+                            minLength="3" upperCase focus />
+                        <Form.Input type="textarea" name="detail" value={task.detail}
+                            label="Descripción" rows="3" onChange={onChange} />
                         <Form.DateSelect label="Fecha a marcar en calendario:"
                             controlId="date"
                             startDate={task.date}
@@ -71,8 +65,8 @@ const TaskForm = ({ userId, date, taskSelected, dashboards, idxDashboard, idGrou
                     </div>
                 </div>
             </Modal.Body>
-            <Modal.FormFooter handleClose={handleClose} />
-        </Form> : <Modal.WithoutSession handleClose={handleClose} />}
+            <Modal.FormFooter />
+        </Form> : <Modal.WithoutSession />}
     </Modal.DropContent>
 }
 
@@ -104,7 +98,4 @@ const mapStateToProps = state => ({
     userId: state.user.id
 })
 
-export default connect(
-    mapStateToProps,
-    { handleClose, processTask }
-)(TaskForm);
+export default connect(mapStateToProps, { processTask })(TaskForm);
