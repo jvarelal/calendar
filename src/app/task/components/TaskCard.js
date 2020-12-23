@@ -2,20 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TaskForm from './TaskForm'
-import { evalueDate } from '../../commons/util/func'
-import { TASK_PROP_SHAPE, PAST } from '../../commons/util/const'
+import { evalueDate } from '../../util/func'
+import { TASK_PROP_SHAPE, PAST, ROLES } from '../../util/const'
 import { deleteTask, processTask } from '../actions/taskActions'
 import { getModalContent, getModalConfirmation } from '../../layout/actions/modalActions'
 
-const TaskCard = ({ expanded = false, task = {}, dashboards, backgroundCards, onDragStart, onDrop, getModalContent, getModalConfirmation, deleteTask, processTask }) => {
+const TaskCard = ({ expanded = false, task = {}, user, dashboards, backgroundCards, onDragStart, onDrop, getModalContent, getModalConfirmation, deleteTask, processTask }) => {
     const [showDetail, setShowDetail] = React.useState(expanded)
     const titleOnDelete = `Eliminar nota`;
     const messageOnDelete = `¿Desea eliminar la nota ${task.name}?`;
-    const confirmDelete = () => deleteTask(dashboards, task)
-    const doneUndone = () => processTask(dashboards, { ...task, done: !task.done })
     const dashboard = dashboards.find(d => d.id === task.dashboard.id)
-    const group = dashboard.groups.find(g => g.id === task.dashboard.idGroup)
+    const confirmDelete = () => deleteTask(dashboard, task)
+    const doneUndone = () => processTask(dashboard, { ...task, done: !task.done, user })
     const variant = task.color ? (backgroundCards === '1' ? task.color : 'outline-' + task.color) : ''
+    const userRol = (dashboard.roles.find(u => u.email === user.email) || { rol: ROLES.MEMBER }).rol
     return <div className={'card card-note ' + variant} onDragStart={onDragStart}
         draggable={onDragStart ? true : false} onDrop={onDrop}>
         <div className="card-header">
@@ -28,15 +28,11 @@ const TaskCard = ({ expanded = false, task = {}, dashboards, backgroundCards, on
                 </div>
             </div>
         </div>
-        {showDetail ? <>
+        {showDetail ? <div className="card-expe">
             <div>
                 <p>{task.detail}</p>
-                <div className="p-1 text-muted text-sm">
-                    Creación: {task.creation} <br />
-                    Tablero: {dashboard.name} | Grupo: {group.name}
-                </div>
             </div>
-            <div className="card-footer">
+            {userRol !== ROLES.MEMBER || user.id === task.author ? <div className="card-footer">
                 <div className="row text-center">
                     <div className="col">
                         <button className="btn-sm"
@@ -62,12 +58,13 @@ const TaskCard = ({ expanded = false, task = {}, dashboards, backgroundCards, on
                         </div>
                     </> : null}
                 </div>
-            </div>
-        </> : null}
+            </div> : null}
+        </div> : null}
     </div>
 }
 
 TaskCard.propTypes = {
+    user: PropTypes.object,
     expanded: PropTypes.bool,
     task: TASK_PROP_SHAPE.isRequired,
     dashboards: PropTypes.array.isRequired,
@@ -81,7 +78,8 @@ TaskCard.propTypes = {
 
 const mapStateToProps = state => ({
     dashboards: state.task.dashboards,
-    backgroundCards: state.user.preferences.backgroundCards
+    backgroundCards: state.user.preferences.backgroundCards,
+    user: state.user
 })
 
 export default connect(

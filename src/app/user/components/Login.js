@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Form from '../../commons/components/Form'
-import { validateEmail } from '../../commons/util/func'
-import { ACCESS, LIST_ACCESS, RGX } from '../../commons/util/const'
+import { validateEmail } from '../../util/func'
+import { ACCESS, LIST_ACCESS, RGX } from '../../util/const'
 import { register, login, loginGoogle, loginFacebook } from '../actions/userActions'
 
 const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => {
@@ -19,7 +19,7 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
     const onSubmit = () => {
         try {
             let validateUser = { ...user, ...cbLogin }
-            typeLogin === ACCESS.REGISTER ? register(validateUser) : login(validateUser)
+            typeLogin === ACCESS.REGISTER.ID ? register(validateUser) : login(validateUser)
         } catch (e) {
             setError(e.message)
         }
@@ -52,7 +52,9 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
                                 minLength="6" />
                         </div>
                         <div className="row">
-                            <input type="submit" className="btn btn-primary w100" value="Ingresar" />
+                            <input type="submit"
+                                className="btn btn-primary w100"
+                                value={typeLogin === ACCESS.REGISTER.ID ? 'Registrarse' : 'Ingresar'} />
                         </div>
                     </Form>
                 </div>
@@ -76,7 +78,7 @@ const Login = ({ currentUser, register, login, loginGoogle, loginFacebook }) => 
 }
 
 Login.propTypes = {
-    currentUser: PropTypes.object.isRequired, 
+    currentUser: PropTypes.object.isRequired,
     register: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired,
     loginGoogle: PropTypes.func.isRequired,

@@ -1,6 +1,5 @@
 import { CALENDAR_TYPES, DASHBOARD_TYPES } from './taskTypes'
-import { dashboardClient } from '../../commons/service/clientService'
-import { insertArrayWithId, replaceById } from '../../commons/util/func'
+import { dashboardClient } from '../../service/client'
 
 const setYearMonth = target => ({
     type: CALENDAR_TYPES.SET_YEAR_MONTH,
@@ -12,63 +11,7 @@ const setDate = date => ({
     payload: date
 })
 
-const processTask = (dashboards, task, dismiss) => {
-    const dashboard = dashboards.find(d => d.id === task.dashboard.id)
-    const idGroup = task.dashboard.idGroup
-    for (let i = 0; i < dashboard.groups.length; i++) {
-        if (dashboard.groups[i].id === idGroup) {
-            task.dismiss = dismiss ? true : false
-            delete task.dashboard
-            if (!task.id) {
-                task.creation = new Date().toLocaleDateString()
-                task.edition = [new Date().toLocaleDateString()]
-                dashboard.groups[i].tasks = insertArrayWithId(dashboard.groups[i].tasks, task)
-            } else {
-                task.editions.push(new Date().toLocaleDateString())
-                dashboard.groups[i].tasks = replaceById(dashboard.groups[i].tasks, task)
-            }
-            break;
-        }
-    }
-    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
-}
-
-const deleteTask = (dashboards, task) => {
-    const dashboard = dashboards.find(d => d.id === task.dashboard.id)
-    const idGroup = task.dashboard.idGroup
-    for (let i = 0; i < dashboard.groups.length; i++) {
-        if (dashboard.groups[i].id === idGroup) {
-            dashboard.groups[i].tasks = dashboard.groups[i].tasks.filter(t => t.id !== task.id)
-            break;
-        }
-    }
-    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
-}
-
-const deleteGroup = (dashboard, group) => {
-    dashboard.groups = dashboard.groups.filter(g => g.id !== group.id)
-    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
-}
-
-const processGroup = (dashboard) => dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
-
-const updateTaskPosition = (dashboard, newIdGroup, idxTask, task) => {
-    const idGroup = task.dashboard.idGroup
-    for (let i = 0; i < dashboard.groups.length; i++) {
-        if (dashboard.groups[i].id === idGroup) {
-            dashboard.groups[i].tasks = dashboard.groups[i].tasks.filter(t => t.id !== task.id)
-        }
-        if (dashboard.groups[i].id === newIdGroup) {
-            dashboard.groups[i].tasks.splice(idxTask, 0, task);
-        }
-    }
-    return dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
-}
-
-const createDashboard = dashboard => dashboardClient(DASHBOARD_TYPES.CREATE_DASHBOARD, {
-    ...dashboard,
-    creation: new Date().toLocaleDateString()
-})
+const createDashboard = dashboard => dashboardClient(DASHBOARD_TYPES.CREATE_DASHBOARD, dashboard)
 
 const readDashboards = user => dashboardClient(DASHBOARD_TYPES.LIST_DASHBOARDS, user)
 
@@ -80,7 +23,23 @@ const setIdxDashboard = idx => ({ type: DASHBOARD_TYPES.SET_IDX_DASHBOARD, paylo
 
 const resetDashboard = () => ({ type: DASHBOARD_TYPES.LIST_DASHBOARDS, payload: [] })
 
-export { createDashboard, readDashboards, updateDashboard, deleteDashboard, setIdxDashboard }
+const processGroup = dashboard => dashboardClient(DASHBOARD_TYPES.EDIT_GROUP, dashboard)
+
+const deleteGroup = (dashboard, group) => dashboardClient(DASHBOARD_TYPES.DELETE_GROUP, { dashboard, group })
+
+const processTask = (dashboard, task, dismiss = false) => dashboardClient(DASHBOARD_TYPES.EDIT_TASK, {
+    dashboard,
+    task: { ...task, dismiss: dismiss }
+})
+
+const deleteTask = (dashboard, task) => dashboardClient(DASHBOARD_TYPES.DELETE_TASK, { dashboard, task })
+
+const updateTaskPosition = (dashboard, newIdGroup, idxTask, task) => dashboardClient(DASHBOARD_TYPES.MOVE_TASK, {
+    dashboard,
+    newIdGroup,
+    idxTask,
+    task
+})
 
 export {
     setDate,
@@ -89,6 +48,7 @@ export {
     processTask,
     deleteGroup,
     processGroup,
+    createDashboard, readDashboards, updateDashboard, deleteDashboard, setIdxDashboard,
     resetDashboard,
     updateTaskPosition
 }

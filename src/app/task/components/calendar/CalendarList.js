@@ -5,13 +5,13 @@ import TaskCard from '../TaskCard'
 import CalendarCell from './CalendarCell'
 import MonthBackForward from './MonthBackForward'
 import TaskForm from '../TaskForm'
-import { getDaysInPanel } from '../../util/funcCalendar'
-import { evalueDate, onDragOver } from '../../../commons/util/func'
+import { getDaysInPanel } from '../../../util/funcCalendar'
+import { evalueDate, onDragOver } from '../../../util/func'
 import { processTask, setDate } from '../../actions/taskActions'
 import { getModalMessage, getModalContent } from '../../../layout/actions/modalActions'
-import { DATE_PROP_SHAPE, PAST } from '../../../commons/util/const'
+import { DATE_PROP_SHAPE, PAST } from '../../../util/const'
 
-const CalendarList = ({ date, dashboards, tasksByMonth, processTask, getModalMessage, setDate, getModalContent }) => {
+const CalendarList = ({ user, date, dashboards, tasksByMonth, processTask, getModalMessage, setDate, getModalContent }) => {
     const days = getDaysInPanel(date, tasksByMonth);
     const [dragging, setDragging] = React.useState(false)
     const dragTask = React.useRef();
@@ -35,8 +35,8 @@ const CalendarList = ({ date, dashboards, tasksByMonth, processTask, getModalMes
             return getModalMessage('Editar nota', 'No se pueden asignar o afectar notas de fechas anteriores')
         }
         if (task.date.day !== newDate.day) {
-            let nTask = { ...task, date: newDate }
-            return processTask(dashboards, nTask);
+            let nTask = { ...task, date: newDate, user }
+            return processTask(dashboards.find(d => d.id === nTask.dashboard.id), nTask);
         }
     }
     const onDivClick = (e, d) => {
@@ -74,6 +74,7 @@ const CalendarList = ({ date, dashboards, tasksByMonth, processTask, getModalMes
 }
 
 CalendarList.propTypes = {
+    user: PropTypes.object,
     date: DATE_PROP_SHAPE.isRequired,
     tasksByMonth: PropTypes.array.isRequired,
     dashboards: PropTypes.array.isRequired,
@@ -86,7 +87,8 @@ CalendarList.propTypes = {
 const mapStateToProps = state => ({
     date: state.task.date,
     dashboards: state.task.dashboards,
-    tasksByMonth: state.task.tasksByMonth
+    tasksByMonth: state.task.tasksByMonth,
+    user: state.user
 })
 
 export default connect(

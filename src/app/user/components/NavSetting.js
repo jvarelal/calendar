@@ -5,14 +5,14 @@ import { useHistory } from 'react-router-dom'
 import Header from '../../commons/components/Header'
 import Form from '../../commons/components/Form'
 import LocationWeather from './LocationWeather'
-import { THEMES } from '../../commons/util/const'
+import UserPng from '../../../assets/img/User-512.png'
+import { THEMES } from '../../util/themes'
 import { setUserPreference, logout } from '../actions/userActions'
 import { resetDashboard } from '../../task/actions/taskActions'
 
 const NavSetting = ({ user, setUserPreference, logout, resetDashboard }) => {
     const history = useHistory();
-    const profileImg = !user.photo ? <i className="fas fa-user" /> :
-        <img src={user.photo} alt="profile" className="profile" />
+    const profileImg =  <img src={user.photoURL || UserPng} alt="profile" className="profile" />
     return <Header.NavDropMenu logo={profileImg}>
         <div className="card">
             <div className="card-header text-center">

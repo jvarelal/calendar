@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { readDashboards, createDashboard } from '../../task/actions/taskActions'
 import { checkSession } from '../actions/userActions'
-import { THEMES, TEMPLATES, LOADING } from '../../commons/util/const'
+import { TEMPLATES, LOADING, ROLES } from '../../util/const'
+import { THEMES } from '../../util/themes'
 
 const LoadUser = ({ user, checkSession, readDashboards, createDashboard, children }) => {
     const THEME = THEMES[user.preferences.theme]
@@ -12,13 +13,18 @@ const LoadUser = ({ user, checkSession, readDashboards, createDashboard, childre
     React.useEffect(() => {
         if (user.id)
             readDashboards({
-                id: user.id,
+                email: user.email,
                 cb: data => {
                     if (data.length === 0)
-                        createDashboard({ ...TEMPLATES.DASHBOARD.BASE, userId: user.id })
+                        createDashboard({
+                            ...TEMPLATES.DASHBOARD.BASE,
+                            author: user.email,
+                            roles: [{email: user.email, rol: ROLES.AUTOR}],
+                            members: [user.email]
+                        })
                 }
             })
-    }, [user.id, readDashboards, createDashboard])
+    }, [user.id]) // eslint-disable-line react-hooks/exhaustive-deps
     return pending ? LOADING :
         <div className={`wrapper ${THEME.NAME}`}>
             {children}

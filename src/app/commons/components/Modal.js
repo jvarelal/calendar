@@ -1,8 +1,8 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import Notification from './Notification'
-import { goToTheTop } from '../util/func'
-import { KEYCODES } from '../util/const'
+import { goToTheTop } from '../../util/func'
+import { KEYCODES } from '../../util/const'
 
 const RENDER_DELAY_IN = 50
 const RENDER_DELAY_OUT = 500

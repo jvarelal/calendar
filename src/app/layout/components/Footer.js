@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { THEMES } from '../../commons/util/const'
+import { THEMES } from '../../util/themes'
 
 const Footer = ({ user }) => {
     const theme = THEMES[user.preferences.theme]

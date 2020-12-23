@@ -105,6 +105,9 @@ p
 .loading
     +Loading(rgba(100, 100, 100, 0.5))
 
+.loading-min
+    +Loading-min(rgba(100, 100, 100, 0.5))
+
 @keyframes spin
     0%
         transform: rotate(0deg)
@@ -119,7 +122,7 @@ p
 
 .container-scrollx
     width: 95vw
-    overflow-x: scroll
+    overflow-x: auto
     margin: auto
 
 .row
@@ -210,10 +213,15 @@ p
         border-radius: 0px
 
 .overlabel
-    float: left
     margin-bottom: 1.25rem
-    border-bottom: 1px solid #999999
+    border-bottom: 1px solid var(--borderGray)
     color: #999999
+
+.f-left
+    float: left
+
+.f-right
+    float: right
 
 .fm-group.inline
     min-width: auto
@@ -262,6 +270,10 @@ p
     &:hover
         font-size: 1.05rem
 
+.btn-sm.inactive
+    &:hover
+        font-size: 0.9rem
+        cursor: default
 .card
     padding: 1rem
     border: 1px solid #ccc
@@ -330,8 +342,16 @@ p
 .icon-g
     font-size: 2rem
 
+.block
+    display: block
+
+
 .profile
     height: 2rem
+    border-radius: 50%
+
+.profile-min
+    height: 1.75rem
     border-radius: 50%
 
 .user-menu
@@ -574,6 +594,8 @@ p
 .br-gray
     border-right: 1px solid var(--borderGray)
 
+.bb-gray
+    border-bottom: 1px solid var(--borderGray)
 .card-group
     position: relative
     padding: 0 .25rem
@@ -602,6 +624,9 @@ p
 .disable, .past
     color: #888888
 
+.forbidden
+    cursor: not-allowed
+
 .selected
     background: rgba(100, 100, 250, 0.75)
     color: white
@@ -619,7 +644,7 @@ p
     margin: auto
 
 .White
-    +NormalTheme("", 'white', 'cyan', 'orange', 'white', "../img/squares.svg")
+    +NormalTheme("", 'white', 'cyan', 'orange', 'white', "../img/squares.png")
 
 .Wood
     +NormalTheme("../img/white-wood.jpg", 'black', 'yellow', 'orange', 'white', "../img/wood2.png")
@@ -634,19 +659,19 @@ p
     +NormalTheme("../img/kitty.png", 'pink', 'cyan', 'orange', 'cyan', "../img/cat.png")
 
 .Cuadros
-    +NormalTheme("../img/cuadros.jpg", 'white', 'cyan', 'cyan', 'orange', "../img/squares.svg")
+    +NormalTheme("../img/cuadros.jpg", 'white', 'cyan', 'cyan', 'orange', "../img/squares.png")
 
 .Glitch
     +NormalTheme("../img/glitch.jpg", 'cyan', 'yellow', 'cyan', 'orange',"../img/glitch1.png")
 
 .Illusionist
-    +BlackTheme("../img/the-illusionist.jpg", 'black', 'yellow', 'orange', 'white', "../img/ilusionist1.svg")
+    +BlackTheme("../img/the-illusionist.jpg", 'black', 'yellow', 'orange', 'white', "../img/ilusionist1.png")
 
 .Asteroids
-    +BlackTheme("../img/asteroids.jpg", 'black', 'cyan', 'orange', 'orange', "../img/space.svg")
+    +BlackTheme("../img/asteroids.jpg", 'black', 'cyan', 'orange', 'orange', "../img/space.png")
 
 .Celebration
-    +BlackTheme("../img/celebration.jpg", 'black', 'orange', 'cyan', 'black', "../img/celebration1.svg")
+    +BlackTheme("../img/celebration.jpg", 'black', 'orange', 'cyan', 'black', "../img/celebration1.png")
 
 .start-text
     @extend %Start
@@ -708,10 +733,12 @@ p
 
     .col2
         max-width: 100%
-
+    .responsive-hide
+        display: none
     .fm-group
-        margin: 1rem 0
-
+        margin: 1.2rem 0
+        .fm-label.active
+            font-size: .7rem
     .tbl
         th
             .normal-th

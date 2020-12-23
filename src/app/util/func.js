@@ -1,5 +1,6 @@
-import { SYSDATE, FUTURE, PRESENT, PAST, THEMES } from './const'
-import square from '../../../assets/img/squares.svg'
+import { SYSDATE, FUTURE, PRESENT, PAST } from './const'
+import { THEMES } from './themes'
+import square from '../../assets/img/squares.png'
 
 const goToTheTop = () => {
     document.body.scrollTop = 0; // For Safari
@@ -143,21 +144,27 @@ const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+
 const insertArrayWithId = (array = [], element = {}) => {
     if (array.length === 0) {
-        return [{...element, id: 1 }]
+        return [{ ...element, id: 1 }]
     }
     let ids = array.map(o => Number(o.id));
     let nextId = Math.max(...ids) + 1;
-    return [...array, {...element, id: nextId }]
+    return [...array, { ...element, id: nextId }]
 }
 
-const replaceById = (array = [], element = {}) => {
+const replaceById = (array = [], element = {}, nameId = 'id') => {
     let nArray = [...array]
+    let replaced = false
     for (let i = 0; i < nArray.length; i++) {
-        if (nArray[i].id === element.id) {
+        if (nArray[i][nameId] === element[nameId]) {
             nArray[i] = element
+            replaced = true
         }
+    }
+    if (!replaced) {
+        nArray = [...nArray, element]
     }
     return nArray;
 }
@@ -203,19 +210,6 @@ const validateEmail = (email) => {
     return validation;
 }
 
-
-const updateTasksInGroup = (dashboard, task, newOrderId, updateDashboard) => {
-    for (let i = 0; i < dashboard.groups.length; i++) {
-        let group = dashboard.groups[i]
-        if (group.id === task.dashboard.idGroup) {
-            let cleanTasks = group.tasks.filter(idTask => idTask !== task.id)
-            cleanTasks.splice(newOrderId, 0, task.id);
-            group.tasks = cleanTasks
-        }
-    }
-    updateDashboard(dashboard)
-}
-
 const getTheme = () => {
     let user = getUserLocalData()
     return THEMES[user.theme]
@@ -223,7 +217,7 @@ const getTheme = () => {
 
 const setPrefence = preference => {
     let user = getUserLocalData()
-    setUserLocalData({...user, ...preference })
+    setUserLocalData({ ...user, ...preference })
 }
 
 const getUserLocalData = () => {
@@ -245,8 +239,39 @@ const onTextChange = (e, rg, setValue, upperCase) => {
     let input = e.target;
     let value = input.value && upperCase ? input.value.toUpperCase() : input.value
     if ((!value || (rg.test(input.value) &&
-            (input.value.length <= input.maxLength))) && (input.value.trim() !== '' || input.value.length === 0)) {
+        (input.value.length <= input.maxLength))) && (input.value.trim() !== '' || input.value.length === 0)) {
         return setValue(value ? value : '')
+    }
+}
+
+const expandTask = taskDb => {
+    try {
+        let title = taskDb.name.split('|')
+        let timestamp = taskDb.date.split('T')
+        let dateElements = timestamp[0].split('-')
+        let date = {
+            year: Number(dateElements[0]),
+            month: Number(dateElements[1]) - 1,
+            day: Number(dateElements[2])
+        }
+        if (timestamp.length > 1) {
+            let timeElements = timestamp[1].split(':')
+            date.hour = timeElements[0]
+            date.minute = timeElements[1]
+        }
+        return {
+            taskId: taskDb.taskId,
+            name: title[0],
+            color: title[1],
+            done: title[2] === 'true',
+            detail: taskDb.detail,
+            author: taskDb.author,
+            date: date,
+            userId: taskDb.author,
+            alarm: timestamp.length > 1
+        }
+    } catch (e) {
+        return {}
     }
 }
 
@@ -282,7 +307,6 @@ export {
     jsonToDate,
     getWeek,
     getRandomNumber,
-    updateTasksInGroup,
     lpadArray,
     rpadArray,
     sortByList,
@@ -295,5 +319,6 @@ export {
     getUserLocalData,
     setUserLocalData,
     setPrefence,
+    expandTask,
     onTextChange
 }

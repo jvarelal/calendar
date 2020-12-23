@@ -1,6 +1,6 @@
 import { USER_TYPES } from './userTypes'
-import { userClient } from '../../commons/service/clientService'
-import { setPrefence } from '../../commons/util/func'
+import { userClient } from '../../service/client'
+import { setPrefence } from '../../util/func'
 
 const register = user => userClient(USER_TYPES.GET_REGISTER, user);
 
@@ -14,15 +14,12 @@ const logout = body => userClient(USER_TYPES.GET_LOGOUT, body);
 
 const checkSession = body => userClient(USER_TYPES.CHECK_SESSION, body);
 
-const getLocation = cb => {
-    let body = { cb: cb }
-    return userClient(USER_TYPES.GET_LOCATION, body, false)
-}
+const getLocation = cb => userClient(USER_TYPES.GET_LOCATION, { cb }, false)
 
 const getWeather = location => userClient(USER_TYPES.GET_WEATHER, location, false);
 
 const setUserPreference = preference => {
-    let data = {[preference.name]: preference.value}
+    let data = { [preference.name]: preference.value }
     setPrefence(data)
     return {
         type: USER_TYPES.SET_PREFERENCE,

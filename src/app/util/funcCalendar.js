@@ -1,5 +1,5 @@
-import { fragmentDate, evalueDate, getLastDayMonth, getWeek } from '../../commons/util/func'
-import { KEYCODES, SYSDATE, DAYS_SP, FUTURE, PAST, STATUS_TASK } from '../../commons/util/const'
+import { fragmentDate, evalueDate, getLastDayMonth, getWeek, expandTask } from './func'
+import { KEYCODES, SYSDATE, DAYS_SP, FUTURE, PAST, STATUS_TASK } from './const'
 import SAINTS from './saints'
 
 const addNewYearToList = (date = {}, yearslist = []) => {
@@ -19,7 +19,7 @@ const getTaskFromDashboards = (dashboards = []) => {
             tasks = [
                 ...tasks,
                 ...group.tasks.map(task => ({
-                    ...task,
+                    ...expandTask(task),
                     dashboard: { id: dashboard.id, idGroup: group.id }
                 }))
             ]
@@ -115,9 +115,9 @@ const _fillRowGrid = (daysRow = [], newDay = {}) => {
 const filterTasks = (group, status) => {
     switch (status) {
         case STATUS_TASK.PENDING:
-            return group.tasks.filter(t => !t.done)
+            return group.tasks.filter(t => t.name.endsWith('false'))
         case STATUS_TASK.COMPLETE:
-            return group.tasks.filter(t => t.done)
+            return group.tasks.filter(t => t.name.endsWith('true'))
         default:
             return group.tasks
     }

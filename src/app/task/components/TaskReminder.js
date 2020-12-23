@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Header from '../../commons/components/Header'
-import { notificationsBySecond, getNotifications } from '../../commons/util/func'
+import { notificationsBySecond, getNotifications } from '../../util/func'
 import { processTask } from '../actions/taskActions'
 import Notification from '../../commons/components/Notification'
 
 const TaskReminder = ({ tasks, dashboards, processTask }) => {
     const [time, setTime] = React.useState(new Date().toLocaleTimeString());
     const [notifications, setNotifications] = React.useState([]);
-    const dismissNotification = (task) => processTask(dashboards, task, true)
+    const dismissNotification = task => processTask(dashboards.find(d => d.id === task.dashboard.id), task, true)
     const title = <>
         <i className="fas fa-clock icon-g" />
         {notifications.length > 0 ? <span className="badge"> {notifications.length}</span> : null}

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setDate } from '../../actions/taskActions'
-import { fragmentDate, goToTheTop } from '../../../commons/util/func'
-import { DATE_PROP_SHAPE } from '../../../commons/util/const'
+import { fragmentDate, goToTheTop } from '../../../util/func'
+import { DATE_PROP_SHAPE } from '../../../util/const'
 
 const MonthBackForward = ({ date, setDate }) => {
     const goForward = () => setDate(fragmentDate(new Date(date.year, Number(date.month) + 1, date.day)))

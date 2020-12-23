@@ -1,5 +1,5 @@
 import React from 'react'
-import { DAYS_SP } from '../../../commons/util/const'
+import { DAYS_SP } from '../../../util/const'
 
 const CalendarCell = ({ day, flag = true }) => {
     return <div className="space">

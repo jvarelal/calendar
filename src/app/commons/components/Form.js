@@ -1,8 +1,8 @@
 import React from 'react'
-import { RGX, MONTHS_SP, KEYCODES } from '../../commons/util/const'
-import { onTextChange, fillNumberList, getMinDay, getMaxDay } from '../../commons/util/func'
+import { RGX, MONTHS_SP, KEYCODES } from '../../util/const'
+import { onTextChange, fillNumberList, getMinDay, getMaxDay } from '../../util/func'
 
-const _innerField = { value: '',  focus: false, touched: false, alert: '' }
+const _innerField = { value: '', focus: false, touched: false, alert: '' }
 
 const ValidForm = React.createContext(() => null)
 
@@ -45,7 +45,7 @@ const FmGroup = ({ name, label, active = false, alert, textMuted, children, inli
 </Group>
 
 const Input = ({ name, label, type = 'text', maxLength = 100, minLength = 0, upperCase, rgx = RGX.ALL,
-    validateValue, value, onChange, required, inline, focus, rows = 1, onKeyDown }) => {
+    validateValue, value, onChange, required, inline, focus, rows = 1, onKeyDown, disabled }) => {
     const [field, setField] = React.useState({ ..._innerField, name: name, value: value })
     const validForm = React.useContext(ValidForm)
     const setValue = newValue => {
@@ -75,9 +75,14 @@ const Input = ({ name, label, type = 'text', maxLength = 100, minLength = 0, upp
     }
     const inputRef = React.useRef(null)
     React.useEffect(() => {
-        if (focus) inputRef.current.focus()
-    }, [focus])
+        if (focus && !disabled) inputRef.current.focus()
+    }, [focus, disabled])
     React.useEffect(() => setField({ ...field, value: value }), [value]) // eslint-disable-line react-hooks/exhaustive-deps
+    if(disabled){
+        return <FmGroup name={name} label={label} active inline={inline}>
+            <label className="block ptb-5 plr-2 bb-gray"> {field.value}</label>
+        </FmGroup>
+    }
     return <FmGroup name={name} label={label} active={field.focus || field.value} alert={field.alert} inline={inline}>
         {type === 'textarea' ? <textarea id={name}
             name={name}
@@ -208,7 +213,7 @@ const CheckBox = ({ name, label, value, onChange }) => <div className="fm-group 
 </div>
 
 const MultiGroup = ({ label, children }) => <Group>
-    <span className="overlabel">{label}</span>
+    <span className="overlabel f-left">{label}</span>
     <div className="fm-group flex-center">{children}</div>
 </Group>
 
@@ -235,8 +240,8 @@ const DateSelect = ({ label, startDate, minDate, maxDate, handleChange }) => {
     </MultiGroup>
 }
 
-const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCase, rgx = RGX.ALL,
-    validateValue, value, onChange, required, textButton, onButtonClick }) => {
+const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCase, rgx = RGX.ALL, focus,
+    validateValue, value, onChange, required, textButton, onButtonClick, blockButton }) => {
     const onKeyDown = (e) => {
         if (e.keyCode === KEYCODES.ENTER) {
             e.preventDefault()
@@ -249,13 +254,27 @@ const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCa
             minLength={minLength} upperCase={upperCase}
             rgx={rgx} validateValue={validateValue}
             value={value} required={required} onKeyDown={onKeyDown}
+            focus={focus}
             onChange={onChange} inline />
-        <span className="btn btn-primary set-right" onClick={e => onButtonClick()}>
+        <span className={`btn btn-primary set-right ${blockButton ? 'forbidden' : ''}`}
+            style={{height: '84%'}}
+            onClick={blockButton ? null : e => onButtonClick()}>
             {textButton}
         </span>
     </MultiGroup>
 }
 
+const DropdownMenu = ({ text, children }) => {
+    const [show, setShow] = React.useState(false)
+    return <Group>
+        <button className="btn btn-primary w100 block"
+            onClick={() => setShow(!show)}
+            onBlur={() => setTimeout(() => setShow(false), 300)}>
+            {text}
+        </button>
+        {show ? <div className="select-list white">{children}</div> : null}
+    </Group>
+}
 
 Form.Group = Group
 Form.FmGroup = FmGroup
@@ -266,5 +285,6 @@ Form.InputButton = InputButton
 Form.MultiGroup = MultiGroup
 Form.CheckBox = CheckBox
 Form.SelectDiv = SelectDiv
+Form.DropdownMenu = DropdownMenu
 
 export default Form

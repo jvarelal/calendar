@@ -101,6 +101,15 @@ $RedColor: #dc3545
     animation: spin 2s linear infinite
     margin: auto
 
+=Loading-min($color)
+    border: 3px solid #f0f0f0
+    border-top: 3px solid $color
+    border-radius: 50%
+    width: 1.2rem
+    height: 1.2rem
+    animation: spin 2s linear infinite
+    margin: auto
+
 =BackgroundStart($img)
     @extend %Start
     background-position: center
@@ -110,6 +119,15 @@ $RedColor: #dc3545
     position: absolute
     right: 0
     width: 50%
+
+=EmptyImg($imgVoid, $size)
+    background-repeat: no-repeat
+    background-image: url($imgVoid)
+    background-size: 100% 100%
+    margin: 1rem auto
+    opacity: 0.75
+    height: $size
+    width: $size
 
 =BackgroundTheme($url, $color, $header, $label, $button, $cardButton, $imgVoid, $imgStart)
     @if $url != ""
@@ -130,13 +148,9 @@ $RedColor: #dc3545
         @else
             @extend %ElementWhite
     .empty-img
-        background-repeat: no-repeat
-        background-image: url($imgVoid)
-        background-size: 100% 100%
-        margin: 1rem auto
-        opacity: 0.75
-        height: 10rem
-        width: 10rem
+        +EmptyImg($imgVoid, 10rem)
+    .empty-img-min
+        +EmptyImg("../img/squares.png", 2.5rem)
     .fm-group label.active, .week
         @if $label == "black"
             @extend %ElementBlack

@@ -1,5 +1,5 @@
 import { USER_TYPES } from '../actions/userTypes'
-import { getUserLocalData } from '../../commons/util/func'
+import { getUserLocalData } from '../../util/func'
 
 const localUser = getUserLocalData()
 const initialState = {
@@ -8,7 +8,7 @@ const initialState = {
     email: '',
     preferences: { ...localUser },
     displayName: '',
-    photo: '',
+    photoURL: '',
     location: {
         ip: '',
         ipType: '',
@@ -38,7 +38,7 @@ const user = (state = { ...initialState }, action) => {
                 id: action.payload.user.uid,
                 email: action.payload.user.email,
                 displayName: action.payload.user.displayName,
-                photo: action.payload.user.photoURL
+                photoURL: action.payload.user.photoURL
             }
         case USER_TYPES.GET_LOCATION:
             return {

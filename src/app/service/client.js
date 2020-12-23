@@ -1,6 +1,6 @@
-import { MODAL_TYPES } from '../../layout/actions/modalTypes'
+import { MODAL_TYPES } from '../layout/actions/modalTypes'
 import service from './service'
-import { getModalLoader } from '../../layout/actions/modalActions'
+import { getModalLoader } from '../layout/actions/modalActions'
 
 const client = (nameService, tipoRequest, body = {}, loader = true) => dispatch => {
     let serviceRequest = {

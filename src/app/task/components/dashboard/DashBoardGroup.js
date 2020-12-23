@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { DASHBOARD_PROP_SHAPE } from '../../../commons/util/const'
+import { DASHBOARD_PROP_SHAPE, ROLES } from '../../../util/const'
 import TaskForm from '../TaskForm'
 import DashBoardGroupForm from './DashBoardGroupForm'
 import { deleteGroup } from '../../actions/taskActions'
 import { getModalContent, getModalConfirmation } from '../../../layout/actions/modalActions'
-import { onDragOver } from '../../../commons/util/func'
+import { onDragOver } from '../../../util/func'
 
-const DashBoardGroup = ({ dashboard = {}, group = {}, children, getModalContent, onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
+const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalContent, onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
     const newTask = () => getModalContent(<TaskForm idGroup={group.id} />)
     const editGroup = () => getModalContent(<DashBoardGroupForm title="Editar grupo" dashboard={dashboard} group={group} />)
     const titleOnDelete = `Eliminar grupo`;
     const messageOnDelete = `¿Desea eliminar el grupo ${group.name}?`;
     const deleteCurrent = () => getModalConfirmation(titleOnDelete, messageOnDelete, () => deleteGroup(dashboard, group))
+    const userRol = ((dashboard.roles || []).find(u => u.email === user.email) || {rol: ROLES.MEMBER}).rol
     return <div className="card-group glass"
         onDrop={onDrop}
         draggable={onDragStart ? true : false}
@@ -25,7 +26,7 @@ const DashBoardGroup = ({ dashboard = {}, group = {}, children, getModalContent,
                 <button className="btn-sm" onClick={newTask}>
                     <i className="fas fa-plus"></i>
                 </button>
-                {group.id ? <>
+                {userRol !== ROLES.MEMBER ? <>
                     <button className="btn-sm" onClick={editGroup}>
                         <i className="fas fa-edit"></i>
                     </button>
@@ -52,7 +53,6 @@ const DashBoardGroup = ({ dashboard = {}, group = {}, children, getModalContent,
     </div>
 }
 
-
 DashBoardGroup.propTypes = {
     dashboard: DASHBOARD_PROP_SHAPE,
     group: PropTypes.object.isRequired,
@@ -62,7 +62,11 @@ DashBoardGroup.propTypes = {
     onDrop: PropTypes.func
 }
 
+const mapStateToProps = state => ({
+    user: state.user
+})
+
 export default connect(
-    null,
+    mapStateToProps,
     { getModalContent, getModalConfirmation, deleteGroup }
 )(DashBoardGroup)

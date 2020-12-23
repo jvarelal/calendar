@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from '../../../commons/components/Form'
-import { stringJsonDate } from '../../../commons/util/func'
+import { stringJsonDate } from '../../../util/func'
 import { setYearMonth } from '../../actions/taskActions'
-import { DATE_PROP_SHAPE, MONTHS_SP } from '../../../commons/util/const'
+import { DATE_PROP_SHAPE, MONTHS_SP } from '../../../util/const'
 import DashBoardGroup from '../dashboard/DashBoardGroup'
 import TaskCard from '../TaskCard'
 import CalendarGrid from './CalendarGrid'
 import CalendarList from './CalendarList'
-import SAINTS from '../../util/saints'
+import SAINTS from '../../../util/saints'
 
 const Calendar = ({ years, date, tasksByMonth, setYearMonth }) => {
     const [grid, setGrid] = React.useState(true)
@@ -28,7 +28,7 @@ const Calendar = ({ years, date, tasksByMonth, setYearMonth }) => {
                     options={MONTHS_SP.map((month, index) => ({ id: index, text: month }))}
                     onChange={setYearMonth} />
             </div>
-            <div className="col col4 text-center">
+            <div className="col col4 text-center responsive-hide">
                 <Form.Group>
                     <button className="btn btn-primary" onClick={() => setGrid(!grid)}>
                         <i className={`fas fa-${grid ? 'calendar-alt' : 'columns'}`} /> {grid ? ' Grid' : ' Lista'}
