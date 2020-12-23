@@ -78,11 +78,11 @@ const AddUser = ({ users, updateUsers }) => {
                 }
                 setPending(false)
             }
-            if (users.find(u => u.email === email)) {
+            if (users.find(u => u.email === email.toLowerCase())) {
                 setAlert('¡El usuario ya esta agregado!')
                 setPending(false)
             } else {
-                let searchUser = () => userService.searchUser({ email, type: 'email' }, cb, cb)
+                let searchUser = () => userService.searchUser({ email: email.toLowerCase(), type: 'email' }, cb, cb)
                 searchUser()
             }
         }
