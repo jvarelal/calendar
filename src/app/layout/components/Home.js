@@ -26,7 +26,7 @@ const Home = () => {
             <div className="start-img-r" style={{ transform: `translateX(-${axisY * .75}px)` }} />
         </div>
         <div className="flex-center">
-            <div className="start-img-l" style={{ transform: `translateX(-${getPercentageX(0, 0.49, 1.1)}px)` }} />
+            <div className="start-img-l" style={{ transform: `translateX(-${getPercentageX(0, 0.49, 1)}px)` }} />
             <div className="start-text ml-auto">
                 <div className="start-info">
                     <h3 className="text-center">Enlista tus pendientes</h3>

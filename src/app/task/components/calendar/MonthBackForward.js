@@ -6,21 +6,20 @@ import { fragmentDate, goToTheTop } from '../../../util/func'
 import { DATE_PROP_SHAPE } from '../../../util/const'
 
 const MonthBackForward = ({ date, setDate }) => {
-    const goForward = () => setDate(fragmentDate(new Date(date.year, Number(date.month) + 1, date.day)))
-    const goBack = () => setDate(fragmentDate(new Date(date.year, Number(date.month) - 1, date.day)))
+    const moveInMonths = nMonths => {
+        goToTheTop()
+        setDate(fragmentDate(new Date(date.year, Number(date.month) + nMonths, date.day)))
+    }
     let style = { color: 'inherit', borderRadius: '0px' }
-    React.useEffect(() => goToTheTop(), [date])
     return <div className="btn-group w100">
-        <button className="w50 btn"
-            style={style}
-            onClick={goBack}
-            onDragEnter={() => setTimeout(goBack, 800)}>
+        <button className="w50 btn" style={style}
+            onClick={() => moveInMonths(-1)}
+            onDragEnter={() => setTimeout(() => moveInMonths(-1), 800)}>
             <i className="fas fa-chevron-circle-left" /> Mes anterior
             </button>
-        <button className="w50 btn"
-            style={style}
-            onClick={goForward}
-            onDragEnter={() => setTimeout(goForward, 800)}>
+        <button className="w50 btn" style={style}
+            onClick={() => moveInMonths(1)}
+            onDragEnter={() => setTimeout(() => moveInMonths(1), 800)}>
             Mes siguiente <i className="fas fa-chevron-circle-right" />
         </button>
     </div>

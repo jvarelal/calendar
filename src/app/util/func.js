@@ -68,7 +68,7 @@ const getNotifications = (tasks, time = new Date().toLocaleTimeString()) => {
     return notifications
 }
 
-const notifyMe = (tasks) => {
+const notifyMe = (tasks = []) => {
     let display = () => tasks.forEach(t => {
         new Notification(`Agenda - ${t.name} [${completeZero(t.date.hour)}:${completeZero(t.date.minute)}]`, {
             body: t.detail || 'Recordatorio',
@@ -77,7 +77,7 @@ const notifyMe = (tasks) => {
     })
     if (Notification.permission === "granted") {
         display()
-    } else if (Notification.permission !== 'denied') {
+    } else if (Notification.permission !== 'denied' && tasks.length > 0) {
         Notification.requestPermission(permission => {
             if (permission === "granted") {
                 display()
@@ -275,23 +275,6 @@ const expandTask = taskDb => {
     }
 }
 
-/*
-const onAlphaChange = evento => {
-    let input = evento.target;
-    let rg = /^([a-zA-Z0-9-@. ]*)$/
-    if (rg.test(input.value)
-        && (this.state[input.name].length < input.maxLength || input.value.length <= input.maxLength))
-        return this.setState({ [input.name]: input.value ? input.value.toUpperCase() : '' })
-}
-
-const onNumberChange = evento => {
-    let input = evento.target;
-    let rg = /^([0-9-]*)$/
-    if (rg.test(input.value)
-        && (this.state[input.name].length < input.maxLength || input.value.length <= input.maxLength))
-        return this.setState({ [input.name]: input.value ? input.value.toUpperCase() : '' })
-}
-*/
 export {
     goToTheTop,
     completeZero,

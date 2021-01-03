@@ -31,13 +31,16 @@ const DashBoardForm = ({ title, user, dashboardSelected, dashboards, createDashb
     return <Modal.DropContent title={title} lg left>
         <Form onSubmit={onSubmit} outsideError={alert}>
             <Modal.Body>
-                <div className="flex-center">
+                <div className="row">
                     <div className={`col br-gray`}>
-                        <Form.Input name="name" required={true} label="Nombre" minLength="3"
+                        <Form.Input name="name" required={true}
+                            label="Nombre"
+                            minLength="3"
                             value={dashboard.name} onChange={onChange}
                             disabled={!editable}
                             upperCase focus />
-                        <Form.Input type="textarea" name="detail" value={dashboard.detail}
+                        <Form.Input type="textarea" name="detail"
+                            value={dashboard.detail}
                             disabled={!editable}
                             label="Descripción" rows="2" onChange={onChange} />
                         {!dashboard.id ? <AddGroups
@@ -45,8 +48,10 @@ const DashBoardForm = ({ title, user, dashboardSelected, dashboards, createDashb
                             setGroups={setGroups}
                             setAlert={setAlert} /> : null}
                     </div>
-                    <AdminUsers editable={editable} userInSession={user}
-                        initialList={dashboard.roles} onChangeUsers={onChangeUsers} />
+                    <AdminUsers editable={editable}
+                        userInSession={user}
+                        initialList={dashboard.roles}
+                        onChangeUsers={onChangeUsers} />
                 </div>
             </Modal.Body>
             {editable ? <Modal.FormFooter /> : null}

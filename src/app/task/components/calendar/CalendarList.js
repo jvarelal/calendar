@@ -50,7 +50,7 @@ const CalendarList = ({ user, date, dashboards, tasksByMonth, processTask, getMo
             <div className="glass">
                 <MonthBackForward />
                 {days.map((d, index) => <div className="row m-0" key={index}>
-                    <div className={'col col8 p-0 ptb-2 panel-cell ' + (d.able ? 'panel-active' : 'disable')}
+                    <div className={`col col8 p-0 ptb-2 panel-cell ${d.able ? 'panel-active' : 'disable'} ${d.className}`}
                         onClick={(e) => onDivClick(e, d)}>
                         <CalendarCell day={d} flag={false} />
                     </div>

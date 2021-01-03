@@ -21,10 +21,6 @@ header, footer
 footer
     bottom: 0
 
-button, li, a, input, select, textarea, label, input[type="submit"]
-    @extend %BasePT
-    text-decoration: none
-
 #root
     height: 100%
 
@@ -63,7 +59,7 @@ p
     height: 3rem
 
 .modal
-    background: rgba(70, 70, 70, 0.6)
+    +ScaleBlack(0.33)
     position: absolute
     width: 100%
     height: 100%
@@ -76,12 +72,13 @@ p
     z-index: -1
     transition: all 0.1s linear 0.1s
     .modal-content
-        background: white
+        +ScaleWhite(1)
         min-width: 30rem
         width: 25%
         padding: 1rem
         transition: all 0.3s linear 0.1s
         opacity: 0
+        overflow: auto
     .modal-center
         transform: translateY(-100%)
         margin: auto
@@ -125,12 +122,19 @@ p
     overflow-x: auto
     margin: auto
 
+.container-text
+    width: 75%
+    height: 100%
+    margin: auto
+    padding: 4rem 5rem
+
 .row
     display: flex
     flex-wrap: wrap
     margin-left: 1.5rem
     margin-right: 1.5rem
-
+.flex-middle
+    align-items: center
 .col
     flex-basis: 0
     flex-grow: 1
@@ -163,70 +167,6 @@ p
     position: absolute
     bottom: 0
 
-.fm-group
-    position: relative
-    margin: 1.9rem 0rem
-    width: 100%
-    min-width: 10rem
-    .fm-input
-        border-radius: .1rem
-        border: 1px solid #d1d1d1
-        padding: .5rem
-        font-size: .9rem
-        width: 100%
-        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out
-        outline: 0
-        &:focus
-            box-shadow: 0 1px 0 0 #011636
-    .fm-input.wrong
-        border: 1px solid $RedColor
-    .fm-input.disabled
-        border: none
-        border-bottom: 1px solid #666666
-        background: rgba(255, 255, 255, 0)
-        color: inherit
-        -webkit-appearance: none
-        -moz-appearance: none
-        &::-ms-expand
-            display: none
-    .fm-label
-        padding: .5rem
-        color: #999999
-        font-size: .9rem
-        cursor: text
-        transition: .25s ease-out
-        position: absolute
-        top: 0
-        left: 0
-    .fm-label.active
-        @extend %ElementCyan
-        font-size: .8rem
-        transform: translateY(-70%)
-        padding: .1rem .5rem
-        border-top-left-radius: .25rem
-    .fm-error
-        color: $RedColor
-        padding-top: 0.25rem
-    .set-right
-        position: absolute
-        right: 0
-        border-radius: 0px
-
-.overlabel
-    margin-bottom: 1.25rem
-    border-bottom: 1px solid var(--borderGray)
-    color: #999999
-
-.f-left
-    float: left
-
-.f-right
-    float: right
-
-.fm-group.inline
-    min-width: auto
-    margin: 0.25rem
-
 .text-alert
     @extend %GroupNote
     text-align: center
@@ -235,45 +175,13 @@ p
 .text-muted
     @extend %GroupNote
     color: #999999
-.btn
-    padding: .5rem 1.5rem
-    font-size: .9rem
-    border: 1px solid #999999
-    cursor: pointer
-    background: transparent
-    transition: all 0.2s ease 0s
-    border-radius: .3rem
-.btn-inactive
-    background-color: rgba(100, 100, 100, 0.2)
-    color: #666666
 
-.btn-red
-    background: $RedColor
-    color: white
+.f-left
+    float: left
 
-.btn-blue
-    background: #007bff
-    color: white
+.f-right
+    float: right
 
-.btn-gray
-    background: #888888
-    color: #eeeeee
-
-.btn-sm
-    border: 1px solid #aaaaaa
-    cursor: pointer
-    background: transparent
-    transition: all 0.2s ease 0s
-    text-align: center
-    padding: .25rem
-    min-width: 2rem
-    &:hover
-        font-size: 1.05rem
-
-.btn-sm.inactive
-    &:hover
-        font-size: 0.9rem
-        cursor: default
 .card
     padding: 1rem
     border: 1px solid #ccc
@@ -294,6 +202,24 @@ p
     margin: 0.15rem auto
     max-width: 20rem
     min-width: 18rem
+.card-group
+    position: relative
+    padding: 0 .25rem
+    border: 1px solid var(--borderGray)
+    min-width: 20rem
+
+.card-group-header
+    font-family: "Monserrat", sans-serif
+    font-weight: bold
+    border-bottom: 1px solid var(--borderGray)
+    padding: .75rem
+    display: flex
+    background: rgba(255,255,255,0.25)
+
+.card-group-empty
+    text-align: center
+    width: 100%
+    padding: 1rem
 
 .notification
     padding: .5rem
@@ -345,7 +271,6 @@ p
 .block
     display: block
 
-
 .profile
     height: 2rem
     border-radius: 50%
@@ -377,8 +302,14 @@ p
 .text-center
     text-align: center
 
+.text-justify
+    text-align: justify
+
 .text-right
     text-align: right
+
+.text-left
+    text-align: left
 
 .text-gray
     color: #aaaaaa
@@ -391,6 +322,9 @@ p
     .mtb-#{$i}
         margin-top: $i * .1rem
         margin-bottom: $i * .1rem
+    .mlr-#{$i}
+        margin-left: $i * .1rem
+        margin-right: $i * .1rem
     .plr-#{$i}
         padding-left: $i * .1rem
         padding-right: $i * .1rem
@@ -404,8 +338,17 @@ p
 .w100
     width: 100%
 
+.w90
+    width: 90%
+
 .w50
     width: 50%
+
+.w40
+    width: 40%
+
+.w33
+    width: 33%
 
 .h75
     height: 75%
@@ -413,21 +356,6 @@ p
 .h50
     height: 50%
 
-.login
-    width: 40%
-    min-width: 20rem
-    margin: 20vh auto
-    border: 1px solid #ccc
-    border-radius: 0.3rem
-    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15)
-    font-size: 16px
-    .navbar-list
-        width: 100%
-        button
-            border: none
-            &:hover
-                @extend %ElementWhite
-                font-size: 1.05rem
 .white
     background: rgba(255,255,255, 0.9)
     color: black
@@ -553,24 +481,6 @@ p
     position: absolute
     left: 0
 
-.select-div option
-    display: none
-
-.select-list
-    position: absolute
-    width: 100%
-    border: 1px solid #222222
-    z-index: 10
-    background: white
-
-.select-option
-    padding: .5rem
-    cursor: pointer
-
-.select-option:hover
-    background-color: rgba(100, 120, 255, 0.75)
-    color: white
-
 .mini-square
     +square(1rem, #eeeeee)
 
@@ -596,30 +506,9 @@ p
 
 .bb-gray
     border-bottom: 1px solid var(--borderGray)
-.card-group
-    position: relative
-    padding: 0 .25rem
-    border: 1px solid var(--borderGray)
-    min-width: 20rem
+.bt-gray
+    border-top: 1px solid var(--borderGray)
 
-.card-group-header
-    font-family: "Monserrat", sans-serif
-    font-weight: bold
-    border-bottom: 1px solid var(--borderGray)
-    padding: .75rem
-    display: flex
-    background: rgba(255,255,255,0.25)
-
-.card-group-empty
-    text-align: center
-    width: 100%
-    padding: 1rem
-
-.btn-group
-    display: inline-flex
-    justify-content: center
-    button
-        border-radius: 0px
 
 .disable, .past
     color: #888888
@@ -684,6 +573,10 @@ p
     font-size: 1.2rem
     text-align: justify
 
+
+.start-img-l, .start-img-r
+    background-size: contain
+
 @media screen and (max-width:1000px)
     header
         padding: 0 .25rem
@@ -701,9 +594,10 @@ p
 
     .nav-link span
         display: none
-    .nav-item  .nav-link .icon
-        display: block
-        font-size: 1.5rem
+    .nav-item  .nav-link 
+        .icon-g, .icon
+            display: block
+            font-size: 1.5rem
 
     .nav-link .profile
         height: 1.5rem
@@ -720,21 +614,16 @@ p
         flex-grow: 1
         position: relative
         padding: 0 .25rem
-
     .col8
-        max-width: 100%
+        min-width: 100%
     .col5
-        max-width: 100%
+        min-width: 100%
     .col4
-        max-width: 100%
-
+        min-width: 100%
     .col3
-        max-width: 100%
-
+        min-width: 100%
     .col2
-        max-width: 100%
-    .responsive-hide
-        display: none
+        min-width: 100%
     .fm-group
         margin: 1.2rem 0
         .fm-label.active
@@ -754,7 +643,6 @@ p
         font-size: 0.6rem
     .text-sm
         font-size: 0.65rem
-
     .flag
         width: 0
         height: 0
@@ -768,7 +656,8 @@ p
             min-width: 100vw
         .modal-lg
             min-width: 100vw
-
+    .start-img-l, .start-img-r
+        background-size: cover
     .card-note
         max-width: 15rem
         min-width: 12rem

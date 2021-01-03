@@ -19,22 +19,25 @@ const TaskForm = ({ user, date, taskSelected, dashboards, idxDashboard, idGroup,
         setTask({ ...task, date: evalueDate(newDate) !== PAST ? newDate : fragmentDate(SYSDATE) })
     }
     const dashboard = dashboards.find(d => d.id === task.dashboard.id)
-    const onSubmit = () => processTask(dashboard, { ...task, user})
+    const onSubmit = () => processTask(dashboard, { ...task, user })
     React.useEffect(() => setTask(initialTask), [taskSelected]) // eslint-disable-line react-hooks/exhaustive-deps
     return <Modal.DropContent lg={user.id} left={user.id} title={task.taskId ? 'Editar tarea' : '+ Nueva tarea'} >
         {user.id ? <Form onSubmit={onSubmit}>
             <Modal.Body>
                 <div className="row">
                     <div className="col col3">
-                        <Form.Select name="id" value={task.dashboard.id} label="Tablero"
+                        <Form.Select name="id"
+                            value={task.dashboard.id} label="Tablero"
                             options={dashboards.map((d, i) => ({ id: d.id, text: d.name }))}
                             onChange={onChangeDashboard}
                             disabled={idGroup || task.id} />
-                        <Form.Select name="idGroup" value={task.dashboard.idGroup} label="Grupo"
+                        <Form.Select name="idGroup"
+                            value={task.dashboard.idGroup} label="Grupo"
                             options={dashboard.groups.map(g => ({ id: g.id, text: g.name }))}
                             onChange={onChangeDashboard}
                             number disabled={idGroup || task.id} />
-                        <Form.SelectDiv name="color" value={task.color} label="Color"
+                        <Form.SelectDiv name="color"
+                            value={task.color} label="Color"
                             onChange={onChange} options={COLORS}>
                             {COLORS.map((color, index) => <div key={index}
                                 className={`select-option flex-center ${task.color === color.id ? 'selected' : ''}`}
@@ -46,7 +49,9 @@ const TaskForm = ({ user, date, taskSelected, dashboards, idxDashboard, idGroup,
                         <div className={'responsive-hide square m-auto ' + task.color}></div>
                     </div>
                     <div className="col bl-gray">
-                        <Form.Input name="name" required={true} label="Titulo"
+                        <Form.Input name="name"
+                            required={true}
+                            label="Titulo"
                             value={task.name} onChange={onChange}
                             minLength="3" upperCase focus />
                         <Form.Input type="textarea" name="detail" value={task.detail}
@@ -57,12 +62,17 @@ const TaskForm = ({ user, date, taskSelected, dashboards, idxDashboard, idGroup,
                             minDate={fragmentDate(SYSDATE)}
                             maxDate={MAXDATE}
                             handleChange={onChangeTime} />
-                        <Form.CheckBox name="alarm" label="Crear recordatorio" value={task.alarm} onChange={onCheck} />
+                        <Form.CheckBox name="alarm" label="Crear recordatorio"
+                            value={task.alarm} onChange={onCheck} />
                         {task.alarm ? <Form.MultiGroup>
-                            <Form.Select name="hour" label="Hora" value={task.date.hour}
-                                options={fillNumberList(0, 23)} onChange={onChangeTime} inline />
-                            <Form.Select name="minute" label="Minuto" value={task.date.minute}
-                                options={fillNumberList(0, 59)} onChange={onChangeTime} inline />
+                            <Form.Select name="hour" label="Hora"
+                                value={task.date.hour}
+                                options={fillNumberList(0, 23)}
+                                onChange={onChangeTime} inline />
+                            <Form.Select name="minute" label="Minuto"
+                                value={task.date.minute}
+                                options={fillNumberList(0, 59)}
+                                onChange={onChangeTime} inline />
                         </Form.MultiGroup> : null}
                     </div>
                 </div>

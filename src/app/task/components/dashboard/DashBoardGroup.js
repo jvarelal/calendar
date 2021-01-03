@@ -8,13 +8,14 @@ import { deleteGroup } from '../../actions/taskActions'
 import { getModalContent, getModalConfirmation } from '../../../layout/actions/modalActions'
 import { onDragOver } from '../../../util/func'
 
-const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalContent, onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
+const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalContent, available = true,
+    onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
     const newTask = () => getModalContent(<TaskForm idGroup={group.id} />)
     const editGroup = () => getModalContent(<DashBoardGroupForm title="Editar grupo" dashboard={dashboard} group={group} />)
     const titleOnDelete = `Eliminar grupo`;
     const messageOnDelete = `¿Desea eliminar el grupo ${group.name}?`;
     const deleteCurrent = () => getModalConfirmation(titleOnDelete, messageOnDelete, () => deleteGroup(dashboard, group))
-    const userRol = ((dashboard.roles || []).find(u => u.email === user.email) || {rol: ROLES.MEMBER}).rol
+    const userRol = ((dashboard.roles || []).find(u => u.email === user.email) || { rol: ROLES.MEMBER }).rol
     return <div className="card-group glass"
         onDrop={onDrop}
         draggable={onDragStart ? true : false}
@@ -23,9 +24,9 @@ const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalCo
         <div className="card-group-header">
             <div className="p-2">{group.name}</div>
             <div className="btn-group ml-auto">
-                <button className="btn-sm" onClick={newTask}>
+                {available ? <button className="btn-sm" onClick={newTask}>
                     <i className="fas fa-plus"></i>
-                </button>
+                </button> : null}
                 {userRol !== ROLES.MEMBER ? <>
                     <button className="btn-sm" onClick={editGroup}>
                         <i className="fas fa-edit"></i>
@@ -48,6 +49,9 @@ const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalCo
                 <div className="card-group-empty">
                     <h3 className="text-center m-1 card-group-child">Sin notas</h3>
                     <div className="empty-img card-group-child" />
+                    {available ? <button className="btn btn-primary" onClick={newTask}>
+                        <i className="fas fa-plus"/> Agregar nota
+                    </button> : null}
                 </div>}
         </div>
     </div>

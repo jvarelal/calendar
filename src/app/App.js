@@ -18,7 +18,8 @@ function App() {
       { link: '/calendar', icon: 'fas fa-calendar-alt', name: 'Calendario', component: React.lazy(() => import('./task/components/calendar/Calendar')) },
       { link: '/dashboard', icon: 'fas fa-clipboard', name: 'Tableros', component: React.lazy(() => import('./task/components/dashboard/DashBoard')), private: true },
       { link: '/login', icon: 'fas fa-user', component: React.lazy(() => import('./user/components/Login')) },
-      { link: '/', icon: 'fas fa-home', component: React.lazy(() => import('./layout/components/Home')) }
+      { link: '/', component: React.lazy(() => import('./layout/components/Home')) },
+      { link: '/help', component: React.lazy(() => import('./layout/components/Help')) }
     ]
   }
   return (
@@ -32,7 +33,7 @@ function App() {
                 {navs.tabs.map((nav, index) => nav.private ?
                   <PrivateRoute key={index} exact path={nav.link} component={nav.component} /> :
                   <Route key={index} exact path={nav.link} component={nav.component} />)}
-                   <Route path="*" component={Page404} />
+                <Route path="*" component={Page404} />
               </Switch>
             </React.Suspense>
             <ModalManager />

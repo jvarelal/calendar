@@ -114,7 +114,6 @@ $RedColor: #dc3545
     @extend %Start
     background-position: center
     background-image: url($img)
-    background-size: contain
     background-repeat: no-repeat
     position: absolute
     right: 0
@@ -234,6 +233,8 @@ $RedColor: #dc3545
         +BackgroundStart("../img/Layout.png")
     .start-img-r
         +BackgroundStart("../img/Calendar3.png")
+    .container-text
+        +ScaleWhite(0.5)
     .tbl
         tbody
             &:focus
@@ -257,6 +258,8 @@ $RedColor: #dc3545
         +BackgroundStart("../img/Layout.png")
     .start-img-r
         +BackgroundStart("../img/Calendar3ia.png")
+    .container-text
+        +ScaleBlack(0.5)
     .tbl
         tbody
             &:focus

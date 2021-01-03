@@ -12,7 +12,7 @@ import { resetDashboard } from '../../task/actions/taskActions'
 
 const NavSetting = ({ user, setUserPreference, logout, resetDashboard }) => {
     const history = useHistory();
-    const profileImg =  <img src={user.photoURL || UserPng} alt="profile" className="profile" />
+    const profileImg = <img src={user.photoURL || UserPng} alt="profile" className="profile" />
     return <Header.NavDropMenu logo={profileImg}>
         <div className="card">
             <div className="card-header text-center">
@@ -20,7 +20,7 @@ const NavSetting = ({ user, setUserPreference, logout, resetDashboard }) => {
                 <div className="text-sm text-gray m-1">{user.email}</div>
             </div>
             <div className="card-body">
-                <LocationWeather />
+                {process.env.NODE_ENV === 'production' ? <LocationWeather /> : null}
                 <Form.FmGroup label="Fondos" active>
                     <div className="square-group text-center ptb-7" id="theme">
                         {THEMES.map((THEME, index) => <div key={index}

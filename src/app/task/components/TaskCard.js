@@ -21,7 +21,7 @@ const TaskCard = ({ expanded = false, task = {}, user, dashboards, backgroundCar
         <div className="card-header">
             <div className="flex-center">
                 <div className="col"><strong>{task.name}</strong></div>
-                <div className="col col4 text-right">
+                <div className="col text-right">
                     <button className="btn btn-sm" onClick={() => setShowDetail(!showDetail)}>
                         <i className={showDetail ? 'fas fa-chevron-circle-up' : 'fas fa-chevron-circle-down'} />
                     </button>

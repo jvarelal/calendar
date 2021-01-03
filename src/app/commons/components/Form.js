@@ -267,12 +267,12 @@ const InputButton = ({ name, label, type = 'text', maxLength, minLength, upperCa
 const DropdownMenu = ({ text, children }) => {
     const [show, setShow] = React.useState(false)
     return <Group>
-        <button className="btn btn-primary w100 block"
+        <button className="btn btn-primary w100"
             onClick={() => setShow(!show)}
             onBlur={() => setTimeout(() => setShow(false), 300)}>
             {text}
         </button>
-        {show ? <div className="select-list white">{children}</div> : null}
+        {show ? <div className="select-list white text-left">{children}</div> : null}
     </Group>
 }
 

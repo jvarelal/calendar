@@ -52,6 +52,22 @@ const DropContent = ({ title, lg, left, children }) => {
     </DelayActive>
 }
 
+const TextHelp = ({ title, children, seeMore }) => {
+    return <DropContent title={title} lg left>
+        {children}
+        <div className="row card-footer mtb-5">
+            {seeMore ? <div className="col">
+                <CloseButton className={`btn btn-primary`}
+                    onClick={seeMore.forward}
+                    text={seeMore.text} />
+            </div> : null}
+            <div className="col">
+                <CloseButton className="btn btn-gray" text="Aceptar" />
+            </div>
+        </div>
+    </DropContent>
+}
+
 const Confirmation = ({ title, message, confirm, warning = false }) => {
     return <DropContent title={title}>
         <div className="card-body ptb-9">{message}</div>
@@ -132,6 +148,7 @@ Modal.Loader = Loader
 Modal.Confirmation = Confirmation
 Modal.Message = Message
 Modal.Body = Body
+Modal.TextHelp = TextHelp
 Modal.DropContent = DropContent
 Modal.WithoutSession = WithoutSession
 
