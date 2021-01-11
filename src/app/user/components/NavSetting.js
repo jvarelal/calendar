@@ -20,7 +20,7 @@ const NavSetting = ({ user, setUserPreference, logout, resetDashboard }) => {
                 <div className="text-sm text-gray m-1">{user.email}</div>
             </div>
             <div className="card-body">
-                {process.env.NODE_ENV === 'production' ? <LocationWeather /> : null}
+                {process.env.NODE_ENV !== 'production' ? <LocationWeather /> : null}
                 <Form.FmGroup label="Fondos" active>
                     <div className="square-group text-center ptb-7" id="theme">
                         {THEMES.map((THEME, index) => <div key={index}

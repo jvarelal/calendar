@@ -11,7 +11,7 @@ const UserDiv = ({ user, changeUser }) => {
     }
     console.log(user)
     return <div className="flex-center  ptb-5 bb-gray">
-        <div className="col col5">
+        <div className="col">
             <img src={user.photoURL || UserPng} alt="profile" className="profile-min" />
         </div>
         <div className="col flex-center">
