@@ -7,9 +7,11 @@ import DashBoardGroupForm from './DashBoardGroupForm'
 import { deleteGroup } from '../../actions/taskActions'
 import { getModalContent, getModalConfirmation } from '../../../layout/actions/modalActions'
 import { onDragOver } from '../../../util/func'
+import { UserContext } from '../../../user/components/UserContext'
 
-const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalContent, available = true,
-    onDragStart, onDrop, getModalConfirmation, deleteGroup, vertical }) => {
+const DashBoardGroup = ({ dashboard = {}, group = {}, children, getModalContent, available = true, onDragStart,
+    onDrop, getModalConfirmation, deleteGroup, vertical }) => {
+    const user = React.useContext(UserContext)
     const newTask = () => getModalContent(<TaskForm idGroup={group.id} />)
     const editGroup = () => getModalContent(<DashBoardGroupForm title="Editar grupo" dashboard={dashboard} group={group} />)
     const titleOnDelete = `Eliminar grupo`;
@@ -50,7 +52,7 @@ const DashBoardGroup = ({ user, dashboard = {}, group = {}, children, getModalCo
                     <h3 className="text-center m-1 card-group-child">Sin notas</h3>
                     <div className="empty-img card-group-child" />
                     {available ? <button className="btn btn-primary" onClick={newTask}>
-                        <i className="fas fa-plus"/> Agregar nota
+                        <i className="fas fa-plus" /> Agregar nota
                     </button> : null}
                 </div>}
         </div>
@@ -66,11 +68,4 @@ DashBoardGroup.propTypes = {
     onDrop: PropTypes.func
 }
 
-const mapStateToProps = state => ({
-    user: state.user
-})
-
-export default connect(
-    mapStateToProps,
-    { getModalContent, getModalConfirmation, deleteGroup }
-)(DashBoardGroup)
+export default connect(null, { getModalContent, getModalConfirmation, deleteGroup })(DashBoardGroup)

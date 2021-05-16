@@ -7,8 +7,10 @@ import { getModalContent, getModalConfirmation } from '../../../layout/actions/m
 import DashBoardGroupForm from './DashBoardGroupForm'
 import { DASHBOARD, SELECT_STATUS_TASK, ROLES } from '../../../util/const'
 import { setIdxDashboard, updateDashboard, deleteDashboard } from '../../actions/taskActions'
+import { UserContext } from '../../../user/components/UserContext'
 
-const DashboardOptions = ({ user, dashboards, idxDashboard, setIdxDashboard, getModalContent, getModalConfirmation, deleteDashboard, updateDashboard, view, setView }) => {
+const DashboardOptions = ({ dashboards, idxDashboard, setIdxDashboard, getModalContent, getModalConfirmation, deleteDashboard, updateDashboard, view, setView }) => {
+    const user = React.useContext(UserContext)
     const dashboard = dashboards[idxDashboard] || DASHBOARD
     const msgOnDelete = `¿Desea eliminar el tablero ${dashboard.name}? Todas las notas serán eliminadas.`
     const msgOnExit = <div className="text-center">
@@ -20,7 +22,7 @@ const DashboardOptions = ({ user, dashboards, idxDashboard, setIdxDashboard, get
     }
     const confirmExit = () => {
         let excludeFromRoles = dashboard.roles.filter(u => u.email !== user.email)
-        updateDashboard({ ...dashboard, roles: excludeFromRoles, members: excludeFromRoles.map(u => u.email) })
+        updateDashboard({ ...dashboard, roles: excludeFromRoles })
     }
     const userRol = (dashboard.roles.find(u => u.email === user.email) || { rol: ROLES.MEMBER }).rol
     let options = [
@@ -71,7 +73,7 @@ const DashboardOptions = ({ user, dashboards, idxDashboard, setIdxDashboard, get
         <div className="col flex-center">
             <div className="col">
                 <Form.Select name="dashboard"
-                    label={<><i className={`fas fa-${dashboard.members.length > 1 ? 'users' : 'user'} mlr-4`} />  Tablero</>}
+                    label={<><i className={`fas fa-${dashboard.roles.length > 1 ? 'users' : 'user'} mlr-4`} />  Tablero</>}
                     value={idxDashboard}
                     options={dashboards.map((d, i) => ({ id: i, text: d.name }))}
                     onChange={target => setIdxDashboard(target.value)}
@@ -87,7 +89,10 @@ const DashboardOptions = ({ user, dashboards, idxDashboard, setIdxDashboard, get
         </div>
         <div className="col col5 flex-center">
             <Form.DropdownMenu text={<><i className="fas fa-tools" /> Opciones</>}>
-                {options.filter(o => o.show).map(option => <div className="select-option" onClick={option.onClick}>
+                {options.filter(o => o.show).map((option, i) => <div
+                    key={i}
+                    className="select-option"
+                    onClick={option.onClick}>
                     <i className={option.icon} /> {option.text}
                 </div>)}
             </Form.DropdownMenu>
@@ -96,7 +101,6 @@ const DashboardOptions = ({ user, dashboards, idxDashboard, setIdxDashboard, get
 }
 
 DashboardOptions.propTypes = {
-    user: PropTypes.object.isRequired,
     dashboards: PropTypes.array.isRequired,
     getModalContent: PropTypes.func.isRequired,
     getModalConfirmation: PropTypes.func.isRequired,
@@ -107,8 +111,7 @@ DashboardOptions.propTypes = {
 
 const mapToStateProp = state => ({
     dashboards: state.task.dashboards,
-    idxDashboard: state.task.idxDashboard,
-    user: state.user
+    idxDashboard: state.task.idxDashboard
 })
 
 export default connect(mapToStateProp,

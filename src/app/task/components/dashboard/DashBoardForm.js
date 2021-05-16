@@ -7,13 +7,11 @@ import { createDashboard, updateDashboard, setIdxDashboard } from '../../actions
 import { DASHBOARD, ROLES, DASHBOARD_PROP_SHAPE } from '../../../util/const'
 import AddGroups from './AddGroups'
 import AdminUsers from '../../../user/components/AdminUsers'
+import { UserContext } from '../../../user/components/UserContext'
 
-const DashBoardForm = ({ title, user, dashboardSelected, dashboards, createDashboard, updateDashboard, setIdxDashboard }) => {
-    const [dashboard, setDashBoard] = React.useState(dashboardSelected || {
-        ...DASHBOARD,
-        author: user.email,
-        roles: [{ email: user.email, rol: ROLES.AUTOR }]
-    })
+const DashBoardForm = ({ title, dashboardSelected, dashboards, createDashboard, updateDashboard, setIdxDashboard }) => {
+    const user = React.useContext(UserContext)
+    const [dashboard, setDashBoard] = React.useState(dashboardSelected || { ...DASHBOARD, roles: [{ email: user.email, rol: ROLES.AUTOR }] })
     const [alert, setAlert] = React.useState(null)
     const setGroups = groups => setDashBoard({ ...dashboard, groups: groups })
     const onChange = target => setDashBoard({ ...dashboard, [target.name]: target.value })
@@ -21,12 +19,12 @@ const DashBoardForm = ({ title, user, dashboardSelected, dashboards, createDashb
     const userRol = (dashboard.roles.find(u => u.email === user.email) || { rol: ROLES.MEMBER }).rol
     const editable = !dashboard.id || dashboard.author === user.email || userRol !== ROLES.MEMBER
     const onSubmit = () => {
-        let nDashboard = { ...dashboard, members: dashboard.roles.map(u => u.email) }
-        if (nDashboard.id)
-            return updateDashboard(nDashboard)
-        if (nDashboard.groups.length === 0)
+        dashboard.idToken = user.idToken
+        if (dashboard.id)
+            return updateDashboard(dashboard)
+        if (dashboard.groups.length === 0)
             return setAlert('Agregue al menos un grupo al nuevo tablero')
-        return createDashboard({ ...nDashboard, cb: () => setIdxDashboard(dashboards.length) });
+        return createDashboard({ ...dashboard, cb: () => setIdxDashboard(dashboards.length)});
     }
     return <Modal.DropContent title={title} lg left>
         <Form onSubmit={onSubmit} outsideError={alert}>
@@ -61,7 +59,6 @@ const DashBoardForm = ({ title, user, dashboardSelected, dashboards, createDashb
 
 DashBoardForm.propTypes = {
     title: PropTypes.string.isRequired,
-    user: PropTypes.object,
     dashboardSelected: DASHBOARD_PROP_SHAPE,
     dashboards: PropTypes.array.isRequired,
     createDashboard: PropTypes.func.isRequired,

@@ -70,8 +70,6 @@ const DASHBOARD = {
     name: '',
     detail: '',
     groups: [],
-    creation: '',
-    members: [],
     roles: []
 }
 
@@ -108,7 +106,7 @@ const GROUP_PROP_SHAPE = PropTypes.shape({
 const DASHBOARD_PROP_SHAPE = PropTypes.shape({
     name: PropTypes.string.isRequired,
     detail: PropTypes.string.isRequired,
-    members: PropTypes.array.isRequired,
+    roles: PropTypes.array.isRequired,
     groups: PropTypes.arrayOf(GROUP_PROP_SHAPE).isRequired,
     creation: PropTypes.string.isRequired
 })

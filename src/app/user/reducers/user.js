@@ -9,6 +9,7 @@ const initialState = {
     preferences: { ...localUser },
     displayName: '',
     photoURL: '',
+    idToken: '',
     location: {
         ip: '',
         ipType: '',
@@ -35,10 +36,11 @@ const user = (state = { ...initialState }, action) => {
         case USER_TYPES.CHECK_SESSION:
             return {
                 ...state,
-                id: action.payload.user.uid,
-                email: action.payload.user.email,
-                displayName: action.payload.user.displayName,
-                photoURL: action.payload.user.photoURL
+                id: action.payload.uid,
+                email: action.payload.email,
+                displayName: action.payload.displayName,
+                photoURL: action.payload.photoURL,
+                idToken: action.payload.idToken
             }
         case USER_TYPES.GET_LOCATION:
             return {

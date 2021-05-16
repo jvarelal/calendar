@@ -5,6 +5,7 @@ import { readDashboards, createDashboard } from '../../task/actions/taskActions'
 import { checkSession } from '../actions/userActions'
 import { TEMPLATES, LOADING, ROLES } from '../../util/const'
 import { THEMES } from '../../util/themes'
+import { UserContext } from './UserContext'
 
 const LoadUser = ({ user, checkSession, readDashboards, createDashboard, children }) => {
     const THEME = THEMES[user.preferences.theme]
@@ -13,22 +14,22 @@ const LoadUser = ({ user, checkSession, readDashboards, createDashboard, childre
     React.useEffect(() => {
         if (user.id)
             readDashboards({
-                email: user.email,
+                idToken: user.idToken,
                 cb: data => {
                     if (data.length === 0)
                         createDashboard({
                             ...TEMPLATES.DASHBOARD.BASE,
                             author: user.email,
-                            roles: [{email: user.email, rol: ROLES.AUTOR}],
-                            members: [user.email]
+                            roles: [{ email: user.email, rol: ROLES.AUTOR }]
                         })
                 }
             })
     }, [user.id]) // eslint-disable-line react-hooks/exhaustive-deps
-    return pending ? LOADING :
-        <div className={`wrapper ${THEME.NAME}`}>
-            {children}
-        </div>
+    return pending ? LOADING : <UserContext.Provider value={user}>
+            <div className={`wrapper ${THEME.NAME}`}>
+                {children}
+            </div>
+        </UserContext.Provider>
 }
 
 LoadUser.propTypes = {

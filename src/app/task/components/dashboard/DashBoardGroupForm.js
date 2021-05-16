@@ -14,9 +14,7 @@ const DashBoardGroupForm = ({ title, dashboard, group = {}, processGroup }) => {
         let groups = [...dashboard.groups]
         if (nGroup.id) {
             for (let i = 0; i < groups.length; i++) {
-                if (groups[i].id === nGroup.id) {
-                    groups[i] = nGroup
-                }
+                if (groups[i].id === nGroup.id) groups[i] = nGroup
             }
         } else {
             groups = insertArrayWithId(groups, nGroup)

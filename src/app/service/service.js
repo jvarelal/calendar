@@ -6,6 +6,7 @@ import dashboardService from './dashboardService'
 import axios from 'axios'
 
 export default function service({ nameService = '', type = '', body = {}, cb = () => null, error = () => null }) {
+    const urlBase = 'http://localhost:5000/b-agenda/us-central1/api'
     const operations = {
         user: [
             {
@@ -52,19 +53,47 @@ export default function service({ nameService = '', type = '', body = {}, cb = (
         dashboard: [
             {
                 type: DASHBOARD_TYPES.CREATE_DASHBOARD,
-                execute: dashboardService.createDashboard
+                url: `${urlBase}/dashboards`,
+                method: 'POST',
+                config: {
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `bearer ${body.idToken}`
+                    }
+                }
             },
             {
                 type: DASHBOARD_TYPES.LIST_DASHBOARDS,
-                execute: dashboardService.readDashboards
+                url: `${urlBase}/dashboards`,
+                method: 'GET',
+                config: {
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `bearer ${body.idToken}`
+                    }
+                }
             },
             {
                 type: DASHBOARD_TYPES.EDIT_DASHBOARD,
-                execute: dashboardService.updateDashboards
+                url: `${urlBase}/dashboards/${body.id}`,
+                method: 'PUT',
+                config: {
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `bearer ${body.idToken}`
+                    }
+                }
             },
             {
                 type: DASHBOARD_TYPES.DELETE_DASHBOARD,
-                execute: dashboardService.deleteDashboard
+                url: `${urlBase}/dashboards/${body.id}`,
+                method: 'DELETE',
+                config: {
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `bearer ${body.idToken}`
+                    }
+                }
             },
             {
                 type: DASHBOARD_TYPES.EDIT_GROUP,
@@ -108,6 +137,8 @@ const httpClient = (operation, body, cb, error) => {
                 }
                 break;
             case 'POST':
+            case 'PUT':
+            case 'DELETE':
                 postJSONService(operation, body, cb, error);
                 break;
             default:
@@ -130,9 +161,7 @@ const getJSONService = (operation, cb, cbError) => {
 
 const getTextService = (operation, cb, cbError) => {
     var config = {
-        headers: {
-            'Content-Type': 'text/plain'
-        },
+        headers: { 'Content-Type': 'text/plain' },
         responseType: 'text'
     };
     axios.get(operation.url, config).then((res) => {
@@ -144,7 +173,8 @@ const getTextService = (operation, cb, cbError) => {
 }
 
 const postJSONService = (operation, params, cb, cbError) => {
-    axios.post(operation.url, params).then((res) => {
+    let config = operation.config || {}
+    axios[operation.method.toLowerCase()](operation.url, params, config).then((res) => {
         if (!res.status || !res.data) {
             res = { data: res, status: OK_RESPONSE.status }
         }
@@ -154,6 +184,7 @@ const postJSONService = (operation, params, cb, cbError) => {
 
 const isNetworkError = (error, cbError) => {
     let msg = '';
+    console.log(error)
     try {
         if (error.OK_RESPONSE) {
             msg = error.OK_RESPONSE

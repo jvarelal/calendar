@@ -17,9 +17,15 @@ const userService = {
         }
     },
     login: (body, cb, cbError) => {
+        let userCredentials
         try {
             auth.signInWithEmailAndPassword(body.email, body.password)
-                .then(credentials => cb({ ...OK_RESPONSE, data: credentials })).catch(cbError);
+                .then(credentials => {
+                    userCredentials = credentials
+                    return credentials.user.getIdToken()
+                })
+                .then(idToken => cb({ ...OK_RESPONSE, data: { ...userCredentials.user, idToken } }))
+                .catch(cbError);
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
@@ -52,8 +58,16 @@ const userService = {
         }
     },
     checkSession: (body, cb, cbError) => {
+        let userCredentials = {}
         try {
-            auth.onAuthStateChanged(user => cb({ ...OK_RESPONSE, data: { user: user || {} } }))
+            auth.onAuthStateChanged(credentials => {
+                userCredentials = credentials || {}
+                if (credentials) {
+                    credentials.getIdToken().then(idToken => cb({ ...OK_RESPONSE, data: { ...userCredentials, idToken } }))
+                } else {
+                    cb({ ...OK_RESPONSE, data: userCredentials })
+                }
+            })
         } catch (e) {
             cbError({ status: 500, message: e.message })
         }
@@ -65,7 +79,8 @@ const userService = {
                 email = email.toLowerCase()
                 await db.collection('users').doc(uid).set({ email, displayName, photoURL })
             }
-            cb({ ...OK_RESPONSE, data: credentials })
+            let idToken = await credentials.user.getIdToken()
+            cb({ ...OK_RESPONSE, data: { ...credentials.user, idToken } })
         } catch (e) {
             console.log(e)
             cbError({ status: 500, message: e.message })
